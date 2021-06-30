@@ -15,6 +15,16 @@ model Account {
   updatedAt  DateTime  @default(now())
   verifiedAt DateTime?
   user       User?
+  admin      Admin?
+}
+
+model Admin {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  account     Account? @relation(fields: [accountId], references: [id])
+  accountId   String?
+  phoneNumber String // Required for 2 factor auth
 }
 
 model User {
