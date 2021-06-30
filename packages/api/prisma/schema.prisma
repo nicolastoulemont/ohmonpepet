@@ -19,12 +19,17 @@ model Account {
 }
 
 model Admin {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  account     Account? @relation(fields: [accountId], references: [id])
-  accountId   String?
-  phoneNumber String // Required for 2 factor auth
+  id                   String           @id @default(cuid())
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @default(now())
+  account              Account?         @relation(fields: [accountId], references: [id])
+  accountId            String?
+  phoneNumber          String // Required for potential 2 factor auth
+  createdSpecies       SpecieOption[]
+  createdLanguages     LanguageOption[]
+  createdHostings      HostingOption[]
+  createdGenderOption  GenderOption[]
+  createdServiceOption ServiceOption[]
 }
 
 model User {
@@ -34,4 +39,57 @@ model User {
   account   Account? @relation(fields: [accountId], references: [id])
   accountId String?
   username  String?
+}
+
+model SpecieOption {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  creator   Admin?   @relation(fields: [adminId], references: [id])
+  adminId   String?
+  nameEn    String
+  nameFr    String
+}
+
+model LanguageOption {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  creator   Admin?   @relation(fields: [adminId], references: [id])
+  adminId   String?
+  nameEn    String
+  nameFr    String
+  iconUrl   String
+}
+
+model HostingOption {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  creator   Admin?   @relation(fields: [adminId], references: [id])
+  adminId   String?
+  nameEn    String
+  nameFr    String
+}
+
+model GenderOption {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  creator   Admin?   @relation(fields: [adminId], references: [id])
+  adminId   String?
+  nameEn    String
+  nameFr    String
+}
+
+model ServiceOption {
+  id                 String   @id @default(cuid())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now())
+  creator            Admin?   @relation(fields: [adminId], references: [id])
+  adminId            String?
+  userFacingNameEn   String
+  userFacingNameFr   String
+  sitterFacingNameEn String
+  sitterFacingNameFr String
 }
