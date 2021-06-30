@@ -3,8 +3,8 @@ import React, { useState, useMemo } from 'react'
 import { toErrorRecord } from 'utils'
 import { isType, isTypeInTuple } from 'gql-typeguards'
 import { UserListItem } from 'components'
-import foo from '@mono/shared'
-import { useAllUsersQuery } from '@mono/data'
+import foo from '@ohmonpepet/shared'
+import { useAllUsersQuery } from '@ohmonpepet/data'
 import {
 	UnorderedList,
 	ListItem,

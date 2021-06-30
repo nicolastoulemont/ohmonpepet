@@ -9,9 +9,9 @@
  */
 
 import React from 'react';
-import foo from '@mono/shared';
+import foo from '@ohmonpepet/shared';
 import { Provider } from 'urql';
-import { mobileClient, useAllUsersQuery } from '@mono/data';
+import { mobileClient, useAllUsersQuery } from '@ohmonpepet/data';
 import { isType } from 'gql-typeguards';
 import {
   SafeAreaView,

@@ -1,5 +1,5 @@
 {
-  "name": "@mono/mobile",
+  "name": "@ohmonpepet/mobile",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -12,8 +12,8 @@
   "dependencies": {
     "react": "17.0.1",
     "react-native": "0.64.1",
-    "@mono/shared": "1.0.0",
-    "@mono/data": "1.0.0",
+    "@ohmonpepet/shared": "1.0.0",
+    "@ohmonpepet/data": "1.0.0",
     "urql": "^2.0.3"
   },
   "devDependencies": {

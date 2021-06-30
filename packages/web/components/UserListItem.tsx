@@ -7,7 +7,7 @@ import {
 	BannedUser,
 	DeletedUser,
 	ActiveUser
-} from '@mono/data'
+} from '@ohmonpepet/data'
 
 interface UserListItemProps {
 	user: ActiveUser | DeletedUser | BannedUser
