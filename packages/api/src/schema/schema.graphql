@@ -7,8 +7,9 @@ type Account implements Node {
   email: EmailAddress
 
   """GUID for a resource"""
-  id: Int
+  id: String!
   updatedAt: DateTime
+  user: User
   verifiedAt: DateTime
 }
 
@@ -25,7 +26,7 @@ type AccountsList {
 
 """Represent the minimal fields required for any actors"""
 interface Actor {
-  accountId: ID!
+  accountId: ID
   createdAt: DateTime!
   id: ID!
   updatedAt: DateTime!
@@ -43,8 +44,8 @@ type BooleanResult {
 
 input CreateAccountInput {
   email: EmailAddress!
+  firstName: String!
   password: String!
-  username: String!
 }
 
 """The result of the createAccount mutation"""
@@ -137,7 +138,7 @@ type Mutation {
 
 interface Node {
   """GUID for a resource"""
-  id: Int
+  id: String!
 }
 
 type NotFoundError {
@@ -185,11 +186,12 @@ type UnableToProcessError {
 }
 
 type User implements Actor {
-  accountId: ID!
+  accountId: ID
   createdAt: DateTime!
+  firstName: String!
   id: ID!
+  lastName: String
   updatedAt: DateTime!
-  username: String
 }
 
 type UserAuthenticationError {

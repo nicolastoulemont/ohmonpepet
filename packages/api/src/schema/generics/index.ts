@@ -3,7 +3,7 @@ import { interfaceType, objectType } from 'nexus'
 export const Node = interfaceType({
 	name: 'Node',
 	definition(t) {
-		t.int('id', { description: 'GUID for a resource' })
+		t.nonNull.string('id', { description: 'GUID for a resource' })
 	}
 })
 

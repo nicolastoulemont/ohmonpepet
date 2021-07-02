@@ -3,10 +3,11 @@ export * from './query'
 // export * from './mutation'
 
 export const user = objectType({
-	isTypeOf: (data) => Boolean((data as any).username),
+	isTypeOf: (data) => Boolean((data as any).firstName),
 	name: 'User',
 	definition(t) {
 		t.implements('Actor')
-		t.string('username')
+		t.nonNull.string('firstName')
+		t.string('lastName')
 	}
 })

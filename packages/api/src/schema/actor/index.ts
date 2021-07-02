@@ -5,7 +5,7 @@ export const actor = interfaceType({
 	description: 'Represent the minimal fields required for any actors',
 	definition(t) {
 		t.nonNull.id('id')
-		t.nonNull.id('accountId')
+		t.id('accountId')
 		t.nonNull.date('createdAt')
 		t.nonNull.date('updatedAt')
 	}

@@ -39,7 +39,7 @@ export const CreateAccountInput = inputObjectType({
 	definition(t) {
 		t.nonNull.email('email')
 		t.nonNull.string('password')
-		t.nonNull.string('username')
+		t.nonNull.string('firstName')
 	}
 })
 
@@ -48,8 +48,8 @@ export const createAccount = mutationField('createAccount', {
 	args: {
 		input: nonNull(arg({ type: CreateAccountInput }))
 	},
-	validation: (args) => checkArgs(args, ['email:mail', 'password:pwd', 'username']),
-	async resolve(_, { input: { password, email, username } }) {
+	validation: (args) => checkArgs(args, ['email:mail', 'password:pwd', 'firstName']),
+	async resolve(_, { input: { password, email, firstName } }) {
 		const existingAccount = await prisma.account.findUnique({
 			where: { email }
 		})
@@ -73,12 +73,12 @@ export const createAccount = mutationField('createAccount', {
 		await prisma.user.create({
 			data: {
 				accountId: account.id,
-				username
+				firstName
 			}
 		})
 
 		try {
-			await sendVerificationEmail(account, 'fr')
+			// await sendVerificationEmail(account, 'fr')
 			return account
 		} catch (error) {
 			return UnableToProcessError

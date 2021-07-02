@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -9,10 +13,10 @@ datasource db {
 
 model Account {
   id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
   email      String    @unique
   password   String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now())
   verifiedAt DateTime?
   user       User?
   admin      Admin?
@@ -22,29 +26,257 @@ model Admin {
   id                   String           @id @default(cuid())
   createdAt            DateTime         @default(now())
   updatedAt            DateTime         @default(now())
-  account              Account?         @relation(fields: [accountId], references: [id])
-  accountId            String?
+  account              Account          @relation(fields: [accountId], references: [id])
+  accountId            String
   phoneNumber          String // Required for potential 2 factor auth
   createdSpecies       SpecieOption[]
   createdLanguages     LanguageOption[]
   createdHostings      HostingOption[]
   createdGenderOption  GenderOption[]
   createdServiceOption ServiceOption[]
+  createdPartners      Partner[]
 }
 
+// Actors
 model User {
+  id               String           @id @default(cuid())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  account          Account          @relation(fields: [accountId], references: [id])
+  accountId        String
+  firstName        String
+  lastName         String?
+  stripeCustomerId String?
+  ratings          Rating[]
+  bookings         Booking[]
+  bookingMessages  BookingMessage[]
+  claims           BookingClaim[]
+}
+
+model Seller {
+  id                         String               @id @default(cuid())
+  createdAt                  DateTime             @default(now())
+  updatedAt                  DateTime             @updatedAt
+  birthDate                  DateTime
+  description                String
+  mainMediaId                String // The mediaId of the main displayed image
+  acceptedSpecieOptionsIds   String[] // No relations, needed for filtering only
+  ownAnimalsSpecieOptionsIds String[] // No relations, needed for filtering only
+  languageOptionIds          String[] // No relations, needed for filtering only
+  genderOptionId             String // Needed for filtering, with relation because its possible
+  hostingOptionId            String // Needed for filtering, with relation because its possible
+  partnerId                  String?
+  partnerPercentage          Float?
+  stripeAccountId            String?
+  calendarUpdate             DateTime?
+  gender                     GenderOption?        @relation(fields: [genderOptionId], references: [id])
+  hosting                    HostingOption?       @relation(fields: [hostingOptionId], references: [id])
+  partner                    Partner?             @relation(fields: [partnerId], references: [id])
+  location                   Location?
+  medias                     Media[]
+  ratings                    Rating[]
+  bookings                   Booking[]
+  bookingMessages            BookingMessage[]
+  claims                     BookingClaim[]
+  coreServices               CoreSellerService[]
+  extraServices              ExtraSellerService?
+  availabilities             SellerAvailability[]
+}
+
+// Actors related informations
+
+model SellerAvailability {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  account   Account? @relation(fields: [accountId], references: [id])
-  accountId String?
-  username  String?
+  updatedAt DateTime @updatedAt
+  seller    Seller   @relation(fields: [sellerId], references: [id])
+  sellerId  String
+  date      DateTime @db.Date
+
+  @@index(fields: [date], name: "availability_date_index")
 }
 
+model CoreSellerService {
+  id              String        @id @default(cuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  seller          Seller        @relation(fields: [sellerId], references: [id])
+  sellerId        String
+  service         ServiceOption @relation(fields: [serviceOptionId], references: [id])
+  serviceOptionId String
+  price           Int
+}
+
+model ExtraSellerService {
+  id                              String   @id @default(cuid())
+  createdAt                       DateTime @default(now())
+  updatedAt                       DateTime @updatedAt
+  seller                          Seller   @relation(fields: [sellerId], references: [id])
+  sellerId                        String
+  atHomeExclusivity               Boolean?
+  atHomeExlusivityExtraPrice      Int?
+  atHomeContinuously              Boolean?
+  atHomeContinuouslyExtraPrice    Int?
+  atHomeOnlyBringPet              Boolean?
+  atHomeOnlyBringPetExtraPrice    Int?
+  atHomeComeGetPet                Boolean?
+  atHomeComeGetPetExtraPrice      Int?
+  atOwnerHomePlantsCare           Boolean?
+  atOwnerHomePlantsCareExtraPrice Int?
+  atOwnerHomeMail                 Boolean?
+  atOwnerHomeMailExtraPrice       Int?
+  atOwnerHomeCurtains             Boolean?
+  atOwnerHomeCurtainsExtraPrice   Int?
+  flexibleCancelation             Boolean?
+  abilityToProvideMedicalCare     Boolean?
+  acceptShortNotice               Boolean?
+  isProfessionalSeller            Boolean?
+}
+
+model Partner {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  creator     Admin?   @relation(fields: [adminId], references: [id])
+  adminId     String?
+  name        String
+  description String
+  websiteUrl  String
+  logoUrl     String
+  sellers     Seller[]
+}
+
+model Location {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  address      String
+  country      String
+  country_code String
+  postcode     String
+  seller       Seller   @relation(fields: [sellerId], references: [id])
+  sellerId     String
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  score     Float
+  seller    Seller?  @relation(fields: [sellerId], references: [id])
+  sellerId  String?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  bookingId String
+}
+
+// Bookings related infos
+model Booking {
+  id                         String           @id @default(cuid())
+  createdAt                  DateTime         @default(now())
+  updatedAt                  DateTime         @updatedAt
+  startDate                  DateTime         @db.Date
+  endDate                    DateTime         @db.Date
+  // Price related fields
+  selectedOptions            Json[] // The option's name and price at the moment of booking's creation
+  priceWithOutApplicationFee Float
+  applicationFeeAmount       Float
+  animalsIds                 String[]
+  // Status related fields
+  sellerConfirmationDate     DateTime?
+  ownerConfirmationDate      DateTime?
+  // Cancelation related fields
+  canceled                   Boolean?         @default(false)
+  canceledBy                 String?
+  canceledReason             String?
+  paid                       Boolean          @default(false)
+  underReview                Boolean? // Claim related field
+  seller                     Seller           @relation(fields: [sellerId], references: [id])
+  sellerId                   String
+  user                       User             @relation(fields: [userId], references: [id])
+  userId                     String
+  service                    ServiceOption    @relation(fields: [serviceOptionId], references: [id])
+  serviceOptionId            String
+  ratings                    Rating[]
+  messages                   BookingMessage[]
+  claims                     BookingClaim[]
+  stripePayment              StripePayment[]
+}
+
+model BookingMessage {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  content   String?
+  readAt    DateTime?
+  booking   Booking   @relation(fields: [bookingId], references: [id])
+  bookingId String
+  medias    Media[]
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    String?
+  seller    Seller?   @relation(fields: [sellerId], references: [id])
+  sellerId  String?
+}
+
+model BookingClaim {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  reason    String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  seller    Seller?  @relation(fields: [sellerId], references: [id])
+  sellerId  String?
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  bookingId String
+}
+
+model StripePayment {
+  id                                String    @id @default(cuid())
+  createdAt                         DateTime  @default(now())
+  updatedAt                         DateTime  @updatedAt
+  booking                           Booking   @relation(fields: [bookingId], references: [id])
+  bookingId                         String
+  setupIntentClientSecret           String?
+  setupIntentId                     String?
+  setupIntentCreationDate           DateTime?
+  paymentIntentClientSecret         String?
+  paymentIntentId                   String?
+  paymentIntentCreationDate         DateTime?
+  // For queued payments: setupIntent -> queue -> paymentIntent created 2 days before booking's end
+  expectedPaymentIntentCreationDate DateTime?
+  paymentMethodId                   String?
+  paymentStatus                     String?
+  errorCode                         String?
+}
+
+// Transversal
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+model Media {
+  id               String          @id @default(cuid())
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  storeUrl         String
+  mediaType        MediaType       @default(IMAGE)
+  // The seller profile pictures
+  seller           Seller?         @relation(fields: [sellerId], references: [id])
+  sellerId         String?
+  // Booking specific media (picture or video sent to the owner by the chat for example)
+  bookingMessage   BookingMessage? @relation(fields: [bookingMessageId], references: [id])
+  bookingMessageId String?
+}
+
+// Options
 model SpecieOption {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   creator   Admin?   @relation(fields: [adminId], references: [id])
   adminId   String?
   nameEn    String
@@ -54,7 +286,7 @@ model SpecieOption {
 model LanguageOption {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   creator   Admin?   @relation(fields: [adminId], references: [id])
   adminId   String?
   nameEn    String
@@ -65,31 +297,35 @@ model LanguageOption {
 model HostingOption {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   creator   Admin?   @relation(fields: [adminId], references: [id])
   adminId   String?
   nameEn    String
   nameFr    String
+  sellers   Seller[]
 }
 
 model GenderOption {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   creator   Admin?   @relation(fields: [adminId], references: [id])
   adminId   String?
   nameEn    String
   nameFr    String
+  sellers   Seller[]
 }
 
 model ServiceOption {
-  id                 String   @id @default(cuid())
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @default(now())
-  creator            Admin?   @relation(fields: [adminId], references: [id])
+  id                 String              @id @default(cuid())
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  creator            Admin?              @relation(fields: [adminId], references: [id])
   adminId            String?
   userFacingNameEn   String
   userFacingNameFr   String
-  sitterFacingNameEn String
-  sitterFacingNameFr String
+  sellerFacingNameEn String
+  sellerFacingNameFr String
+  bookings           Booking[]
+  coreSellerServices CoreSellerService[]
 }

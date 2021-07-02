@@ -1,3 +1,4 @@
+import prisma from '../../lib/prisma'
 import { objectType, unionType } from 'nexus'
 export * from './query'
 export * from './mutation'
@@ -11,6 +12,15 @@ export const Account = objectType({
 		t.date('createdAt')
 		t.date('updatedAt')
 		t.date('verifiedAt')
+		t.field('user', {
+			type: 'User',
+			resolve: async (a) =>
+				await prisma.account
+					.findUnique({
+						where: { id: a.id }
+					})
+					.user()
+		})
 	}
 })
 
