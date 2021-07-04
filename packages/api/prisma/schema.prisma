@@ -51,6 +51,7 @@ model User {
   bookings         Booking[]
   bookingMessages  BookingMessage[]
   claims           BookingClaim[]
+  seller           Seller[]
 }
 
 model Seller {
@@ -69,6 +70,8 @@ model Seller {
   partnerPercentage          Float?
   stripeAccountId            String?
   calendarUpdate             DateTime?
+  userId                     String
+  user                       User                 @relation(fields: [userId], references: [id])
   gender                     GenderOption?        @relation(fields: [genderOptionId], references: [id])
   hosting                    HostingOption?       @relation(fields: [hostingOptionId], references: [id])
   partner                    Partner?             @relation(fields: [partnerId], references: [id])

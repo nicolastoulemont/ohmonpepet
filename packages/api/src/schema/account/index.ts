@@ -9,9 +9,9 @@ export const Account = objectType({
 	definition(t) {
 		t.implements('Node')
 		t.email('email')
-		t.date('createdAt')
-		t.date('updatedAt')
-		t.date('verifiedAt')
+		t.datetime('createdAt')
+		t.datetime('updatedAt')
+		t.datetime('verifiedAt')
 		t.field('user', {
 			type: 'User',
 			resolve: async (a) =>

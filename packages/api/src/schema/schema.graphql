@@ -55,6 +55,11 @@ union CreateAccountResult = Account | InvalidArgumentsError | UnableToProcessErr
 union CurrentAccountResult = Account | NotFoundError | UserAuthenticationError | UserForbiddenError
 
 """
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+"""
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
@@ -105,6 +110,16 @@ type InvalidArgumentsError {
 A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 """
 scalar JWT
+
+"""
+A field whose value is a valid decimal degrees latitude number (53.471): https://en.wikipedia.org/wiki/Latitude
+"""
+scalar Latitude
+
+"""
+A field whose value is a valid decimal degrees longitude number (53.471): https://en.wikipedia.org/wiki/Longitude
+"""
+scalar Longitude
 
 """The result of the lostPassword mutation"""
 union LostPasswordResult = BooleanResult | NotFoundError
@@ -179,6 +194,11 @@ union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToP
 
 """The result of the signOut mutation"""
 union SignOutResult = BooleanResult | UserAuthenticationError
+
+"""
+A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
+"""
+scalar URL
 
 type UnableToProcessError {
   code: ErrorCode!

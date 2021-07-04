@@ -1,12 +1,12 @@
 import { interfaceType } from 'nexus'
 
-export const actor = interfaceType({
+export const Actor = interfaceType({
 	name: 'Actor',
 	description: 'Represent the minimal fields required for any actors',
 	definition(t) {
 		t.nonNull.id('id')
 		t.id('accountId')
-		t.nonNull.date('createdAt')
-		t.nonNull.date('updatedAt')
+		t.nonNull.datetime('createdAt')
+		t.nonNull.datetime('updatedAt')
 	}
 })
