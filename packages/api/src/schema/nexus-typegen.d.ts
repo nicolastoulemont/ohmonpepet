@@ -118,10 +118,10 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Account: { // root type
-    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
     id: string; // String!
-    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
     verifiedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   AccountsList: { // root type
@@ -145,7 +145,7 @@ export interface NexusGenObjects {
     accountId?: string | null; // ID
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     firstName: string; // String!
-    id: string; // ID!
+    id: string; // String!
     lastName?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -158,7 +158,8 @@ export interface NexusGenObjects {
 
 export interface NexusGenInterfaces {
   Actor: NexusGenRootTypes['User'];
-  Node: NexusGenRootTypes['Account'];
+  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['User'];
+  TimeStamps: NexusGenRootTypes['Account'] | NexusGenRootTypes['User'];
 }
 
 export interface NexusGenUnions {
@@ -186,10 +187,10 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Account: { // field return type
-    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
     id: string; // String!
-    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
     verifiedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
@@ -239,7 +240,7 @@ export interface NexusGenFieldTypes {
     accountId: string | null; // ID
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     firstName: string; // String!
-    id: string; // ID!
+    id: string; // String!
     lastName: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -257,11 +258,15 @@ export interface NexusGenFieldTypes {
   Actor: { // field return type
     accountId: string | null; // ID
     createdAt: NexusGenScalars['DateTime']; // DateTime!
-    id: string; // ID!
+    id: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Node: { // field return type
     id: string; // String!
+  }
+  TimeStamps: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
 }
 
@@ -320,7 +325,7 @@ export interface NexusGenFieldTypeNames {
     accountId: 'ID'
     createdAt: 'DateTime'
     firstName: 'String'
-    id: 'ID'
+    id: 'String'
     lastName: 'String'
     updatedAt: 'DateTime'
   }
@@ -338,11 +343,15 @@ export interface NexusGenFieldTypeNames {
   Actor: { // field return type name
     accountId: 'ID'
     createdAt: 'DateTime'
-    id: 'ID'
+    id: 'String'
     updatedAt: 'DateTime'
   }
   Node: { // field return type name
     id: 'String'
+  }
+  TimeStamps: { // field return type name
+    createdAt: 'DateTime'
+    updatedAt: 'DateTime'
   }
 }
 
@@ -405,12 +414,14 @@ export interface NexusGenAbstractTypeMembers {
   UserByIdResult: "InvalidArgumentsError" | "NotFoundError" | "User" | "UserAuthenticationError" | "UserForbiddenError"
   VerifyUserResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   Actor: "User"
-  Node: "Account"
+  Node: "Account" | "User"
+  TimeStamps: "Account" | "User"
 }
 
 export interface NexusGenTypeInterfaces {
-  Account: "Node"
-  User: "Actor"
+  Account: "Node" | "TimeStamps"
+  User: "Actor" | "Node" | "TimeStamps"
+  Actor: "Node" | "TimeStamps"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;

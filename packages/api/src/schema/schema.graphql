@@ -2,13 +2,13 @@
 ### Do not make changes to this file directly
 
 
-type Account implements Node {
-  createdAt: DateTime
+type Account implements Node & TimeStamps {
+  createdAt: DateTime!
   email: EmailAddress
 
   """GUID for a resource"""
   id: String!
-  updatedAt: DateTime
+  updatedAt: DateTime!
   user: User
   verifiedAt: DateTime
 }
@@ -25,10 +25,12 @@ type AccountsList {
 }
 
 """Represent the minimal fields required for any actors"""
-interface Actor {
+interface Actor implements Node & TimeStamps {
   accountId: ID
   createdAt: DateTime!
-  id: ID!
+
+  """GUID for a resource"""
+  id: String!
   updatedAt: DateTime!
 }
 
@@ -195,6 +197,12 @@ union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToP
 """The result of the signOut mutation"""
 union SignOutResult = BooleanResult | UserAuthenticationError
 
+"""Represent the createdAt and updatedAt fields"""
+interface TimeStamps {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 """
 A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
 """
@@ -205,11 +213,13 @@ type UnableToProcessError {
   message: ErrorMessage!
 }
 
-type User implements Actor {
+type User implements Actor & Node & TimeStamps {
   accountId: ID
   createdAt: DateTime!
   firstName: String!
-  id: ID!
+
+  """GUID for a resource"""
+  id: String!
   lastName: String
   updatedAt: DateTime!
 }
