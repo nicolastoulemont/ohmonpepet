@@ -2,13 +2,13 @@
 ### Do not make changes to this file directly
 
 
-type Account implements Node & TimeStamps {
-  createdAt: DateTime!
+type Account implements Node {
+  createdAt: DateTime
   email: EmailAddress
 
   """GUID for a resource"""
   id: String!
-  updatedAt: DateTime!
+  updatedAt: DateTime
   user: User
   verifiedAt: DateTime
 }
@@ -25,13 +25,13 @@ type AccountsList {
 }
 
 """Represent the minimal fields required for any actors"""
-interface Actor implements Node & TimeStamps {
+interface Actor implements Node {
   accountId: ID
-  createdAt: DateTime!
+  createdAt: DateTime
 
   """GUID for a resource"""
   id: String!
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 """The result of the accounts query"""
@@ -97,6 +97,28 @@ enum ErrorMessage {
   UNAUTHENTICATED_PLEASE_LOGIN
 }
 
+type IndividualOperator implements Actor & Node & Operator {
+  acceptedSpecieOptionsIds: [String]
+  account: Account
+  accountId: ID
+  birthDate: Date
+  calendarUpdate: DateTime
+  createdAt: DateTime
+  description: String
+  genderOptionId: String
+  hostingOptionId: String
+
+  """GUID for a resource"""
+  id: String!
+  languageOptionIds: [String]
+  mainMediaId: String
+  ownAnimalsSpecieOptionsIds: [String]
+  partnerId: String
+  partnerPercentage: Int
+  stripeAccountId: String
+  updatedAt: DateTime
+}
+
 type InvalidArgument {
   key: String!
   message: String!
@@ -154,13 +176,39 @@ type Mutation {
 }
 
 interface Node {
+  createdAt: DateTime
+
   """GUID for a resource"""
   id: String!
+  updatedAt: DateTime
 }
 
 type NotFoundError {
   code: ErrorCode!
   message: ErrorMessage!
+}
+
+"""
+Represent the required fields of commercial operators on the plateform.
+"""
+interface Operator implements Actor & Node {
+  acceptedSpecieOptionsIds: [String]
+  accountId: ID
+  calendarUpdate: DateTime
+  createdAt: DateTime
+  description: String
+  genderOptionId: String
+  hostingOptionId: String
+
+  """GUID for a resource"""
+  id: String!
+  languageOptionIds: [String]
+  mainMediaId: String
+  ownAnimalsSpecieOptionsIds: [String]
+  partnerId: String
+  partnerPercentage: Int
+  stripeAccountId: String
+  updatedAt: DateTime
 }
 
 type Query {
@@ -197,12 +245,6 @@ union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToP
 """The result of the signOut mutation"""
 union SignOutResult = BooleanResult | UserAuthenticationError
 
-"""Represent the createdAt and updatedAt fields"""
-interface TimeStamps {
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 """
 A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
 """
@@ -213,15 +255,15 @@ type UnableToProcessError {
   message: ErrorMessage!
 }
 
-type User implements Actor & Node & TimeStamps {
+type User implements Actor & Node {
   accountId: ID
-  createdAt: DateTime!
+  createdAt: DateTime
   firstName: String!
 
   """GUID for a resource"""
   id: String!
   lastName: String
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 type UserAuthenticationError {

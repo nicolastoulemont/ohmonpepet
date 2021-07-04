@@ -118,10 +118,10 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Account: { // root type
-    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
     id: string; // String!
-    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     verifiedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   AccountsList: { // root type
@@ -129,6 +129,24 @@ export interface NexusGenObjects {
   }
   BooleanResult: { // root type
     success?: boolean | null; // Boolean
+  }
+  IndividualOperator: { // root type
+    acceptedSpecieOptionsIds?: Array<string | null> | null; // [String]
+    accountId?: string | null; // ID
+    birthDate?: NexusGenScalars['Date'] | null; // Date
+    calendarUpdate?: NexusGenScalars['DateTime'] | null; // DateTime
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    description?: string | null; // String
+    genderOptionId?: string | null; // String
+    hostingOptionId?: string | null; // String
+    id: string; // String!
+    languageOptionIds?: Array<string | null> | null; // [String]
+    mainMediaId?: string | null; // String
+    ownAnimalsSpecieOptionsIds?: Array<string | null> | null; // [String]
+    partnerId?: string | null; // String
+    partnerPercentage?: number | null; // Int
+    stripeAccountId?: string | null; // String
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   InvalidArgument: { // root type
     key: string; // String!
@@ -143,11 +161,11 @@ export interface NexusGenObjects {
   UnableToProcessError: {};
   User: { // root type
     accountId?: string | null; // ID
-    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     firstName: string; // String!
     id: string; // String!
     lastName?: string | null; // String
-    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   UserAuthenticationError: {};
   UserForbiddenError: {};
@@ -157,9 +175,9 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  Actor: NexusGenRootTypes['User'];
-  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['User'];
-  TimeStamps: NexusGenRootTypes['Account'] | NexusGenRootTypes['User'];
+  Actor: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['User'];
+  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['User'];
+  Operator: NexusGenRootTypes['IndividualOperator'];
 }
 
 export interface NexusGenUnions {
@@ -187,10 +205,10 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Account: { // field return type
-    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
     id: string; // String!
-    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
     user: NexusGenRootTypes['User'] | null; // User
     verifiedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
@@ -199,6 +217,25 @@ export interface NexusGenFieldTypes {
   }
   BooleanResult: { // field return type
     success: boolean | null; // Boolean
+  }
+  IndividualOperator: { // field return type
+    acceptedSpecieOptionsIds: Array<string | null> | null; // [String]
+    account: NexusGenRootTypes['Account'] | null; // Account
+    accountId: string | null; // ID
+    birthDate: NexusGenScalars['Date'] | null; // Date
+    calendarUpdate: NexusGenScalars['DateTime'] | null; // DateTime
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    description: string | null; // String
+    genderOptionId: string | null; // String
+    hostingOptionId: string | null; // String
+    id: string; // String!
+    languageOptionIds: Array<string | null> | null; // [String]
+    mainMediaId: string | null; // String
+    ownAnimalsSpecieOptionsIds: Array<string | null> | null; // [String]
+    partnerId: string | null; // String
+    partnerPercentage: number | null; // Int
+    stripeAccountId: string | null; // String
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   InvalidArgument: { // field return type
     key: string; // String!
@@ -238,11 +275,11 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     accountId: string | null; // ID
-    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     firstName: string; // String!
     id: string; // String!
     lastName: string | null; // String
-    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   UserAuthenticationError: { // field return type
     code: NexusGenEnums['ErrorCode']; // ErrorCode!
@@ -257,16 +294,31 @@ export interface NexusGenFieldTypes {
   }
   Actor: { // field return type
     accountId: string | null; // ID
-    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     id: string; // String!
-    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   Node: { // field return type
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     id: string; // String!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
-  TimeStamps: { // field return type
-    createdAt: NexusGenScalars['DateTime']; // DateTime!
-    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  Operator: { // field return type
+    acceptedSpecieOptionsIds: Array<string | null> | null; // [String]
+    accountId: string | null; // ID
+    calendarUpdate: NexusGenScalars['DateTime'] | null; // DateTime
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    description: string | null; // String
+    genderOptionId: string | null; // String
+    hostingOptionId: string | null; // String
+    id: string; // String!
+    languageOptionIds: Array<string | null> | null; // [String]
+    mainMediaId: string | null; // String
+    ownAnimalsSpecieOptionsIds: Array<string | null> | null; // [String]
+    partnerId: string | null; // String
+    partnerPercentage: number | null; // Int
+    stripeAccountId: string | null; // String
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
 }
 
@@ -284,6 +336,25 @@ export interface NexusGenFieldTypeNames {
   }
   BooleanResult: { // field return type name
     success: 'Boolean'
+  }
+  IndividualOperator: { // field return type name
+    acceptedSpecieOptionsIds: 'String'
+    account: 'Account'
+    accountId: 'ID'
+    birthDate: 'Date'
+    calendarUpdate: 'DateTime'
+    createdAt: 'DateTime'
+    description: 'String'
+    genderOptionId: 'String'
+    hostingOptionId: 'String'
+    id: 'String'
+    languageOptionIds: 'String'
+    mainMediaId: 'String'
+    ownAnimalsSpecieOptionsIds: 'String'
+    partnerId: 'String'
+    partnerPercentage: 'Int'
+    stripeAccountId: 'String'
+    updatedAt: 'DateTime'
   }
   InvalidArgument: { // field return type name
     key: 'String'
@@ -347,10 +418,25 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
   }
   Node: { // field return type name
-    id: 'String'
-  }
-  TimeStamps: { // field return type name
     createdAt: 'DateTime'
+    id: 'String'
+    updatedAt: 'DateTime'
+  }
+  Operator: { // field return type name
+    acceptedSpecieOptionsIds: 'String'
+    accountId: 'ID'
+    calendarUpdate: 'DateTime'
+    createdAt: 'DateTime'
+    description: 'String'
+    genderOptionId: 'String'
+    hostingOptionId: 'String'
+    id: 'String'
+    languageOptionIds: 'String'
+    mainMediaId: 'String'
+    ownAnimalsSpecieOptionsIds: 'String'
+    partnerId: 'String'
+    partnerPercentage: 'Int'
+    stripeAccountId: 'String'
     updatedAt: 'DateTime'
   }
 }
@@ -413,15 +499,17 @@ export interface NexusGenAbstractTypeMembers {
   SignOutResult: "BooleanResult" | "UserAuthenticationError"
   UserByIdResult: "InvalidArgumentsError" | "NotFoundError" | "User" | "UserAuthenticationError" | "UserForbiddenError"
   VerifyUserResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
-  Actor: "User"
-  Node: "Account" | "User"
-  TimeStamps: "Account" | "User"
+  Actor: "IndividualOperator" | "User"
+  Node: "Account" | "IndividualOperator" | "User"
+  Operator: "IndividualOperator"
 }
 
 export interface NexusGenTypeInterfaces {
-  Account: "Node" | "TimeStamps"
-  User: "Actor" | "Node" | "TimeStamps"
-  Actor: "Node" | "TimeStamps"
+  Account: "Node"
+  IndividualOperator: "Actor" | "Node" | "Operator"
+  User: "Actor" | "Node"
+  Actor: "Node"
+  Operator: "Actor" | "Node"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -436,7 +524,7 @@ export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = keyof NexusGenUnions;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserForbiddenError" | "UsersList";
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BooleanResult" | "IndividualOperator" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserForbiddenError" | "UsersList";
 
 export type NexusGenAbstractsUsingStrategyResolveType = never;
 

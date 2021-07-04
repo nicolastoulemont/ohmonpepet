@@ -8,7 +8,6 @@ export const Account = objectType({
 	isTypeOf: (data) => Boolean((data as any).email),
 	definition(t) {
 		t.implements('Node')
-		t.implements('TimeStamps')
 		t.email('email')
 		t.datetime('verifiedAt')
 		t.field('user', {
