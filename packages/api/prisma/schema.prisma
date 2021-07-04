@@ -154,6 +154,8 @@ model Location {
   country      String
   country_code String
   postcode     String
+  latitude     Float
+  longitude    Float
   seller       Seller   @relation(fields: [sellerId], references: [id])
   sellerId     String
 }
