@@ -83,6 +83,19 @@ export interface NexusGenInputs {
     firstName: string; // String!
     password: string; // String!
   }
+  CreateIndividualOperatorInput: { // input type
+    acceptedSpecieOptionsIds: string[]; // [ID!]!
+    birthDate: NexusGenScalars['Date']; // Date!
+    description: string; // String!
+    genderOptionId: string; // String!
+    hostingOptionId: string; // String!
+    languageOptionIds: string[]; // [ID!]!
+    mainMediaId: string; // ID!
+    ownAnimalsSpecieOptionsIds: string[]; // [ID!]!
+    partnerId?: string | null; // String
+    partnerPercentage?: number | null; // Int
+    stripeAccountId?: string | null; // ID
+  }
   EmailAndPasswordInput: { // input type
     email: NexusGenScalars['EmailAddress']; // EmailAddress!
     password: string; // String!
@@ -90,6 +103,19 @@ export interface NexusGenInputs {
   ResetPasswordInput: { // input type
     newPassword: string; // String!
     token: NexusGenScalars['JWT']; // JWT!
+  }
+  UpdateIndividualOperatorInput: { // input type
+    acceptedSpecieOptionsIds?: Array<string | null> | null; // [ID]
+    birthDate?: NexusGenScalars['Date'] | null; // Date
+    description?: string | null; // String
+    genderOptionId?: string | null; // String
+    hostingOptionId?: string | null; // String
+    languageOptionIds?: Array<string | null> | null; // [ID]
+    mainMediaId?: string | null; // ID
+    ownAnimalsSpecieOptionsIds?: Array<string | null> | null; // [ID]
+    partnerId?: string | null; // String
+    partnerPercentage?: number | null; // Int
+    stripeAccountId?: string | null; // ID
   }
   VerifyUserInput: { // input type
     token: NexusGenScalars['JWT']; // JWT!
@@ -186,8 +212,10 @@ export interface NexusGenUnions {
   AllAccountsResult: NexusGenRootTypes['AccountsList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   AllUsersResult: NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'] | NexusGenRootTypes['UsersList'];
   CreateAccountResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'];
+  CreateIndividualOperatorResult: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'];
   CurrentAccountResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   DeleteAccountResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'];
+  IndividualOperatorResult: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   LostPasswordResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['NotFoundError'];
   ModifyEmailResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   ModifyPasswordResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'];
@@ -195,6 +223,7 @@ export interface NexusGenUnions {
   SendVerificationEmailResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
   SignInResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
   SignOutResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['UserAuthenticationError'];
+  UpdateIndividualOperatorResult: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
   UserByIdResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   VerifyUserResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
 }
@@ -248,6 +277,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['CreateAccountResult'] | null; // CreateAccountResult
+    createIndividualOperator: NexusGenRootTypes['CreateIndividualOperatorResult'] | null; // CreateIndividualOperatorResult
     deleteAccount: NexusGenRootTypes['DeleteAccountResult'] | null; // DeleteAccountResult
     lostPassword: NexusGenRootTypes['LostPasswordResult'] | null; // LostPasswordResult
     modifyEmail: NexusGenRootTypes['ModifyEmailResult'] | null; // ModifyEmailResult
@@ -256,6 +286,7 @@ export interface NexusGenFieldTypes {
     sendVerificationEmail: NexusGenRootTypes['SendVerificationEmailResult'] | null; // SendVerificationEmailResult
     signIn: NexusGenRootTypes['SignInResult'] | null; // SignInResult
     signOut: NexusGenRootTypes['SignOutResult'] | null; // SignOutResult
+    updateIndividualOperator: NexusGenRootTypes['IndividualOperatorResult'] | null; // IndividualOperatorResult
     verifyUser: NexusGenRootTypes['VerifyUserResult'] | null; // VerifyUserResult
   }
   NotFoundError: { // field return type
@@ -309,7 +340,6 @@ export interface NexusGenFieldTypes {
     calendarUpdate: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     description: string | null; // String
-    genderOptionId: string | null; // String
     hostingOptionId: string | null; // String
     id: string; // String!
     languageOptionIds: Array<string | null> | null; // [String]
@@ -367,6 +397,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createAccount: 'CreateAccountResult'
+    createIndividualOperator: 'CreateIndividualOperatorResult'
     deleteAccount: 'DeleteAccountResult'
     lostPassword: 'LostPasswordResult'
     modifyEmail: 'ModifyEmailResult'
@@ -375,6 +406,7 @@ export interface NexusGenFieldTypeNames {
     sendVerificationEmail: 'SendVerificationEmailResult'
     signIn: 'SignInResult'
     signOut: 'SignOutResult'
+    updateIndividualOperator: 'IndividualOperatorResult'
     verifyUser: 'VerifyUserResult'
   }
   NotFoundError: { // field return type name
@@ -428,7 +460,6 @@ export interface NexusGenFieldTypeNames {
     calendarUpdate: 'DateTime'
     createdAt: 'DateTime'
     description: 'String'
-    genderOptionId: 'String'
     hostingOptionId: 'String'
     id: 'String'
     languageOptionIds: 'String'
@@ -445,6 +476,9 @@ export interface NexusGenArgTypes {
   Mutation: {
     createAccount: { // args
       input: NexusGenInputs['CreateAccountInput']; // CreateAccountInput!
+    }
+    createIndividualOperator: { // args
+      input: NexusGenInputs['CreateIndividualOperatorInput']; // CreateIndividualOperatorInput!
     }
     deleteAccount: { // args
       confirmPassword: string; // String!
@@ -468,6 +502,9 @@ export interface NexusGenArgTypes {
     signIn: { // args
       input: NexusGenInputs['EmailAndPasswordInput']; // EmailAndPasswordInput!
     }
+    updateIndividualOperator: { // args
+      input: NexusGenInputs['CreateIndividualOperatorInput']; // CreateIndividualOperatorInput!
+    }
     verifyUser: { // args
       input: NexusGenInputs['VerifyUserInput']; // VerifyUserInput!
     }
@@ -488,8 +525,10 @@ export interface NexusGenAbstractTypeMembers {
   AllAccountsResult: "AccountsList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   AllUsersResult: "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError" | "UsersList"
   CreateAccountResult: "Account" | "InvalidArgumentsError" | "UnableToProcessError"
+  CreateIndividualOperatorResult: "IndividualOperator" | "InvalidArgumentsError" | "UnableToProcessError"
   CurrentAccountResult: "Account" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   DeleteAccountResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError"
+  IndividualOperatorResult: "IndividualOperator" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   LostPasswordResult: "BooleanResult" | "NotFoundError"
   ModifyEmailResult: "Account" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError"
   ModifyPasswordResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError"
@@ -497,6 +536,7 @@ export interface NexusGenAbstractTypeMembers {
   SendVerificationEmailResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   SignInResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   SignOutResult: "BooleanResult" | "UserAuthenticationError"
+  UpdateIndividualOperatorResult: "IndividualOperator" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   UserByIdResult: "InvalidArgumentsError" | "NotFoundError" | "User" | "UserAuthenticationError" | "UserForbiddenError"
   VerifyUserResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   Actor: "IndividualOperator" | "User"

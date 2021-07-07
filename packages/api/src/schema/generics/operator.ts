@@ -10,7 +10,6 @@ export const Operator = interfaceType({
 		t.list.string('acceptedSpecieOptionsIds')
 		t.list.string('ownAnimalsSpecieOptionsIds')
 		t.list.string('languageOptionIds')
-		t.string('genderOptionId')
 		t.string('hostingOptionId')
 		t.datetime('calendarUpdate')
 		t.string('partnerId')

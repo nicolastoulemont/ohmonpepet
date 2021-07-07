@@ -1,7 +1,7 @@
-import { objectType } from 'nexus'
+import { objectType, unionType } from 'nexus'
 import prisma from '../../lib/prisma'
 // export * from './query'
-// export * from './mutation'
+export * from './mutation'
 
 export const IndividualOperator = objectType({
 	isTypeOf: (data) => Boolean((data as any).birthDate),
@@ -9,6 +9,7 @@ export const IndividualOperator = objectType({
 	definition(t) {
 		t.implements('Operator')
 		t.date('birthDate')
+		t.string('genderOptionId')
 		t.field('account', {
 			type: 'Account',
 			resolve: async (i) =>
@@ -18,5 +19,20 @@ export const IndividualOperator = objectType({
 					})
 					.account()
 		})
+	}
+})
+
+export const IndividualOperatorResult = unionType({
+	name: 'IndividualOperatorResult',
+	description: 'Return an individual operator or related errors',
+	definition(t) {
+		t.members(
+			'IndividualOperator',
+			'UserAuthenticationError',
+			'UserForbiddenError',
+			'InvalidArgumentsError',
+			'NotFoundError',
+			'UnableToProcessError'
+		)
 	}
 })

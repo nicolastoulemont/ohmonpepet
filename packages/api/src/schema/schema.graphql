@@ -53,6 +53,23 @@ input CreateAccountInput {
 """The result of the createAccount mutation"""
 union CreateAccountResult = Account | InvalidArgumentsError | UnableToProcessError
 
+input CreateIndividualOperatorInput {
+  acceptedSpecieOptionsIds: [ID!]!
+  birthDate: Date!
+  description: String!
+  genderOptionId: String!
+  hostingOptionId: String!
+  languageOptionIds: [ID!]!
+  mainMediaId: ID!
+  ownAnimalsSpecieOptionsIds: [ID!]!
+  partnerId: String
+  partnerPercentage: Int
+  stripeAccountId: ID
+}
+
+"""The result of the createIndividualOperator mutation"""
+union CreateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | UnableToProcessError
+
 """The result of the currentAccount query"""
 union CurrentAccountResult = Account | NotFoundError | UserAuthenticationError | UserForbiddenError
 
@@ -119,6 +136,9 @@ type IndividualOperator implements Actor & Node & Operator {
   updatedAt: DateTime
 }
 
+"""Return an individual operator or related errors"""
+union IndividualOperatorResult = IndividualOperator | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 type InvalidArgument {
   key: String!
   message: String!
@@ -156,6 +176,7 @@ union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | U
 
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountResult
+  createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
 
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
@@ -172,6 +193,7 @@ type Mutation {
 
   """Access restricted to logged in user"""
   signOut: SignOutResult
+  updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
   verifyUser(input: VerifyUserInput!): VerifyUserResult
 }
 
@@ -197,7 +219,6 @@ interface Operator implements Actor & Node {
   calendarUpdate: DateTime
   createdAt: DateTime
   description: String
-  genderOptionId: String
   hostingOptionId: String
 
   """GUID for a resource"""
@@ -254,6 +275,23 @@ type UnableToProcessError {
   code: ErrorCode!
   message: ErrorMessage!
 }
+
+input UpdateIndividualOperatorInput {
+  acceptedSpecieOptionsIds: [ID]
+  birthDate: Date
+  description: String
+  genderOptionId: String
+  hostingOptionId: String
+  languageOptionIds: [ID]
+  mainMediaId: ID
+  ownAnimalsSpecieOptionsIds: [ID]
+  partnerId: String
+  partnerPercentage: Int
+  stripeAccountId: ID
+}
+
+"""The result of the updateIndividualOperator mutation"""
+union UpdateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | NotFoundError | UnableToProcessError
 
 type User implements Actor & Node {
   accountId: ID

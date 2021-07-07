@@ -104,7 +104,8 @@ export const signIn = mutationField('signIn', {
 		const account = await prisma.account.findUnique({
 			where: { email },
 			include: {
-				user: true
+				user: true,
+				operator: true
 			}
 		})
 
@@ -119,7 +120,12 @@ export const signIn = mutationField('signIn', {
 				invalidArguments: [{ key: 'password', message: 'Invalid password' }]
 			}
 
-		ctx.req.session.user = { accountId: account.id, userId: account.user.id, access: 'user' }
+		ctx.req.session.user = {
+			accountId: account.id,
+			userId: account.user.id,
+			access: 'user',
+			...(account.operator && { operatorId: account.operator.id })
+		}
 
 		return account
 	}
