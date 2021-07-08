@@ -188,6 +188,7 @@ type Mutation {
   """Access restricted to logged in user"""
   modifyPassword(newPassword: String!, password: String!): ModifyPasswordResult
   resetPassword(input: ResetPasswordInput!): ResetPasswordResult
+  saveToStorage(input: SaveToStorageInput!): SaveToStorageResult
   sendVerificationEmail(email: String!): SendVerificationEmailResult
   signIn(input: EmailAndPasswordInput!): SignInResult
 
@@ -257,6 +258,13 @@ input ResetPasswordInput {
 """The result of the resetPassword mutation"""
 union ResetPasswordResult = BooleanResult | InvalidArgumentsError | UnableToProcessError
 
+input SaveToStorageInput {
+  fileName: String!
+  fileType: String!
+}
+
+union SaveToStorageResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError
+
 """The result of the sendVerificationEmail mutation"""
 union SendVerificationEmailResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError
 
@@ -265,6 +273,11 @@ union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToP
 
 """The result of the signOut mutation"""
 union SignOutResult = BooleanResult | UserAuthenticationError
+
+type StorageInfos {
+  signedRequest: String
+  url: String
+}
 
 """
 A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.

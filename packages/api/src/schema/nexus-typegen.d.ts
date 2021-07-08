@@ -104,6 +104,10 @@ export interface NexusGenInputs {
     newPassword: string; // String!
     token: NexusGenScalars['JWT']; // JWT!
   }
+  SaveToStorageInput: { // input type
+    fileName: string; // String!
+    fileType: string; // String!
+  }
   UpdateIndividualOperatorInput: { // input type
     acceptedSpecieOptionsIds?: Array<string | null> | null; // [ID]
     birthDate?: NexusGenScalars['Date'] | null; // Date
@@ -184,6 +188,10 @@ export interface NexusGenObjects {
   Mutation: {};
   NotFoundError: {};
   Query: {};
+  StorageInfos: { // root type
+    signedRequest?: string | null; // String
+    url?: string | null; // String
+  }
   UnableToProcessError: {};
   User: { // root type
     accountId?: string | null; // ID
@@ -220,6 +228,7 @@ export interface NexusGenUnions {
   ModifyEmailResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   ModifyPasswordResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'];
   ResetPasswordResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'];
+  SaveToStorageResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['StorageInfos'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   SendVerificationEmailResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
   SignInResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
   SignOutResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['UserAuthenticationError'];
@@ -283,6 +292,7 @@ export interface NexusGenFieldTypes {
     modifyEmail: NexusGenRootTypes['ModifyEmailResult'] | null; // ModifyEmailResult
     modifyPassword: NexusGenRootTypes['ModifyPasswordResult'] | null; // ModifyPasswordResult
     resetPassword: NexusGenRootTypes['ResetPasswordResult'] | null; // ResetPasswordResult
+    saveToStorage: NexusGenRootTypes['SaveToStorageResult'] | null; // SaveToStorageResult
     sendVerificationEmail: NexusGenRootTypes['SendVerificationEmailResult'] | null; // SendVerificationEmailResult
     signIn: NexusGenRootTypes['SignInResult'] | null; // SignInResult
     signOut: NexusGenRootTypes['SignOutResult'] | null; // SignOutResult
@@ -299,6 +309,10 @@ export interface NexusGenFieldTypes {
     allUsers: NexusGenRootTypes['AllUsersResult'] | null; // AllUsersResult
     currentAccount: NexusGenRootTypes['CurrentAccountResult'] | null; // CurrentAccountResult
     userById: NexusGenRootTypes['UserByIdResult'] | null; // UserByIdResult
+  }
+  StorageInfos: { // field return type
+    signedRequest: string | null; // String
+    url: string | null; // String
   }
   UnableToProcessError: { // field return type
     code: NexusGenEnums['ErrorCode']; // ErrorCode!
@@ -403,6 +417,7 @@ export interface NexusGenFieldTypeNames {
     modifyEmail: 'ModifyEmailResult'
     modifyPassword: 'ModifyPasswordResult'
     resetPassword: 'ResetPasswordResult'
+    saveToStorage: 'SaveToStorageResult'
     sendVerificationEmail: 'SendVerificationEmailResult'
     signIn: 'SignInResult'
     signOut: 'SignOutResult'
@@ -419,6 +434,10 @@ export interface NexusGenFieldTypeNames {
     allUsers: 'AllUsersResult'
     currentAccount: 'CurrentAccountResult'
     userById: 'UserByIdResult'
+  }
+  StorageInfos: { // field return type name
+    signedRequest: 'String'
+    url: 'String'
   }
   UnableToProcessError: { // field return type name
     code: 'ErrorCode'
@@ -496,6 +515,9 @@ export interface NexusGenArgTypes {
     resetPassword: { // args
       input: NexusGenInputs['ResetPasswordInput']; // ResetPasswordInput!
     }
+    saveToStorage: { // args
+      input: NexusGenInputs['SaveToStorageInput']; // SaveToStorageInput!
+    }
     sendVerificationEmail: { // args
       email: string; // String!
     }
@@ -533,6 +555,7 @@ export interface NexusGenAbstractTypeMembers {
   ModifyEmailResult: "Account" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError"
   ModifyPasswordResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError"
   ResetPasswordResult: "BooleanResult" | "InvalidArgumentsError" | "UnableToProcessError"
+  SaveToStorageResult: "InvalidArgumentsError" | "StorageInfos" | "UnableToProcessError" | "UserAuthenticationError"
   SendVerificationEmailResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   SignInResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   SignOutResult: "BooleanResult" | "UserAuthenticationError"
@@ -564,7 +587,7 @@ export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = keyof NexusGenUnions;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BooleanResult" | "IndividualOperator" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserForbiddenError" | "UsersList";
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BooleanResult" | "IndividualOperator" | "InvalidArgumentsError" | "NotFoundError" | "StorageInfos" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserForbiddenError" | "UsersList";
 
 export type NexusGenAbstractsUsingStrategyResolveType = never;
 

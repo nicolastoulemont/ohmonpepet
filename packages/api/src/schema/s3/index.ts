@@ -1,47 +1,58 @@
-import { mutationField, stringArg, objectType, nonNull } from 'nexus'
-import { authorize } from '../../utils'
+import { mutationField, objectType, unionType, inputObjectType, nonNull, arg } from 'nexus'
+import { authorize, checkArgs, UnableToProcessError } from '../../utils'
 import { s3Bucket, s3 } from './config'
 
 export const StorageInfos = objectType({
 	name: 'StorageInfos',
+	isTypeOf: (data) => Boolean((data as any).signedRequest),
 	definition(t) {
 		t.string('signedRequest')
 		t.string('url')
 	}
 })
 
-export const StorageResponse = objectType({
-	name: 'StorageResponse',
+export const SaveToStorageInput = inputObjectType({
+	name: 'SaveToStorageInput',
 	definition(t) {
-		t.string('signedRequest')
-		t.string('url')
-		// t.list.field('errors', { type: 'Error' })
+		t.nonNull.string('fileName')
+		t.nonNull.string('fileType')
 	}
 })
 
-// export const saveToStorage = mutationField('saveToStorage', {
-// 	type: 'StorageResponse',
-// 	args: {
-// 		fileName: nonNull(stringArg()),
-// 		fileType: nonNull(stringArg()),
-// 	},
-// 	async resolve(_, args, ctx) {
+export const SaveToStorageResult = unionType({
+	name: 'SaveToStorageResult',
+	definition(t) {
+		t.members(
+			'StorageInfos',
+			'InvalidArgumentsError',
+			'UserAuthenticationError',
+			'UnableToProcessError'
+		)
+	}
+})
 
-// 		const s3Params = {
-// 			Bucket: s3Bucket,
-// 			Key: args.fileName,
-// 			Expires: 60,
-// 			ContentType: args.fileType,
-// 			ACL: 'public-read',
-// 		}
+export const saveToStorage = mutationField('saveToStorage', {
+	type: 'SaveToStorageResult',
+	args: { input: nonNull(arg({ type: SaveToStorageInput })) },
+	authorization: (ctx) => authorize(ctx, 'user'),
+	validation: (args) => checkArgs(args, ['fileName', 'fileType']),
+	async resolve(_, { input: { fileName, fileType } }) {
+		const s3Params = {
+			Bucket: s3Bucket,
+			Key: fileName,
+			Expires: 60,
+			ContentType: fileType,
+			ACL: 'public-read'
+		}
 
-// 		const infos = {
-// 			signedRequest: await s3.getSignedUrl('putObject', s3Params),
-// 			url: `https://${s3Bucket}.s3.amazonaws.com/${args.fileName}`,
-// 		}
-
-// 		return {
-// 			...infos,
-// 		}
-// 	},
-// })
+		try {
+			const signedRequest = await s3.getSignedUrl('putObject', s3Params)
+			return {
+				signedRequest,
+				url: `https://${s3Bucket}.s3.amazonaws.com/${fileName}`
+			}
+		} catch (error) {
+			return UnableToProcessError
+		}
+	}
+})

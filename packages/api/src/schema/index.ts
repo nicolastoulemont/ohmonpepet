@@ -3,9 +3,12 @@ import { makeSchema } from 'nexus'
 import { __prod__ } from '../constants'
 import * as types from './typeDefs'
 import path from 'path'
+import fs from 'fs'
+
+const isTranspiled = () => !fs.existsSync(path.resolve(__dirname, '../', 'config', 'context.ts'))
 
 export const schema = makeSchema({
-	shouldGenerateArtifacts: !__prod__,
+	shouldGenerateArtifacts: !isTranspiled() && !__prod__,
 	types,
 	outputs: {
 		schema: path.join(__dirname, './schema.graphql'),
@@ -17,8 +20,11 @@ export const schema = makeSchema({
 			isTypeOf: true
 		}
 	},
-	contextType: {
-		module: path.join(__dirname, '../', 'config', 'context.ts'),
-		export: 'ApiContext'
-	}
+	// @ts-expect-error
+	contextType: !isTranspiled()
+		? {
+				module: path.join(__dirname, '../', 'config', 'context.ts'),
+				export: 'ApiContext'
+		  }
+		: {}
 })

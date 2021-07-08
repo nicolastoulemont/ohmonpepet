@@ -1,6 +1,7 @@
 export * from './generics'
 export * from './scalars'
 export * from './errors'
+export * from './s3'
 export * from './account'
 export * from './user'
 export * from './individualOperator'
