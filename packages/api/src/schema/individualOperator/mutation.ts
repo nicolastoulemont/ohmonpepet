@@ -32,7 +32,7 @@ export const createIndividualOperator = mutationField('createIndividualOperator'
 	args: {
 		input: nonNull(arg({ type: createIndividualOperatorInput }))
 	},
-	async resolve(_, { input }, { user }) {
+	async resolve(_, { input }, { user, req }) {
 		const existingOperator = await prisma.operator.findUnique({
 			where: { accountId: user.accountId }
 		})
@@ -46,12 +46,21 @@ export const createIndividualOperator = mutationField('createIndividualOperator'
 			}
 		} else {
 			try {
-				return await prisma.operator.create({
+				const operator = await prisma.operator.create({
 					data: {
 						accountId: user.accountId,
 						...input
 					}
 				})
+
+				if (req.session.user) {
+					req.session.user = {
+						...req.session.user,
+						operatorId: operator.id
+					}
+				}
+
+				return operator
 			} catch (error) {
 				return UnableToProcessError
 			}
