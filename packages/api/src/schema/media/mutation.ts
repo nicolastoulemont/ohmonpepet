@@ -124,6 +124,20 @@ export const deleteMediaResult = unionType({
 	}
 })
 
+async function removeMedia({ mediaId, mediaAwsPath }: { mediaId: string; mediaAwsPath: string }) {
+	await s3
+		.deleteObject({
+			Bucket: s3Bucket,
+			Key: mediaAwsPath
+		})
+		.promise()
+
+	await prisma.media.delete({
+		where: { id: mediaId }
+	})
+	return { success: true }
+}
+
 export const deleteMedia = mutationField('deleteMedia', {
 	type: 'DeleteMediaResult',
 	args: {
@@ -131,7 +145,7 @@ export const deleteMedia = mutationField('deleteMedia', {
 	},
 	authorization: (ctx) => authorize(ctx, 'user'),
 	validation: (args) => checkArgs(args, ['mediaId']),
-	async resolve(_, { mediaId }, { user: { operatorId, userId } }) {
+	async resolve(_, { mediaId }, { user: { operatorId } }) {
 		try {
 			const media = await prisma.media.findUnique({
 				where: { id: mediaId },
@@ -152,43 +166,25 @@ export const deleteMedia = mutationField('deleteMedia', {
 					})
 					const hasNoReplacementPictures = operatorMedias.length === 1 // Only has this one media
 					const isOperatorMainPicture = operator.mainMediaId === mediaId
-					if (operator?.isActive && hasNoReplacementPictures) {
+					if (hasNoReplacementPictures) {
 						return {
 							activeOperatorWithNoReplacementMediaError:
 								'Cannot delete media because of lack of replacement medias, please desactivate the related operator before deleting its last media'
 						}
-					} else if (operator?.isActive && isOperatorMainPicture) {
+					} else if (isOperatorMainPicture) {
 						return {
 							activeOperatorMainMediaError:
 								'Cannot delete an active Operator main media, replace this media with another one before deleting or set this operator as unactive'
 						}
 					} else {
-						await s3
-							.deleteObject({
-								Bucket: s3Bucket,
-								Key: mediaAwsPath
-							})
-							.promise()
-
-						await prisma.media.delete({
-							where: { id: mediaId }
-						})
-						return { success: true }
+						return await removeMedia({ mediaId, mediaAwsPath })
 					}
+				} else {
+					return await removeMedia({ mediaId, mediaAwsPath })
 				}
 			} else {
 				try {
-					await s3
-						.deleteObject({
-							Bucket: s3Bucket,
-							Key: mediaAwsPath
-						})
-						.promise()
-
-					await prisma.media.delete({
-						where: { id: mediaId }
-					})
-					return { success: true }
+					return await removeMedia({ mediaId, mediaAwsPath })
 				} catch (error) {
 					return UnableToProcessError
 				}
