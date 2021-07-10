@@ -1,5 +1,11 @@
 import { mutationField, objectType, unionType, inputObjectType, nonNull, arg, idArg } from 'nexus'
-import { authorize, checkArgs, NotFoundError, UnableToProcessError } from '../../utils'
+import {
+	authorize,
+	checkArgs,
+	NotFoundError,
+	PartialInvalidArgumentsError,
+	UnableToProcessError
+} from '../../utils'
 import prisma from '../../lib/prisma'
 import { s3Bucket, s3 } from './s3Config'
 
@@ -45,6 +51,18 @@ export const createMedia = mutationField('createMedia', {
 			Expires: 60,
 			ContentType: fileType,
 			ACL: 'public-read'
+		}
+
+		if (saveAs === 'operator' && !operatorId) {
+			return {
+				...PartialInvalidArgumentsError,
+				invalidArguments: [
+					{
+						key: 'saveAs',
+						message: 'Cannot save as operator, please create an operator profile'
+					}
+				]
+			}
 		}
 
 		try {
