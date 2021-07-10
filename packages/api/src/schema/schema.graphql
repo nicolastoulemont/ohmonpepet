@@ -146,6 +146,7 @@ type IndividualOperator implements Actor & Node & Operator {
   id: String!
   languageOptionIds: [String]
   mainMediaId: String
+  medias: [Media]
   ownAnimalsSpecieOptionsIds: [String]
   partnerId: String
   partnerPercentage: Int

@@ -311,6 +311,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     languageOptionIds: Array<string | null> | null; // [String]
     mainMediaId: string | null; // String
+    medias: Array<NexusGenRootTypes['Media'] | null> | null; // [Media]
     ownAnimalsSpecieOptionsIds: Array<string | null> | null; // [String]
     partnerId: string | null; // String
     partnerPercentage: number | null; // Int
@@ -486,6 +487,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     languageOptionIds: 'String'
     mainMediaId: 'String'
+    medias: 'Media'
     ownAnimalsSpecieOptionsIds: 'String'
     partnerId: 'String'
     partnerPercentage: 'Int'

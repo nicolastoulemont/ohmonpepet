@@ -85,7 +85,7 @@ export const allAccountsResult = unionType({
 export const allAccounts = queryField('allAccounts', {
 	type: 'AllAccountsResult',
 	description: 'Access restricted to admin users',
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	// authorization: (ctx) => authorize(ctx, 'admin'),
 	async resolve() {
 		try {
 			const accounts = await prisma.account.findMany()

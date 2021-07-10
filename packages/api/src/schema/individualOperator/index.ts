@@ -19,6 +19,15 @@ export const IndividualOperator = objectType({
 					})
 					.account()
 		})
+		t.list.field('medias', {
+			type: 'Media',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.medias()
+		})
 	}
 })
 

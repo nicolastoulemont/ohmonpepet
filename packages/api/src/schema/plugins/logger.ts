@@ -8,7 +8,7 @@ export const OperationLoggerPlugin = plugin({
 			const value = await next(root, args, ctx, info)
 			const endTimeMs = new Date().valueOf()
 
-			if (endTimeMs - startTimeMs > 10) {
+			if (endTimeMs - startTimeMs > 5) {
 				console.log(
 					`${
 						info?.operation?.name?.value
