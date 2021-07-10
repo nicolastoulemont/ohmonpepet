@@ -52,12 +52,14 @@ model User {
   bookings         Booking[]
   bookingMessages  BookingMessage[]
   claims           BookingClaim[]
+  medias           Media[]
 }
 
 model Operator {
   id                         String                 @id @default(cuid())
   createdAt                  DateTime               @default(now())
   updatedAt                  DateTime               @updatedAt
+  isActive                   Boolean                @default(true)
   birthDate                  DateTime?              @db.Date
   description                String
   mainMediaId                String // The mediaId of the main displayed image
@@ -269,6 +271,9 @@ model Media {
   updatedAt        DateTime        @updatedAt
   storeUrl         String
   mediaType        MediaType       @default(IMAGE)
+  // The user pictures
+  user             User?           @relation(fields: [userId], references: [id])
+  userId           String?
   // The operator pictures
   operator         Operator?       @relation(fields: [operatorId], references: [id])
   operatorId       String?

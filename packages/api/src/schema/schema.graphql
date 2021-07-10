@@ -70,8 +70,22 @@ input CreateIndividualOperatorInput {
 """The result of the createIndividualOperator mutation"""
 union CreateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | UnableToProcessError
 
+input CreateMediaInput {
+  fileName: String!
+  fileType: String!
+  saveAs: String!
+}
+
+union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError
+
 """The result of the currentAccount query"""
 union CurrentAccountResult = Account | NotFoundError | UserAuthenticationError | UserForbiddenError
+
+"""The result of the currentOperatorMedia query"""
+union CurrentOperatorMediaResult = NotFoundError | OperatorMedia | SharedMedia | UserAuthenticationError | UserForbiddenError
+
+"""The result of the currentUserMedia query"""
+union CurrentUserMediaResult = NotFoundError | SharedMedia | UserAuthenticationError | UserForbiddenError | UserMedia
 
 """
 A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
@@ -85,6 +99,9 @@ scalar DateTime
 
 """The result of the deleteAccount mutation"""
 union DeleteAccountResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError
+
+"""The result of the deleteMedia mutation"""
+union DeleteMediaResult = BooleanResult | InvalidArgumentsError | IsActiveOperatorMainMediaError | IsActiveOperatorWithNoReplacementMediaError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 """
 A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/.
@@ -150,6 +167,14 @@ type InvalidArgumentsError {
   message: ErrorMessage!
 }
 
+type IsActiveOperatorMainMediaError {
+  activeOperatorMainMediaError: String!
+}
+
+type IsActiveOperatorWithNoReplacementMediaError {
+  activeOperatorWithNoReplacementMediaError: String!
+}
+
 """
 A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 """
@@ -168,6 +193,34 @@ scalar Longitude
 """The result of the lostPassword mutation"""
 union LostPasswordResult = BooleanResult | NotFoundError
 
+""""""
+interface Media implements Node {
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  mediaType: MediaType
+  storeUrl: URL!
+  updatedAt: DateTime
+}
+
+"""The result of the mediaById query"""
+union MediaByIdResult = InvalidArgumentsError | NotFoundError | OperatorMedia | SharedMedia | UserAuthenticationError | UserForbiddenError | UserMedia
+
+"""Type of media accepted"""
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+"""List of medias"""
+type MediasList {
+  medias: [Media]
+}
+
+"""The result of the accounts query"""
+union MediasResult = MediasList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 """The result of the modifyEmail mutation"""
 union ModifyEmailResult = Account | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
 
@@ -177,9 +230,11 @@ union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | U
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountResult
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
+  createMedia(input: CreateMediaInput!): CreateMediaResult
 
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
+  deleteMedia(mediaId: ID!): DeleteMediaResult
   lostPassword(email: String!): LostPasswordResult
 
   """Access restricted to logged in user"""
@@ -188,7 +243,6 @@ type Mutation {
   """Access restricted to logged in user"""
   modifyPassword(newPassword: String!, password: String!): ModifyPasswordResult
   resetPassword(input: ResetPasswordInput!): ResetPasswordResult
-  saveToStorage(input: SaveToStorageInput!): SaveToStorageResult
   sendVerificationEmail(email: String!): SendVerificationEmailResult
   signIn(input: EmailAndPasswordInput!): SignInResult
 
@@ -233,6 +287,18 @@ interface Operator implements Actor & Node {
   updatedAt: DateTime
 }
 
+type OperatorMedia implements Media & Node {
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  mediaType: MediaType
+  operator: Operator
+  operatorId: ID
+  storeUrl: URL!
+  updatedAt: DateTime
+}
+
 type Query {
   """Access restricted to admin users"""
   accountById(id: ID!): AccountByIdResult
@@ -246,6 +312,18 @@ type Query {
   """Access restricted to logged in user"""
   currentAccount: CurrentAccountResult
 
+  """Access restricted to logged in user"""
+  currentOperatorMedia: CurrentOperatorMediaResult
+
+  """Access restricted to logged in user"""
+  currentUserMedia: CurrentUserMediaResult
+
+  """Access restricted to admin users"""
+  mediaById(id: ID!): MediaByIdResult
+
+  """Access restricted to admin users"""
+  medias: MediasResult
+
   """Access restricted to admin users"""
   userById(id: ID!): UserByIdResult
 }
@@ -258,15 +336,22 @@ input ResetPasswordInput {
 """The result of the resetPassword mutation"""
 union ResetPasswordResult = BooleanResult | InvalidArgumentsError | UnableToProcessError
 
-input SaveToStorageInput {
-  fileName: String!
-  fileType: String!
-}
-
-union SaveToStorageResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError
-
 """The result of the sendVerificationEmail mutation"""
 union SendVerificationEmailResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError
+
+type SharedMedia implements Media & Node {
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  mediaType: MediaType
+  operator: Operator
+  operatorId: ID
+  storeUrl: URL!
+  updatedAt: DateTime
+  user: User
+  userId: ID
+}
 
 """The result of the signIn mutation"""
 union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToProcessError
@@ -328,6 +413,18 @@ union UserByIdResult = InvalidArgumentsError | NotFoundError | User | UserAuthen
 type UserForbiddenError {
   code: ErrorCode!
   message: ErrorMessage!
+}
+
+type UserMedia implements Media & Node {
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  mediaType: MediaType
+  storeUrl: URL!
+  updatedAt: DateTime
+  user: User
+  userId: ID
 }
 
 """List of users"""
