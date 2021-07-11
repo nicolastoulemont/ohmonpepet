@@ -11,7 +11,7 @@ export const mediaType = enumType({
 
 export const media = interfaceType({
 	name: 'Media',
-	description: '',
+	description: 'The minimum required fields for media types',
 	definition(t) {
 		t.implements('Node')
 		t.nonNull.url('storeUrl')

@@ -40,6 +40,18 @@ union AllAccountsResult = AccountsList | UnableToProcessError | UserAuthenticati
 """The result of the allUsers query"""
 union AllUsersResult = UnableToProcessError | UserAuthenticationError | UserForbiddenError | UsersList
 
+"""The minimum required fields for message types"""
+interface BookingMessage implements Node {
+  content: String!
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  medias: [Media]
+  readAt: DateTime
+  updatedAt: DateTime
+}
+
 type BooleanResult {
   success: Boolean
 }
@@ -52,6 +64,14 @@ input CreateAccountInput {
 
 """The result of the createAccount mutation"""
 union CreateAccountResult = Account | InvalidArgumentsError | UnableToProcessError
+
+input CreateBookingMessageInput {
+  bookingId: String!
+  content: String!
+  saveAs: String!
+}
+
+union CreateBookingMessageResult = InvalidArgumentsError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
 
 input CreateIndividualOperatorInput {
   acceptedSpecieOptionsIds: [ID!]!
@@ -99,6 +119,9 @@ scalar DateTime
 
 """The result of the deleteAccount mutation"""
 union DeleteAccountResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError
+
+"""The result of the deleteBookingMessage mutation"""
+union DeleteBookingMessageResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 """The result of the deleteMedia mutation"""
 union DeleteMediaResult = BooleanResult | InvalidArgumentsError | IsActiveOperatorMainMediaError | IsActiveOperatorWithNoReplacementMediaError | NotFoundError | UnableToProcessError | UserAuthenticationError
@@ -194,7 +217,7 @@ scalar Longitude
 """The result of the lostPassword mutation"""
 union LostPasswordResult = BooleanResult | NotFoundError
 
-""""""
+"""The minimum required fields for media types"""
 interface Media implements Node {
   createdAt: DateTime
 
@@ -230,11 +253,13 @@ union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | U
 
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountResult
+  createBookingMessage(input: CreateBookingMessageInput!): CreateBookingMessageResult
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
   createMedia(input: CreateMediaInput!): CreateMediaResult
 
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
+  deleteBookingMessage(id: ID!): DeleteBookingMessageResult
   deleteMedia(mediaId: ID!): DeleteMediaResult
   lostPassword(email: String!): LostPasswordResult
 
@@ -245,10 +270,12 @@ type Mutation {
   modifyPassword(newPassword: String!, password: String!): ModifyPasswordResult
   resetPassword(input: ResetPasswordInput!): ResetPasswordResult
   sendVerificationEmail(email: String!): SendVerificationEmailResult
+  setAsRead(input: SetBookingMessagesAsReadInput!): SetBookingMessagesAsReadResult
   signIn(input: EmailAndPasswordInput!): SignInResult
 
   """Access restricted to logged in user"""
   signOut: SignOutResult
+  updateBookingMessage(id: ID!, input: UpdateBookingMessageInput!, saveAs: String!): UpdateBookingMessageResult
   updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
   verifyUser(input: VerifyUserInput!): VerifyUserResult
 }
@@ -285,6 +312,19 @@ interface Operator implements Actor & Node {
   partnerId: String
   partnerPercentage: Int
   stripeAccountId: String
+  updatedAt: DateTime
+}
+
+type OperatorBookingMessage implements BookingMessage & Node {
+  content: String!
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  medias: [Media]
+  operator: Operator
+  operatorId: ID
+  readAt: DateTime
   updatedAt: DateTime
 }
 
@@ -340,6 +380,14 @@ union ResetPasswordResult = BooleanResult | InvalidArgumentsError | UnableToProc
 """The result of the sendVerificationEmail mutation"""
 union SendVerificationEmailResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError
 
+input SetBookingMessagesAsReadInput {
+  ids: [ID!]!
+  readAt: Date
+}
+
+"""The result of the setBookingMessageAsRead mutation"""
+union SetBookingMessagesAsReadResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
 type SharedMedia implements Media & Node {
   createdAt: DateTime
 
@@ -375,6 +423,13 @@ type UnableToProcessError {
   message: ErrorMessage!
 }
 
+input UpdateBookingMessageInput {
+  content: String
+  readAt: Date
+}
+
+union UpdateBookingMessageResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
+
 input UpdateIndividualOperatorInput {
   acceptedSpecieOptionsIds: [ID]
   birthDate: Date
@@ -406,6 +461,19 @@ type User implements Actor & Node {
 type UserAuthenticationError {
   code: ErrorCode!
   message: ErrorMessage!
+}
+
+type UserBookingMessage implements BookingMessage & Node {
+  content: String!
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  medias: [Media]
+  readAt: DateTime
+  updatedAt: DateTime
+  user: User
+  userId: ID
 }
 
 """The result of the userById query"""

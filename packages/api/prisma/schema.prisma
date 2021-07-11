@@ -219,11 +219,11 @@ model BookingMessage {
   readAt     DateTime?
   booking    Booking   @relation(fields: [bookingId], references: [id])
   bookingId  String
-  medias     Media[]
   user       User?     @relation(fields: [userId], references: [id])
   userId     String?
   operator   Operator? @relation(fields: [operatorId], references: [id])
   operatorId String?
+  medias     Media[]
 }
 
 model BookingClaim {
