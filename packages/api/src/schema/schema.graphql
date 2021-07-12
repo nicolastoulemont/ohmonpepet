@@ -98,6 +98,13 @@ input CreateMediaInput {
 
 union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError
 
+input CreateSpecieOptionInput {
+  nameEn: String!
+  nameFr: String!
+}
+
+union CreateSpecieOptionResult = InvalidArgumentsError | SpecieOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 """The result of the currentAccount query"""
 union CurrentAccountResult = Account | NotFoundError | UserAuthenticationError | UserForbiddenError
 
@@ -125,6 +132,8 @@ union DeleteBookingMessageResult = BooleanResult | InvalidArgumentsError | NotFo
 
 """The result of the deleteMedia mutation"""
 union DeleteMediaResult = BooleanResult | InvalidArgumentsError | IsActiveOperatorMainMediaError | IsActiveOperatorWithNoReplacementMediaError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
+union DeleteSpecieOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
 """
 A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/.
@@ -256,11 +265,13 @@ type Mutation {
   createBookingMessage(input: CreateBookingMessageInput!): CreateBookingMessageResult
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
   createMedia(input: CreateMediaInput!): CreateMediaResult
+  createSpecieOption(input: CreateSpecieOptionInput!): CreateSpecieOptionResult
 
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
   deleteBookingMessage(id: ID!): DeleteBookingMessageResult
   deleteMedia(mediaId: ID!): DeleteMediaResult
+  deleteSpecieOption(id: ID!): DeleteSpecieOptionResult
   lostPassword(email: String!): LostPasswordResult
 
   """Access restricted to logged in user"""
@@ -277,6 +288,7 @@ type Mutation {
   signOut: SignOutResult
   updateBookingMessage(id: ID!, input: UpdateBookingMessageInput!, saveAs: String!): UpdateBookingMessageResult
   updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
+  updateSpecieOption(id: ID!, input: UpdateSpecieOptionInput!): UpdateSpecieOptionResult
   verifyUser(input: VerifyUserInput!): VerifyUserResult
 }
 
@@ -408,6 +420,15 @@ union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToP
 """The result of the signOut mutation"""
 union SignOutResult = BooleanResult | UserAuthenticationError
 
+type SpecieOption {
+  adminId: ID
+  createdAt: Date
+  id: ID
+  nameEn: String!
+  nameFr: String!
+  updatedAt: Date
+}
+
 type StorageInfos {
   signedRequest: String
   url: String
@@ -446,6 +467,13 @@ input UpdateIndividualOperatorInput {
 
 """The result of the updateIndividualOperator mutation"""
 union UpdateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | NotFoundError | UnableToProcessError
+
+input UpdateSpecieOptionInput {
+  nameEn: String
+  nameFr: String
+}
+
+union UpdateSpecieOptionResult = InvalidArgumentsError | SpecieOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type User implements Actor & Node {
   accountId: ID
