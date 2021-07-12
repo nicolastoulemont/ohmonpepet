@@ -1,7 +1,7 @@
 import { objectType } from 'nexus'
 
 export * from './mutation'
-// export * from './query'
+export * from './query'
 
 export const SpecieOption = objectType({
 	name: 'SpecieOption',

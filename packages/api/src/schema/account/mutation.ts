@@ -105,7 +105,8 @@ export const signIn = mutationField('signIn', {
 			where: { email },
 			include: {
 				user: true,
-				operator: true
+				operator: true,
+				admin: true
 			}
 		})
 
@@ -123,8 +124,9 @@ export const signIn = mutationField('signIn', {
 		ctx.req.session.user = {
 			accountId: account.id,
 			userId: account.user.id,
-			access: 'user',
-			...(account.operator && { operatorId: account.operator.id })
+			access: Boolean(account.admin) ? 'admin' : 'user',
+			...(account.operator && { operatorId: account.operator.id }),
+			...(account.admin && { adminId: account.admin.id })
 		}
 
 		return account
@@ -273,7 +275,11 @@ export const deleteAccount = mutationField('deleteAccount', {
 				invalidArguments: [{ key: 'password', message: 'Invalid password' }]
 			}
 
-		await prisma.account.delete({ where: { id: user.accountId } })
+		try {
+			await prisma.account.delete({ where: { id: user.accountId } })
+		} catch (error) {
+			return UnableToProcessError
+		}
 
 		return new Promise((resolve) =>
 			req.session.destroy((err) => {

@@ -1,69 +1,73 @@
-import { SpeciesModel } from './index'
-import { queryField, idArg, arg, nonNull } from 'nexus'
-import { checkFields } from '@utils/checkFields'
-import { withDates, getWhere, getSort } from '../shared'
-import { notFound } from '@utils/errors'
+import { idArg, nonNull, objectType, queryField, unionType } from 'nexus'
+import { authorize, checkArgs, NotFoundError, UnableToProcessError } from '../../utils'
+import prisma from '../../lib/prisma'
 
-export const speciesById = queryField('speciesById', {
-	type: 'SpecieResponse',
-	args: {
-		id: nonNull(idArg()),
-	},
-	validate: (args) => checkFields(args, ['id']),
-	async resolve(_, args) {
-		try {
-			const specie = await SpeciesModel.findById(args.id)
-			return { specie }
-		} catch {
-			return notFound()
-		}
-	},
+export const specieOptionByIdResult = unionType({
+	name: 'SpecieOptionByIdResult',
+	description: 'The result of the accountById query',
+	definition(t) {
+		t.members(
+			'Account',
+			'UserAuthenticationError',
+			'UserForbiddenError',
+			'NotFoundError',
+			'InvalidArgumentsError'
+		)
+	}
 })
 
-export const species = queryField('species', {
-	type: 'SpeciesResponse',
+export const specieOptionById = queryField('specieOptionById', {
+	type: 'SpecieOptionByIdResult',
 	args: {
-		params: arg({
-			type: 'ParamsInput',
-		}),
+		id: nonNull(idArg())
 	},
-	async resolve(_, args) {
+	description: 'Access restricted to admin users',
+	authorization: (ctx) => authorize(ctx, 'admin'),
+	validation: (args) => checkArgs(args, ['id']),
+	async resolve(_, { id }) {
 		try {
-			const query = { ...getWhere(args.params) }
-			const species = await SpeciesModel.find(query)
-				.sort(getSort(args.params))
-				.skip(args.params?.offset || 0)
-				.limit(args.params?.limit || 0)
-
-			return { species }
-		} catch {
-			return notFound()
+			return await prisma.specieOption.findUnique({
+				where: { id },
+				rejectOnNotFound: true
+			})
+		} catch (err) {
+			return NotFoundError
 		}
-	},
+	}
 })
-export const searchSpecies = queryField('searchSpecies', {
-	type: 'SpeciesResponse',
-	args: {
-		input: nonNull(
-			arg({
-				type: 'SearchInput',
-			}),
-		),
-	},
-	async resolve(_, args) {
-		const { input } = args
+
+export const specieOptionsList = objectType({
+	name: 'SpecieOptionsList',
+	isTypeOf: (data) => Boolean((data as any).specieOptions),
+	description: 'List of specieOptions',
+	definition(t) {
+		t.list.field('specieOptions', { type: 'SpecieOption' })
+	}
+})
+
+export const specieOptionsResult = unionType({
+	name: 'SpecieOptionsResult',
+	description: 'The result of the accounts query',
+	definition(t) {
+		t.members(
+			'SpecieOptionsList',
+			'UserAuthenticationError',
+			'UserForbiddenError',
+			'UnableToProcessError'
+		)
+	}
+})
+
+export const specieOptions = queryField('allAccounts', {
+	type: 'SpecieOptionsResult',
+	description: 'Access restricted to admin users',
+	// authorization: (ctx) => authorize(ctx, 'admin'),
+	async resolve() {
 		try {
-			let search = { description: { $regex: new RegExp(input.search || '', 'i') } }
-
-			const query = withDates(input, search, 'updatedAt')
-
-			const species = await SpeciesModel.find(query)
-				.sort({ updatedAt: input.sort || 'descending' })
-				.limit(input.limit || 0)
-
-			return { species }
-		} catch {
-			return notFound()
+			const specieOptions = await prisma.specieOption.findMany()
+			return { specieOptions }
+		} catch (error) {
+			return UnableToProcessError
 		}
-	},
+	}
 })

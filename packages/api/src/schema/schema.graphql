@@ -357,7 +357,7 @@ type Query {
   accountById(id: ID!): AccountByIdResult
 
   """Access restricted to admin users"""
-  allAccounts: AllAccountsResult
+  allAccounts: SpecieOptionsResult
 
   """Access restricted to admin users"""
   allUsers: AllUsersResult
@@ -376,6 +376,9 @@ type Query {
 
   """Access restricted to admin users"""
   medias: MediasResult
+
+  """Access restricted to admin users"""
+  specieOptionById(id: ID!): SpecieOptionByIdResult
 
   """Access restricted to admin users"""
   userById(id: ID!): UserByIdResult
@@ -428,6 +431,17 @@ type SpecieOption {
   nameFr: String!
   updatedAt: Date
 }
+
+"""The result of the accountById query"""
+union SpecieOptionByIdResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+
+"""List of specieOptions"""
+type SpecieOptionsList {
+  specieOptions: [SpecieOption]
+}
+
+"""The result of the accounts query"""
+union SpecieOptionsResult = SpecieOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type StorageInfos {
   signedRequest: String
