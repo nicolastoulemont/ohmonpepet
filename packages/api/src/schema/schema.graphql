@@ -52,6 +52,17 @@ interface BookingMessage implements Node {
   updatedAt: DateTime
 }
 
+"""The result of the accountById query"""
+union BookingMessageByIdResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+
+"""List of booking messages"""
+type BookingMessagesList {
+  bookingMessages: [BookingMessage]
+}
+
+"""The result of the bookingMessages query"""
+union BookingMessagesResult = BookingMessagesList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 type BooleanResult {
   success: Boolean
 }
@@ -251,7 +262,7 @@ type MediasList {
   medias: [Media]
 }
 
-"""The result of the accounts query"""
+"""The result of the medias query"""
 union MediasResult = MediasList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 """The result of the modifyEmail mutation"""
@@ -357,10 +368,16 @@ type Query {
   accountById(id: ID!): AccountByIdResult
 
   """Access restricted to admin users"""
-  allAccounts: SpecieOptionsResult
+  allAccounts: AllAccountsResult
 
   """Access restricted to admin users"""
   allUsers: AllUsersResult
+
+  """Access restricted to admin users"""
+  bookingMessageById(id: ID!): BookingMessageByIdResult
+
+  """Access restricted to admin users"""
+  bookingMessages: BookingMessagesResult
 
   """Access restricted to logged in user"""
   currentAccount: CurrentAccountResult
@@ -379,6 +396,9 @@ type Query {
 
   """Access restricted to admin users"""
   specieOptionById(id: ID!): SpecieOptionByIdResult
+
+  """Access restricted to admin users"""
+  speciesOptions: SpecieOptionsResult
 
   """Access restricted to admin users"""
   userById(id: ID!): UserByIdResult
@@ -440,7 +460,7 @@ type SpecieOptionsList {
   specieOptions: [SpecieOption]
 }
 
-"""The result of the accounts query"""
+"""The result of the speciesOptions query"""
 union SpecieOptionsResult = SpecieOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type StorageInfos {

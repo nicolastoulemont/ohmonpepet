@@ -107,7 +107,7 @@ export const mediasList = objectType({
 
 export const mediasResult = unionType({
 	name: 'MediasResult',
-	description: 'The result of the accounts query',
+	description: 'The result of the medias query',
 	definition(t) {
 		t.members(
 			'MediasList',

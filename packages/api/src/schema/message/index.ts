@@ -1,6 +1,6 @@
 import { interfaceType, objectType } from 'nexus'
 import prisma from '../../lib/prisma'
-// export * from './query'
+export * from './query'
 export * from './mutation'
 
 export const bookingMessage = interfaceType({

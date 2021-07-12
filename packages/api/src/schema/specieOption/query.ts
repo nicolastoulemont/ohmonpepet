@@ -47,7 +47,7 @@ export const specieOptionsList = objectType({
 
 export const specieOptionsResult = unionType({
 	name: 'SpecieOptionsResult',
-	description: 'The result of the accounts query',
+	description: 'The result of the speciesOptions query',
 	definition(t) {
 		t.members(
 			'SpecieOptionsList',
@@ -58,7 +58,7 @@ export const specieOptionsResult = unionType({
 	}
 })
 
-export const specieOptions = queryField('allAccounts', {
+export const specieOptions = queryField('speciesOptions', {
 	type: 'SpecieOptionsResult',
 	description: 'Access restricted to admin users',
 	// authorization: (ctx) => authorize(ctx, 'admin'),
