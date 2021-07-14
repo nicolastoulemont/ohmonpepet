@@ -6,7 +6,7 @@
 	"main": "dist/main.js",
 	"scripts": {
 		"gen-env": "gen-env-types .env -e .",
-		"start": "node dist/main.js",
+		"start": "export NODE_ENV=production && node dist/main.js",
 		"dev": "tsnd --files src/dev.ts",
 		"build": "tsc"
 	},

@@ -5,7 +5,7 @@ import { __prod__ } from '../constants'
 
 // Redis config src: https://github.com/davidyaha/graphql-redis-subscriptions
 const options = {
-	host: 'redis',
+	host: '127.0.0.1',
 	port: 6379,
 	retryStrategy: (times: number) => Math.min(times * 50, 2000)
 }
