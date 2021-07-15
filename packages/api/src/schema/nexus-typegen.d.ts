@@ -88,6 +88,10 @@ export interface NexusGenInputs {
     content: string; // String!
     saveAs: string; // String!
   }
+  CreateHostingOptionInput: { // input type
+    nameEn: string; // String!
+    nameFr: string; // String!
+  }
   CreateIndividualOperatorInput: { // input type
     acceptedSpecieOptionsIds: string[]; // [ID!]!
     birthDate: NexusGenScalars['Date']; // Date!
@@ -125,6 +129,10 @@ export interface NexusGenInputs {
   UpdateBookingMessageInput: { // input type
     content?: string | null; // String
     readAt?: NexusGenScalars['Date'] | null; // Date
+  }
+  UpdateHostingOptionInput: { // input type
+    nameEn?: string | null; // String
+    nameFr?: string | null; // String
   }
   UpdateIndividualOperatorInput: { // input type
     acceptedSpecieOptionsIds?: Array<string | null> | null; // [ID]
@@ -185,6 +193,17 @@ export interface NexusGenObjects {
   }
   BooleanResult: { // root type
     success?: boolean | null; // Boolean
+  }
+  HostingOption: { // root type
+    adminId?: string | null; // ID
+    createdAt?: NexusGenScalars['Date'] | null; // Date
+    id?: string | null; // ID
+    nameEn: string; // String!
+    nameFr: string; // String!
+    updatedAt?: NexusGenScalars['Date'] | null; // Date
+  }
+  HostingOptionsList: { // root type
+    hostingOptions?: Array<NexusGenRootTypes['HostingOption'] | null> | null; // [HostingOption]
   }
   IndividualOperator: { // root type
     acceptedSpecieOptionsIds?: Array<string | null> | null; // [String]
@@ -312,6 +331,7 @@ export interface NexusGenUnions {
   BookingMessagesResult: NexusGenRootTypes['BookingMessagesList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   CreateAccountResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'];
   CreateBookingMessageResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserBookingMessage'];
+  CreateHostingOptionResult: NexusGenRootTypes['HostingOption'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   CreateIndividualOperatorResult: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'];
   CreateMediaResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['StorageInfos'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   CreateSpecieOptionResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['SpecieOption'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
@@ -320,8 +340,11 @@ export interface NexusGenUnions {
   CurrentUserMediaResult: NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'] | NexusGenRootTypes['UserMedia'];
   DeleteAccountResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'];
   DeleteBookingMessageResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
+  DeleteHostingOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   DeleteMediaResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['IsActiveOperatorMainMediaError'] | NexusGenRootTypes['IsActiveOperatorWithNoReplacementMediaError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   DeleteSpecieOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
+  HostingOptionByIdResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
+  HostingOptionsResult: NexusGenRootTypes['HostingOptionsList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   IndividualOperatorResult: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   LostPasswordResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['NotFoundError'];
   MediaByIdResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'] | NexusGenRootTypes['UserMedia'];
@@ -336,6 +359,7 @@ export interface NexusGenUnions {
   SpecieOptionByIdResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   SpecieOptionsResult: NexusGenRootTypes['SpecieOptionsList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   UpdateBookingMessageResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserBookingMessage'];
+  UpdateHostingOptionResult: NexusGenRootTypes['HostingOption'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   UpdateIndividualOperatorResult: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
   UpdateSpecieOptionResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['SpecieOption'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   UserByIdResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
@@ -363,6 +387,17 @@ export interface NexusGenFieldTypes {
   }
   BooleanResult: { // field return type
     success: boolean | null; // Boolean
+  }
+  HostingOption: { // field return type
+    adminId: string | null; // ID
+    createdAt: NexusGenScalars['Date'] | null; // Date
+    id: string | null; // ID
+    nameEn: string; // String!
+    nameFr: string; // String!
+    updatedAt: NexusGenScalars['Date'] | null; // Date
+  }
+  HostingOptionsList: { // field return type
+    hostingOptions: Array<NexusGenRootTypes['HostingOption'] | null> | null; // [HostingOption]
   }
   IndividualOperator: { // field return type
     acceptedSpecieOptionsIds: Array<string | null> | null; // [String]
@@ -405,11 +440,13 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['CreateAccountResult'] | null; // CreateAccountResult
     createBookingMessage: NexusGenRootTypes['CreateBookingMessageResult'] | null; // CreateBookingMessageResult
+    createHostingOption: NexusGenRootTypes['CreateHostingOptionResult'] | null; // CreateHostingOptionResult
     createIndividualOperator: NexusGenRootTypes['CreateIndividualOperatorResult'] | null; // CreateIndividualOperatorResult
     createMedia: NexusGenRootTypes['CreateMediaResult'] | null; // CreateMediaResult
     createSpecieOption: NexusGenRootTypes['CreateSpecieOptionResult'] | null; // CreateSpecieOptionResult
     deleteAccount: NexusGenRootTypes['DeleteAccountResult'] | null; // DeleteAccountResult
     deleteBookingMessage: NexusGenRootTypes['DeleteBookingMessageResult'] | null; // DeleteBookingMessageResult
+    deleteHostingOption: NexusGenRootTypes['DeleteHostingOptionResult'] | null; // DeleteHostingOptionResult
     deleteMedia: NexusGenRootTypes['DeleteMediaResult'] | null; // DeleteMediaResult
     deleteSpecieOption: NexusGenRootTypes['DeleteSpecieOptionResult'] | null; // DeleteSpecieOptionResult
     lostPassword: NexusGenRootTypes['LostPasswordResult'] | null; // LostPasswordResult
@@ -421,6 +458,7 @@ export interface NexusGenFieldTypes {
     signIn: NexusGenRootTypes['SignInResult'] | null; // SignInResult
     signOut: NexusGenRootTypes['SignOutResult'] | null; // SignOutResult
     updateBookingMessage: NexusGenRootTypes['UpdateBookingMessageResult'] | null; // UpdateBookingMessageResult
+    updateHostingOption: NexusGenRootTypes['UpdateHostingOptionResult'] | null; // UpdateHostingOptionResult
     updateIndividualOperator: NexusGenRootTypes['IndividualOperatorResult'] | null; // IndividualOperatorResult
     updateSpecieOption: NexusGenRootTypes['UpdateSpecieOptionResult'] | null; // UpdateSpecieOptionResult
     verifyUser: NexusGenRootTypes['VerifyUserResult'] | null; // VerifyUserResult
@@ -457,6 +495,8 @@ export interface NexusGenFieldTypes {
     currentAccount: NexusGenRootTypes['CurrentAccountResult'] | null; // CurrentAccountResult
     currentOperatorMedia: NexusGenRootTypes['CurrentOperatorMediaResult'] | null; // CurrentOperatorMediaResult
     currentUserMedia: NexusGenRootTypes['CurrentUserMediaResult'] | null; // CurrentUserMediaResult
+    hostingOptionById: NexusGenRootTypes['HostingOptionByIdResult'] | null; // HostingOptionByIdResult
+    hostingsOptions: NexusGenRootTypes['HostingOptionsResult'] | null; // HostingOptionsResult
     mediaById: NexusGenRootTypes['MediaByIdResult'] | null; // MediaByIdResult
     medias: NexusGenRootTypes['MediasResult'] | null; // MediasResult
     specieOptionById: NexusGenRootTypes['SpecieOptionByIdResult'] | null; // SpecieOptionByIdResult
@@ -593,6 +633,17 @@ export interface NexusGenFieldTypeNames {
   BooleanResult: { // field return type name
     success: 'Boolean'
   }
+  HostingOption: { // field return type name
+    adminId: 'ID'
+    createdAt: 'Date'
+    id: 'ID'
+    nameEn: 'String'
+    nameFr: 'String'
+    updatedAt: 'Date'
+  }
+  HostingOptionsList: { // field return type name
+    hostingOptions: 'HostingOption'
+  }
   IndividualOperator: { // field return type name
     acceptedSpecieOptionsIds: 'String'
     account: 'Account'
@@ -634,11 +685,13 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createAccount: 'CreateAccountResult'
     createBookingMessage: 'CreateBookingMessageResult'
+    createHostingOption: 'CreateHostingOptionResult'
     createIndividualOperator: 'CreateIndividualOperatorResult'
     createMedia: 'CreateMediaResult'
     createSpecieOption: 'CreateSpecieOptionResult'
     deleteAccount: 'DeleteAccountResult'
     deleteBookingMessage: 'DeleteBookingMessageResult'
+    deleteHostingOption: 'DeleteHostingOptionResult'
     deleteMedia: 'DeleteMediaResult'
     deleteSpecieOption: 'DeleteSpecieOptionResult'
     lostPassword: 'LostPasswordResult'
@@ -650,6 +703,7 @@ export interface NexusGenFieldTypeNames {
     signIn: 'SignInResult'
     signOut: 'SignOutResult'
     updateBookingMessage: 'UpdateBookingMessageResult'
+    updateHostingOption: 'UpdateHostingOptionResult'
     updateIndividualOperator: 'IndividualOperatorResult'
     updateSpecieOption: 'UpdateSpecieOptionResult'
     verifyUser: 'VerifyUserResult'
@@ -686,6 +740,8 @@ export interface NexusGenFieldTypeNames {
     currentAccount: 'CurrentAccountResult'
     currentOperatorMedia: 'CurrentOperatorMediaResult'
     currentUserMedia: 'CurrentUserMediaResult'
+    hostingOptionById: 'HostingOptionByIdResult'
+    hostingsOptions: 'HostingOptionsResult'
     mediaById: 'MediaByIdResult'
     medias: 'MediasResult'
     specieOptionById: 'SpecieOptionByIdResult'
@@ -812,6 +868,9 @@ export interface NexusGenArgTypes {
     createBookingMessage: { // args
       input: NexusGenInputs['CreateBookingMessageInput']; // CreateBookingMessageInput!
     }
+    createHostingOption: { // args
+      input: NexusGenInputs['CreateHostingOptionInput']; // CreateHostingOptionInput!
+    }
     createIndividualOperator: { // args
       input: NexusGenInputs['CreateIndividualOperatorInput']; // CreateIndividualOperatorInput!
     }
@@ -825,6 +884,9 @@ export interface NexusGenArgTypes {
       confirmPassword: string; // String!
     }
     deleteBookingMessage: { // args
+      id: string; // ID!
+    }
+    deleteHostingOption: { // args
       id: string; // ID!
     }
     deleteMedia: { // args
@@ -860,6 +922,10 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['UpdateBookingMessageInput']; // UpdateBookingMessageInput!
       saveAs: string; // String!
     }
+    updateHostingOption: { // args
+      id: string; // ID!
+      input: NexusGenInputs['UpdateHostingOptionInput']; // UpdateHostingOptionInput!
+    }
     updateIndividualOperator: { // args
       input: NexusGenInputs['CreateIndividualOperatorInput']; // CreateIndividualOperatorInput!
     }
@@ -876,6 +942,9 @@ export interface NexusGenArgTypes {
       id: string; // ID!
     }
     bookingMessageById: { // args
+      id: string; // ID!
+    }
+    hostingOptionById: { // args
       id: string; // ID!
     }
     mediaById: { // args
@@ -899,6 +968,7 @@ export interface NexusGenAbstractTypeMembers {
   BookingMessagesResult: "BookingMessagesList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   CreateAccountResult: "Account" | "InvalidArgumentsError" | "UnableToProcessError"
   CreateBookingMessageResult: "InvalidArgumentsError" | "OperatorBookingMessage" | "UnableToProcessError" | "UserAuthenticationError" | "UserBookingMessage"
+  CreateHostingOptionResult: "HostingOption" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   CreateIndividualOperatorResult: "IndividualOperator" | "InvalidArgumentsError" | "UnableToProcessError"
   CreateMediaResult: "InvalidArgumentsError" | "StorageInfos" | "UnableToProcessError" | "UserAuthenticationError"
   CreateSpecieOptionResult: "InvalidArgumentsError" | "SpecieOption" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
@@ -907,8 +977,11 @@ export interface NexusGenAbstractTypeMembers {
   CurrentUserMediaResult: "NotFoundError" | "SharedMedia" | "UserAuthenticationError" | "UserForbiddenError" | "UserMedia"
   DeleteAccountResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError"
   DeleteBookingMessageResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError"
+  DeleteHostingOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   DeleteMediaResult: "BooleanResult" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError"
   DeleteSpecieOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
+  HostingOptionByIdResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
+  HostingOptionsResult: "HostingOptionsList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   IndividualOperatorResult: "IndividualOperator" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   LostPasswordResult: "BooleanResult" | "NotFoundError"
   MediaByIdResult: "InvalidArgumentsError" | "NotFoundError" | "OperatorMedia" | "SharedMedia" | "UserAuthenticationError" | "UserForbiddenError" | "UserMedia"
@@ -923,6 +996,7 @@ export interface NexusGenAbstractTypeMembers {
   SpecieOptionByIdResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   SpecieOptionsResult: "SpecieOptionsList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   UpdateBookingMessageResult: "InvalidArgumentsError" | "NotFoundError" | "OperatorBookingMessage" | "UnableToProcessError" | "UserAuthenticationError" | "UserBookingMessage"
+  UpdateHostingOptionResult: "HostingOption" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   UpdateIndividualOperatorResult: "IndividualOperator" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   UpdateSpecieOptionResult: "InvalidArgumentsError" | "SpecieOption" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   UserByIdResult: "InvalidArgumentsError" | "NotFoundError" | "User" | "UserAuthenticationError" | "UserForbiddenError"
@@ -961,7 +1035,7 @@ export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = keyof NexusGenUnions;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BookingMessagesList" | "BooleanResult" | "IndividualOperator" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "MediasList" | "NotFoundError" | "OperatorBookingMessage" | "OperatorMedia" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "StorageInfos" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserForbiddenError" | "UserMedia" | "UsersList";
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BookingMessagesList" | "BooleanResult" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "MediasList" | "NotFoundError" | "OperatorBookingMessage" | "OperatorMedia" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "StorageInfos" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserForbiddenError" | "UserMedia" | "UsersList";
 
 export type NexusGenAbstractsUsingStrategyResolveType = never;
 

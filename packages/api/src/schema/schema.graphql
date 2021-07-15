@@ -84,6 +84,13 @@ input CreateBookingMessageInput {
 
 union CreateBookingMessageResult = InvalidArgumentsError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
 
+input CreateHostingOptionInput {
+  nameEn: String!
+  nameFr: String!
+}
+
+union CreateHostingOptionResult = HostingOption | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 input CreateIndividualOperatorInput {
   acceptedSpecieOptionsIds: [ID!]!
   birthDate: Date!
@@ -141,6 +148,8 @@ union DeleteAccountResult = BooleanResult | InvalidArgumentsError | NotFoundErro
 """The result of the deleteBookingMessage mutation"""
 union DeleteBookingMessageResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
+union DeleteHostingOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+
 """The result of the deleteMedia mutation"""
 union DeleteMediaResult = BooleanResult | InvalidArgumentsError | IsActiveOperatorMainMediaError | IsActiveOperatorWithNoReplacementMediaError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
@@ -173,6 +182,26 @@ enum ErrorMessage {
   UNABLE_TO_PROCESS_REQUEST_DUE_TO_SERVER_ERROR
   UNAUTHENTICATED_PLEASE_LOGIN
 }
+
+type HostingOption {
+  adminId: ID
+  createdAt: Date
+  id: ID
+  nameEn: String!
+  nameFr: String!
+  updatedAt: Date
+}
+
+"""The result of the accountById query"""
+union HostingOptionByIdResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+
+"""List of HostingOptions"""
+type HostingOptionsList {
+  hostingOptions: [HostingOption]
+}
+
+"""The result of the hostingsOptions query"""
+union HostingOptionsResult = HostingOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type IndividualOperator implements Actor & Node & Operator {
   acceptedSpecieOptionsIds: [String]
@@ -274,6 +303,7 @@ union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | U
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountResult
   createBookingMessage(input: CreateBookingMessageInput!): CreateBookingMessageResult
+  createHostingOption(input: CreateHostingOptionInput!): CreateHostingOptionResult
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
   createMedia(input: CreateMediaInput!): CreateMediaResult
   createSpecieOption(input: CreateSpecieOptionInput!): CreateSpecieOptionResult
@@ -281,6 +311,7 @@ type Mutation {
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
   deleteBookingMessage(id: ID!): DeleteBookingMessageResult
+  deleteHostingOption(id: ID!): DeleteHostingOptionResult
   deleteMedia(mediaId: ID!): DeleteMediaResult
   deleteSpecieOption(id: ID!): DeleteSpecieOptionResult
   lostPassword(email: String!): LostPasswordResult
@@ -298,6 +329,7 @@ type Mutation {
   """Access restricted to logged in user"""
   signOut: SignOutResult
   updateBookingMessage(id: ID!, input: UpdateBookingMessageInput!, saveAs: String!): UpdateBookingMessageResult
+  updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
   updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
   updateSpecieOption(id: ID!, input: UpdateSpecieOptionInput!): UpdateSpecieOptionResult
   verifyUser(input: VerifyUserInput!): VerifyUserResult
@@ -387,6 +419,12 @@ type Query {
 
   """Access restricted to logged in user"""
   currentUserMedia: CurrentUserMediaResult
+
+  """Access restricted to admin users"""
+  hostingOptionById(id: ID!): HostingOptionByIdResult
+
+  """Access restricted to admin users"""
+  hostingsOptions: HostingOptionsResult
 
   """Access restricted to admin users"""
   mediaById(id: ID!): MediaByIdResult
@@ -484,6 +522,13 @@ input UpdateBookingMessageInput {
 }
 
 union UpdateBookingMessageResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
+
+input UpdateHostingOptionInput {
+  nameEn: String
+  nameFr: String
+}
+
+union UpdateHostingOptionResult = HostingOption | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateIndividualOperatorInput {
   acceptedSpecieOptionsIds: [ID]

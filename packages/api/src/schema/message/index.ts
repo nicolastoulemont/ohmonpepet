@@ -10,7 +10,6 @@ export const bookingMessage = interfaceType({
 		t.implements('Node')
 		t.nonNull.string('content')
 		t.datetime('readAt')
-		// Add booking related fields
 		t.list.field('medias', {
 			type: 'Media',
 			resolve: async (m) =>
