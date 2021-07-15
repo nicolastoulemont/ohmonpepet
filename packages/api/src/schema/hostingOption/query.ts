@@ -4,7 +4,7 @@ import prisma from '../../lib/prisma'
 
 export const hostingOptionByIdResult = unionType({
 	name: 'HostingOptionByIdResult',
-	description: 'The result of the accountById query',
+	description: 'The result of the hostingOptionById query',
 	definition(t) {
 		t.members(
 			'Account',

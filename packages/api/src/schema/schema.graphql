@@ -84,6 +84,13 @@ input CreateBookingMessageInput {
 
 union CreateBookingMessageResult = InvalidArgumentsError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
 
+input CreateGenderOptionInput {
+  nameEn: String!
+  nameFr: String!
+}
+
+union CreateGenderOptionResult = GenderOption | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 input CreateHostingOptionInput {
   nameEn: String!
   nameFr: String!
@@ -148,6 +155,8 @@ union DeleteAccountResult = BooleanResult | InvalidArgumentsError | NotFoundErro
 """The result of the deleteBookingMessage mutation"""
 union DeleteBookingMessageResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
+union DeleteGenderOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+
 union DeleteHostingOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
 """The result of the deleteMedia mutation"""
@@ -183,6 +192,26 @@ enum ErrorMessage {
   UNAUTHENTICATED_PLEASE_LOGIN
 }
 
+type GenderOption {
+  adminId: ID
+  createdAt: Date
+  id: ID
+  nameEn: String!
+  nameFr: String!
+  updatedAt: Date
+}
+
+"""The result of the genderOptionById query"""
+union GenderOptionByIdResult = GenderOption | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+
+"""List of genderOptions"""
+type GenderOptionsList {
+  genderOptions: [GenderOption]
+}
+
+"""The result of the gendersOptions query"""
+union GenderOptionsResult = GenderOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 type HostingOption {
   adminId: ID
   createdAt: Date
@@ -192,7 +221,7 @@ type HostingOption {
   updatedAt: Date
 }
 
-"""The result of the accountById query"""
+"""The result of the hostingOptionById query"""
 union HostingOptionByIdResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
 """List of HostingOptions"""
@@ -303,6 +332,7 @@ union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | U
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountResult
   createBookingMessage(input: CreateBookingMessageInput!): CreateBookingMessageResult
+  createGenderOption(input: CreateGenderOptionInput!): CreateGenderOptionResult
   createHostingOption(input: CreateHostingOptionInput!): CreateHostingOptionResult
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
   createMedia(input: CreateMediaInput!): CreateMediaResult
@@ -311,6 +341,7 @@ type Mutation {
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
   deleteBookingMessage(id: ID!): DeleteBookingMessageResult
+  deleteGenderOption(id: ID!): DeleteGenderOptionResult
   deleteHostingOption(id: ID!): DeleteHostingOptionResult
   deleteMedia(mediaId: ID!): DeleteMediaResult
   deleteSpecieOption(id: ID!): DeleteSpecieOptionResult
@@ -329,6 +360,7 @@ type Mutation {
   """Access restricted to logged in user"""
   signOut: SignOutResult
   updateBookingMessage(id: ID!, input: UpdateBookingMessageInput!, saveAs: String!): UpdateBookingMessageResult
+  updateGenderOption(id: ID!, input: UpdateGenderOptionInput!): UpdateGenderOptionResult
   updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
   updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
   updateSpecieOption(id: ID!, input: UpdateSpecieOptionInput!): UpdateSpecieOptionResult
@@ -421,6 +453,12 @@ type Query {
   currentUserMedia: CurrentUserMediaResult
 
   """Access restricted to admin users"""
+  genderOptionById(id: ID!): GenderOptionByIdResult
+
+  """Access restricted to admin users"""
+  gendersOptions: GenderOptionsResult
+
+  """Access restricted to admin users"""
   hostingOptionById(id: ID!): HostingOptionByIdResult
 
   """Access restricted to admin users"""
@@ -490,8 +528,8 @@ type SpecieOption {
   updatedAt: Date
 }
 
-"""The result of the accountById query"""
-union SpecieOptionByIdResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+"""The result of the specieOptionById query"""
+union SpecieOptionByIdResult = InvalidArgumentsError | NotFoundError | SpecieOption | UserAuthenticationError | UserForbiddenError
 
 """List of specieOptions"""
 type SpecieOptionsList {
@@ -522,6 +560,13 @@ input UpdateBookingMessageInput {
 }
 
 union UpdateBookingMessageResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
+
+input UpdateGenderOptionInput {
+  nameEn: String
+  nameFr: String
+}
+
+union UpdateGenderOptionResult = GenderOption | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateHostingOptionInput {
   nameEn: String

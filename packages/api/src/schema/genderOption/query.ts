@@ -2,12 +2,12 @@ import { idArg, nonNull, objectType, queryField, unionType } from 'nexus'
 import { authorize, checkArgs, NotFoundError, UnableToProcessError } from '../../utils'
 import prisma from '../../lib/prisma'
 
-export const specieOptionByIdResult = unionType({
-	name: 'SpecieOptionByIdResult',
-	description: 'The result of the specieOptionById query',
+export const genderOptionByIdResult = unionType({
+	name: 'GenderOptionByIdResult',
+	description: 'The result of the genderOptionById query',
 	definition(t) {
 		t.members(
-			'SpecieOption',
+			'GenderOption',
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'NotFoundError',
@@ -16,8 +16,8 @@ export const specieOptionByIdResult = unionType({
 	}
 })
 
-export const specieOptionById = queryField('specieOptionById', {
-	type: 'SpecieOptionByIdResult',
+export const genderOptionById = queryField('genderOptionById', {
+	type: 'GenderOptionByIdResult',
 	args: {
 		id: nonNull(idArg())
 	},
@@ -26,7 +26,7 @@ export const specieOptionById = queryField('specieOptionById', {
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
-			return await prisma.specieOption.findUnique({
+			return await prisma.genderOption.findUnique({
 				where: { id },
 				rejectOnNotFound: true
 			})
@@ -36,21 +36,21 @@ export const specieOptionById = queryField('specieOptionById', {
 	}
 })
 
-export const specieOptionsList = objectType({
-	name: 'SpecieOptionsList',
-	isTypeOf: (data) => Boolean((data as any).specieOptions),
-	description: 'List of specieOptions',
+export const genderOptionsList = objectType({
+	name: 'GenderOptionsList',
+	isTypeOf: (data) => Boolean((data as any).genderOptions),
+	description: 'List of genderOptions',
 	definition(t) {
-		t.list.field('specieOptions', { type: 'SpecieOption' })
+		t.list.field('genderOptions', { type: 'GenderOption' })
 	}
 })
 
-export const specieOptionsResult = unionType({
-	name: 'SpecieOptionsResult',
-	description: 'The result of the speciesOptions query',
+export const genderOptionsResult = unionType({
+	name: 'GenderOptionsResult',
+	description: 'The result of the gendersOptions query',
 	definition(t) {
 		t.members(
-			'SpecieOptionsList',
+			'GenderOptionsList',
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'UnableToProcessError'
@@ -58,14 +58,14 @@ export const specieOptionsResult = unionType({
 	}
 })
 
-export const specieOptions = queryField('speciesOptions', {
-	type: 'SpecieOptionsResult',
+export const genderOptions = queryField('gendersOptions', {
+	type: 'GenderOptionsResult',
 	description: 'Access restricted to admin users',
 	// authorization: (ctx) => authorize(ctx, 'admin'),
 	async resolve() {
 		try {
-			const specieOptions = await prisma.specieOption.findMany()
-			return { specieOptions }
+			const genderOptions = await prisma.genderOption.findMany()
+			return { genderOptions }
 		} catch (error) {
 			return UnableToProcessError
 		}
