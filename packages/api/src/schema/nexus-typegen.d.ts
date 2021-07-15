@@ -109,6 +109,11 @@ export interface NexusGenInputs {
     partnerPercentage?: number | null; // Int
     stripeAccountId?: string | null; // ID
   }
+  CreateLanguageOptionInput: { // input type
+    iconUrl: string; // String!
+    nameEn: string; // String!
+    nameFr: string; // String!
+  }
   CreateMediaInput: { // input type
     fileName: string; // String!
     fileType: string; // String!
@@ -154,6 +159,10 @@ export interface NexusGenInputs {
     partnerId?: string | null; // String
     partnerPercentage?: number | null; // Int
     stripeAccountId?: string | null; // ID
+  }
+  UpdateLanguageOptionInput: { // input type
+    nameEn?: string | null; // String
+    nameFr?: string | null; // String
   }
   UpdateSpecieOptionInput: { // input type
     nameEn?: string | null; // String
@@ -255,6 +264,18 @@ export interface NexusGenObjects {
   IsActiveOperatorWithNoReplacementMediaError: { // root type
     activeOperatorWithNoReplacementMediaError: string; // String!
   }
+  LanguageOption: { // root type
+    adminId?: string | null; // ID
+    createdAt?: NexusGenScalars['Date'] | null; // Date
+    iconUrl: string; // String!
+    id?: string | null; // ID
+    nameEn: string; // String!
+    nameFr: string; // String!
+    updatedAt?: NexusGenScalars['Date'] | null; // Date
+  }
+  LanguageOptionsList: { // root type
+    languageOptions?: Array<NexusGenRootTypes['LanguageOption'] | null> | null; // [LanguageOption]
+  }
   MediasList: { // root type
     medias?: Array<NexusGenRootTypes['Media'] | null> | null; // [Media]
   }
@@ -353,6 +374,7 @@ export interface NexusGenUnions {
   CreateGenderOptionResult: NexusGenRootTypes['GenderOption'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   CreateHostingOptionResult: NexusGenRootTypes['HostingOption'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   CreateIndividualOperatorResult: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'];
+  CreateLanguageOptionResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['LanguageOption'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   CreateMediaResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['StorageInfos'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   CreateSpecieOptionResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['SpecieOption'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   CurrentAccountResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
@@ -362,6 +384,7 @@ export interface NexusGenUnions {
   DeleteBookingMessageResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   DeleteGenderOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   DeleteHostingOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
+  DeleteLanguageOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   DeleteMediaResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['IsActiveOperatorMainMediaError'] | NexusGenRootTypes['IsActiveOperatorWithNoReplacementMediaError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   DeleteSpecieOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   GenderOptionByIdResult: NexusGenRootTypes['GenderOption'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
@@ -369,6 +392,8 @@ export interface NexusGenUnions {
   HostingOptionByIdResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   HostingOptionsResult: NexusGenRootTypes['HostingOptionsList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   IndividualOperatorResult: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
+  LanguageOptionByIdResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['LanguageOption'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
+  LanguageOptionsResult: NexusGenRootTypes['LanguageOptionsList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   LostPasswordResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['NotFoundError'];
   MediaByIdResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'] | NexusGenRootTypes['UserMedia'];
   MediasResult: NexusGenRootTypes['MediasList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
@@ -385,6 +410,7 @@ export interface NexusGenUnions {
   UpdateGenderOptionResult: NexusGenRootTypes['GenderOption'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   UpdateHostingOptionResult: NexusGenRootTypes['HostingOption'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   UpdateIndividualOperatorResult: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
+  UpdateLanguageOptionResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['LanguageOption'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   UpdateSpecieOptionResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['SpecieOption'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   UserByIdResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   VerifyUserResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
@@ -469,6 +495,18 @@ export interface NexusGenFieldTypes {
   IsActiveOperatorWithNoReplacementMediaError: { // field return type
     activeOperatorWithNoReplacementMediaError: string; // String!
   }
+  LanguageOption: { // field return type
+    adminId: string | null; // ID
+    createdAt: NexusGenScalars['Date'] | null; // Date
+    iconUrl: string; // String!
+    id: string | null; // ID
+    nameEn: string; // String!
+    nameFr: string; // String!
+    updatedAt: NexusGenScalars['Date'] | null; // Date
+  }
+  LanguageOptionsList: { // field return type
+    languageOptions: Array<NexusGenRootTypes['LanguageOption'] | null> | null; // [LanguageOption]
+  }
   MediasList: { // field return type
     medias: Array<NexusGenRootTypes['Media'] | null> | null; // [Media]
   }
@@ -478,12 +516,14 @@ export interface NexusGenFieldTypes {
     createGenderOption: NexusGenRootTypes['CreateGenderOptionResult'] | null; // CreateGenderOptionResult
     createHostingOption: NexusGenRootTypes['CreateHostingOptionResult'] | null; // CreateHostingOptionResult
     createIndividualOperator: NexusGenRootTypes['CreateIndividualOperatorResult'] | null; // CreateIndividualOperatorResult
+    createLanguageOption: NexusGenRootTypes['CreateLanguageOptionResult'] | null; // CreateLanguageOptionResult
     createMedia: NexusGenRootTypes['CreateMediaResult'] | null; // CreateMediaResult
     createSpecieOption: NexusGenRootTypes['CreateSpecieOptionResult'] | null; // CreateSpecieOptionResult
     deleteAccount: NexusGenRootTypes['DeleteAccountResult'] | null; // DeleteAccountResult
     deleteBookingMessage: NexusGenRootTypes['DeleteBookingMessageResult'] | null; // DeleteBookingMessageResult
     deleteGenderOption: NexusGenRootTypes['DeleteGenderOptionResult'] | null; // DeleteGenderOptionResult
     deleteHostingOption: NexusGenRootTypes['DeleteHostingOptionResult'] | null; // DeleteHostingOptionResult
+    deleteLanguageOption: NexusGenRootTypes['DeleteLanguageOptionResult'] | null; // DeleteLanguageOptionResult
     deleteMedia: NexusGenRootTypes['DeleteMediaResult'] | null; // DeleteMediaResult
     deleteSpecieOption: NexusGenRootTypes['DeleteSpecieOptionResult'] | null; // DeleteSpecieOptionResult
     lostPassword: NexusGenRootTypes['LostPasswordResult'] | null; // LostPasswordResult
@@ -498,6 +538,7 @@ export interface NexusGenFieldTypes {
     updateGenderOption: NexusGenRootTypes['UpdateGenderOptionResult'] | null; // UpdateGenderOptionResult
     updateHostingOption: NexusGenRootTypes['UpdateHostingOptionResult'] | null; // UpdateHostingOptionResult
     updateIndividualOperator: NexusGenRootTypes['IndividualOperatorResult'] | null; // IndividualOperatorResult
+    updateLanguageOption: NexusGenRootTypes['UpdateLanguageOptionResult'] | null; // UpdateLanguageOptionResult
     updateSpecieOption: NexusGenRootTypes['UpdateSpecieOptionResult'] | null; // UpdateSpecieOptionResult
     verifyUser: NexusGenRootTypes['VerifyUserResult'] | null; // VerifyUserResult
   }
@@ -537,6 +578,8 @@ export interface NexusGenFieldTypes {
     gendersOptions: NexusGenRootTypes['GenderOptionsResult'] | null; // GenderOptionsResult
     hostingOptionById: NexusGenRootTypes['HostingOptionByIdResult'] | null; // HostingOptionByIdResult
     hostingsOptions: NexusGenRootTypes['HostingOptionsResult'] | null; // HostingOptionsResult
+    languageOptionById: NexusGenRootTypes['LanguageOptionByIdResult'] | null; // LanguageOptionByIdResult
+    languagesOptions: NexusGenRootTypes['LanguageOptionsResult'] | null; // LanguageOptionsResult
     mediaById: NexusGenRootTypes['MediaByIdResult'] | null; // MediaByIdResult
     medias: NexusGenRootTypes['MediasResult'] | null; // MediasResult
     specieOptionById: NexusGenRootTypes['SpecieOptionByIdResult'] | null; // SpecieOptionByIdResult
@@ -730,6 +773,18 @@ export interface NexusGenFieldTypeNames {
   IsActiveOperatorWithNoReplacementMediaError: { // field return type name
     activeOperatorWithNoReplacementMediaError: 'String'
   }
+  LanguageOption: { // field return type name
+    adminId: 'ID'
+    createdAt: 'Date'
+    iconUrl: 'String'
+    id: 'ID'
+    nameEn: 'String'
+    nameFr: 'String'
+    updatedAt: 'Date'
+  }
+  LanguageOptionsList: { // field return type name
+    languageOptions: 'LanguageOption'
+  }
   MediasList: { // field return type name
     medias: 'Media'
   }
@@ -739,12 +794,14 @@ export interface NexusGenFieldTypeNames {
     createGenderOption: 'CreateGenderOptionResult'
     createHostingOption: 'CreateHostingOptionResult'
     createIndividualOperator: 'CreateIndividualOperatorResult'
+    createLanguageOption: 'CreateLanguageOptionResult'
     createMedia: 'CreateMediaResult'
     createSpecieOption: 'CreateSpecieOptionResult'
     deleteAccount: 'DeleteAccountResult'
     deleteBookingMessage: 'DeleteBookingMessageResult'
     deleteGenderOption: 'DeleteGenderOptionResult'
     deleteHostingOption: 'DeleteHostingOptionResult'
+    deleteLanguageOption: 'DeleteLanguageOptionResult'
     deleteMedia: 'DeleteMediaResult'
     deleteSpecieOption: 'DeleteSpecieOptionResult'
     lostPassword: 'LostPasswordResult'
@@ -759,6 +816,7 @@ export interface NexusGenFieldTypeNames {
     updateGenderOption: 'UpdateGenderOptionResult'
     updateHostingOption: 'UpdateHostingOptionResult'
     updateIndividualOperator: 'IndividualOperatorResult'
+    updateLanguageOption: 'UpdateLanguageOptionResult'
     updateSpecieOption: 'UpdateSpecieOptionResult'
     verifyUser: 'VerifyUserResult'
   }
@@ -798,6 +856,8 @@ export interface NexusGenFieldTypeNames {
     gendersOptions: 'GenderOptionsResult'
     hostingOptionById: 'HostingOptionByIdResult'
     hostingsOptions: 'HostingOptionsResult'
+    languageOptionById: 'LanguageOptionByIdResult'
+    languagesOptions: 'LanguageOptionsResult'
     mediaById: 'MediaByIdResult'
     medias: 'MediasResult'
     specieOptionById: 'SpecieOptionByIdResult'
@@ -933,6 +993,9 @@ export interface NexusGenArgTypes {
     createIndividualOperator: { // args
       input: NexusGenInputs['CreateIndividualOperatorInput']; // CreateIndividualOperatorInput!
     }
+    createLanguageOption: { // args
+      input: NexusGenInputs['CreateLanguageOptionInput']; // CreateLanguageOptionInput!
+    }
     createMedia: { // args
       input: NexusGenInputs['CreateMediaInput']; // CreateMediaInput!
     }
@@ -949,6 +1012,9 @@ export interface NexusGenArgTypes {
       id: string; // ID!
     }
     deleteHostingOption: { // args
+      id: string; // ID!
+    }
+    deleteLanguageOption: { // args
       id: string; // ID!
     }
     deleteMedia: { // args
@@ -995,6 +1061,10 @@ export interface NexusGenArgTypes {
     updateIndividualOperator: { // args
       input: NexusGenInputs['CreateIndividualOperatorInput']; // CreateIndividualOperatorInput!
     }
+    updateLanguageOption: { // args
+      id: string; // ID!
+      input: NexusGenInputs['UpdateLanguageOptionInput']; // UpdateLanguageOptionInput!
+    }
     updateSpecieOption: { // args
       id: string; // ID!
       input: NexusGenInputs['UpdateSpecieOptionInput']; // UpdateSpecieOptionInput!
@@ -1014,6 +1084,9 @@ export interface NexusGenArgTypes {
       id: string; // ID!
     }
     hostingOptionById: { // args
+      id: string; // ID!
+    }
+    languageOptionById: { // args
       id: string; // ID!
     }
     mediaById: { // args
@@ -1040,6 +1113,7 @@ export interface NexusGenAbstractTypeMembers {
   CreateGenderOptionResult: "GenderOption" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   CreateHostingOptionResult: "HostingOption" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   CreateIndividualOperatorResult: "IndividualOperator" | "InvalidArgumentsError" | "UnableToProcessError"
+  CreateLanguageOptionResult: "InvalidArgumentsError" | "LanguageOption" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   CreateMediaResult: "InvalidArgumentsError" | "StorageInfos" | "UnableToProcessError" | "UserAuthenticationError"
   CreateSpecieOptionResult: "InvalidArgumentsError" | "SpecieOption" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   CurrentAccountResult: "Account" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
@@ -1049,6 +1123,7 @@ export interface NexusGenAbstractTypeMembers {
   DeleteBookingMessageResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError"
   DeleteGenderOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   DeleteHostingOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
+  DeleteLanguageOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   DeleteMediaResult: "BooleanResult" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError"
   DeleteSpecieOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   GenderOptionByIdResult: "GenderOption" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
@@ -1056,6 +1131,8 @@ export interface NexusGenAbstractTypeMembers {
   HostingOptionByIdResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   HostingOptionsResult: "HostingOptionsList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   IndividualOperatorResult: "IndividualOperator" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
+  LanguageOptionByIdResult: "InvalidArgumentsError" | "LanguageOption" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
+  LanguageOptionsResult: "LanguageOptionsList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   LostPasswordResult: "BooleanResult" | "NotFoundError"
   MediaByIdResult: "InvalidArgumentsError" | "NotFoundError" | "OperatorMedia" | "SharedMedia" | "UserAuthenticationError" | "UserForbiddenError" | "UserMedia"
   MediasResult: "MediasList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
@@ -1072,6 +1149,7 @@ export interface NexusGenAbstractTypeMembers {
   UpdateGenderOptionResult: "GenderOption" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   UpdateHostingOptionResult: "HostingOption" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   UpdateIndividualOperatorResult: "IndividualOperator" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
+  UpdateLanguageOptionResult: "InvalidArgumentsError" | "LanguageOption" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   UpdateSpecieOptionResult: "InvalidArgumentsError" | "SpecieOption" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   UserByIdResult: "InvalidArgumentsError" | "NotFoundError" | "User" | "UserAuthenticationError" | "UserForbiddenError"
   VerifyUserResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
@@ -1109,7 +1187,7 @@ export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = keyof NexusGenUnions;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BookingMessagesList" | "BooleanResult" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "MediasList" | "NotFoundError" | "OperatorBookingMessage" | "OperatorMedia" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "StorageInfos" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserForbiddenError" | "UserMedia" | "UsersList";
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BookingMessagesList" | "BooleanResult" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "LanguageOption" | "LanguageOptionsList" | "MediasList" | "NotFoundError" | "OperatorBookingMessage" | "OperatorMedia" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "StorageInfos" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserForbiddenError" | "UserMedia" | "UsersList";
 
 export type NexusGenAbstractsUsingStrategyResolveType = never;
 
