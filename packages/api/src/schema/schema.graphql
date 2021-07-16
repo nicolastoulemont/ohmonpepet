@@ -131,6 +131,13 @@ input CreateMediaInput {
 
 union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError
 
+input CreateServiceOptionInput {
+  nameEn: String!
+  nameFr: String!
+}
+
+union CreateServiceOptionResult = InvalidArgumentsError | ServiceOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 input CreateSpecieOptionInput {
   nameEn: String!
   nameFr: String!
@@ -171,6 +178,8 @@ union DeleteLanguageOptionResult = BooleanResult | InvalidArgumentsError | NotFo
 
 """The result of the deleteMedia mutation"""
 union DeleteMediaResult = BooleanResult | InvalidArgumentsError | IsActiveOperatorMainMediaError | IsActiveOperatorWithNoReplacementMediaError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
+union DeleteServiceOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
 union DeleteSpecieOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
@@ -368,6 +377,7 @@ type Mutation {
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
   createLanguageOption(input: CreateLanguageOptionInput!): CreateLanguageOptionResult
   createMedia(input: CreateMediaInput!): CreateMediaResult
+  createServiceOption(input: CreateServiceOptionInput!): CreateServiceOptionResult
   createSpecieOption(input: CreateSpecieOptionInput!): CreateSpecieOptionResult
 
   """Access restricted to logged in user"""
@@ -377,6 +387,7 @@ type Mutation {
   deleteHostingOption(id: ID!): DeleteHostingOptionResult
   deleteLanguageOption(id: ID!): DeleteLanguageOptionResult
   deleteMedia(mediaId: ID!): DeleteMediaResult
+  deleteServiceOption(id: ID!): DeleteServiceOptionResult
   deleteSpecieOption(id: ID!): DeleteSpecieOptionResult
   lostPassword(email: String!): LostPasswordResult
 
@@ -397,6 +408,7 @@ type Mutation {
   updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
   updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
   updateLanguageOption(id: ID!, input: UpdateLanguageOptionInput!): UpdateLanguageOptionResult
+  updateServiceOption(id: ID!, input: UpdateServiceOptionInput!): UpdateServiceOptionResult
   updateSpecieOption(id: ID!, input: UpdateSpecieOptionInput!): UpdateSpecieOptionResult
   verifyUser(input: VerifyUserInput!): VerifyUserResult
 }
@@ -511,6 +523,12 @@ type Query {
   medias: MediasResult
 
   """Access restricted to admin users"""
+  serviceOptionById(id: ID!): ServiceOptionByIdResult
+
+  """Access restricted to admin users"""
+  servicesOptions: ServiceOptionsResult
+
+  """Access restricted to admin users"""
   specieOptionById(id: ID!): SpecieOptionByIdResult
 
   """Access restricted to admin users"""
@@ -530,6 +548,26 @@ union ResetPasswordResult = BooleanResult | InvalidArgumentsError | UnableToProc
 
 """The result of the sendVerificationEmail mutation"""
 union SendVerificationEmailResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError
+
+type ServiceOption {
+  adminId: ID
+  createdAt: Date
+  id: ID
+  nameEn: String!
+  nameFr: String!
+  updatedAt: Date
+}
+
+"""The result of the serviceOptionById query"""
+union ServiceOptionByIdResult = InvalidArgumentsError | NotFoundError | ServiceOption | UserAuthenticationError | UserForbiddenError
+
+"""List of serviceOptions"""
+type ServiceOptionsList {
+  serviceOptions: [ServiceOption]
+}
+
+"""The result of the servicesOptions query"""
+union ServiceOptionsResult = ServiceOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input SetBookingMessagesAsReadInput {
   ids: [ID!]!
@@ -638,6 +676,13 @@ input UpdateLanguageOptionInput {
 }
 
 union UpdateLanguageOptionResult = InvalidArgumentsError | LanguageOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+input UpdateServiceOptionInput {
+  nameEn: String
+  nameFr: String
+}
+
+union UpdateServiceOptionResult = InvalidArgumentsError | ServiceOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateSpecieOptionInput {
   nameEn: String

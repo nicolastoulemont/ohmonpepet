@@ -332,10 +332,8 @@ model ServiceOption {
   updatedAt            DateTime              @updatedAt
   creator              Admin?                @relation(fields: [adminId], references: [id])
   adminId              String?
-  userFacingNameEn     String
-  userFacingNameFr     String
-  operatorFacingNameEn String
-  operatorFacingNameFr String
+  nameEn               String
+  nameFr               String
   bookings             Booking[]
   coreOperatorServices CoreOperatorService[]
 }
