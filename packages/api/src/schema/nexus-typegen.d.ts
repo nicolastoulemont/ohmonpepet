@@ -37,6 +37,10 @@ declare global {
      * A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
      */
     url<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "URL";
+    /**
+     * A field whose value must be either: user, operator, admin
+     */
+    saveAs<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "SaveAsValue";
   }
 }
 declare global {
@@ -69,6 +73,10 @@ declare global {
      * A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
      */
     url<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "URL";
+    /**
+     * A field whose value must be either: user, operator, admin
+     */
+    saveAs<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "SaveAsValue";
   }
 }
 
@@ -82,6 +90,11 @@ export interface NexusGenInputs {
     email: NexusGenScalars['EmailAddress']; // EmailAddress!
     firstName: string; // String!
     password: string; // String!
+  }
+  CreateBookingClaimInput: { // input type
+    bookingId: string; // String!
+    reason: string; // String!
+    saveAs: NexusGenScalars['SaveAsValue']; // SaveAsValue!
   }
   CreateBookingMessageInput: { // input type
     bookingId: string; // String!
@@ -193,13 +206,14 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
-  Date: any
-  DateTime: any
-  EmailAddress: any
-  JWT: any
-  Latitude: any
-  Longitude: any
-  URL: any
+  Date: Date
+  DateTime: Date
+  EmailAddress: string
+  JWT: string
+  Latitude: number
+  Longitude: number
+  SaveAsValue: 'user' | 'operator' | 'admin'
+  URL: string
 }
 
 export interface NexusGenObjects {
@@ -218,6 +232,9 @@ export interface NexusGenObjects {
   }
   BooleanResult: { // root type
     success?: boolean | null; // Boolean
+  }
+  ClaimsList: { // root type
+    claims?: Array<NexusGenRootTypes['Claim'] | null> | null; // [Claim]
   }
   GenderOption: { // root type
     adminId?: string | null; // ID
@@ -297,6 +314,14 @@ export interface NexusGenObjects {
     readAt?: NexusGenScalars['DateTime'] | null; // DateTime
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  OperatorClaim: { // root type
+    bookingId: string; // ID!
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    operatorId?: string | null; // ID
+    reason: string; // String!
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+  }
   OperatorMedia: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     id: string; // String!
@@ -359,6 +384,14 @@ export interface NexusGenObjects {
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     userId?: string | null; // ID
   }
+  UserClaim: { // root type
+    bookingId: string; // ID!
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    reason: string; // String!
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    userId?: string | null; // ID
+  }
   UserForbiddenError: {};
   UserMedia: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -376,8 +409,9 @@ export interface NexusGenObjects {
 export interface NexusGenInterfaces {
   Actor: NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['User'];
   BookingMessage: NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['UserBookingMessage'];
+  Claim: NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['UserClaim'];
   Media: NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['UserMedia'];
-  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserBookingMessage'] | NexusGenRootTypes['UserMedia'];
+  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserBookingMessage'] | NexusGenRootTypes['UserClaim'] | NexusGenRootTypes['UserMedia'];
   Operator: NexusGenRootTypes['IndividualOperator'];
 }
 
@@ -388,7 +422,10 @@ export interface NexusGenUnions {
   AllUsersResult: NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'] | NexusGenRootTypes['UsersList'];
   BookingMessageByIdResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   BookingMessagesResult: NexusGenRootTypes['BookingMessagesList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
+  ClaimByIdResult: NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserClaim'] | NexusGenRootTypes['UserForbiddenError'];
+  ClaimsResult: NexusGenRootTypes['ClaimsList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   CreateAccountResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'];
+  CreateBookingClaimResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserClaim'];
   CreateBookingMessageResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserBookingMessage'];
   CreateGenderOptionResult: NexusGenRootTypes['GenderOption'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   CreateHostingOptionResult: NexusGenRootTypes['HostingOption'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
@@ -461,6 +498,9 @@ export interface NexusGenFieldTypes {
   }
   BooleanResult: { // field return type
     success: boolean | null; // Boolean
+  }
+  ClaimsList: { // field return type
+    claims: Array<NexusGenRootTypes['Claim'] | null> | null; // [Claim]
   }
   GenderOption: { // field return type
     adminId: string | null; // ID
@@ -536,6 +576,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createAccount: NexusGenRootTypes['CreateAccountResult'] | null; // CreateAccountResult
+    createBookingClaim: NexusGenRootTypes['CreateBookingClaimResult'] | null; // CreateBookingClaimResult
     createBookingMessage: NexusGenRootTypes['CreateBookingMessageResult'] | null; // CreateBookingMessageResult
     createGenderOption: NexusGenRootTypes['CreateGenderOptionResult'] | null; // CreateGenderOptionResult
     createHostingOption: NexusGenRootTypes['CreateHostingOptionResult'] | null; // CreateHostingOptionResult
@@ -583,6 +624,15 @@ export interface NexusGenFieldTypes {
     readAt: NexusGenScalars['DateTime'] | null; // DateTime
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  OperatorClaim: { // field return type
+    bookingId: string; // ID!
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    operator: NexusGenRootTypes['Operator'] | null; // Operator
+    operatorId: string | null; // ID
+    reason: string; // String!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+  }
   OperatorMedia: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     id: string; // String!
@@ -598,6 +648,8 @@ export interface NexusGenFieldTypes {
     allUsers: NexusGenRootTypes['AllUsersResult'] | null; // AllUsersResult
     bookingMessageById: NexusGenRootTypes['BookingMessageByIdResult'] | null; // BookingMessageByIdResult
     bookingMessages: NexusGenRootTypes['BookingMessagesResult'] | null; // BookingMessagesResult
+    claimById: NexusGenRootTypes['ClaimByIdResult'] | null; // ClaimByIdResult
+    claims: NexusGenRootTypes['ClaimsResult'] | null; // ClaimsResult
     currentAccount: NexusGenRootTypes['CurrentAccountResult'] | null; // CurrentAccountResult
     currentOperatorMedia: NexusGenRootTypes['CurrentOperatorMediaResult'] | null; // CurrentOperatorMediaResult
     currentUserMedia: NexusGenRootTypes['CurrentUserMediaResult'] | null; // CurrentUserMediaResult
@@ -678,6 +730,15 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // ID
   }
+  UserClaim: { // field return type
+    bookingId: string; // ID!
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    reason: string; // String!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // ID
+  }
   UserForbiddenError: { // field return type
     code: NexusGenEnums['ErrorCode']; // ErrorCode!
     message: NexusGenEnums['ErrorMessage']; // ErrorMessage!
@@ -706,6 +767,13 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     medias: Array<NexusGenRootTypes['Media'] | null> | null; // [Media]
     readAt: NexusGenScalars['DateTime'] | null; // DateTime
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+  }
+  Claim: { // field return type
+    bookingId: string; // ID!
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    reason: string; // String!
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   Media: { // field return type
@@ -755,6 +823,9 @@ export interface NexusGenFieldTypeNames {
   }
   BooleanResult: { // field return type name
     success: 'Boolean'
+  }
+  ClaimsList: { // field return type name
+    claims: 'Claim'
   }
   GenderOption: { // field return type name
     adminId: 'ID'
@@ -830,6 +901,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createAccount: 'CreateAccountResult'
+    createBookingClaim: 'CreateBookingClaimResult'
     createBookingMessage: 'CreateBookingMessageResult'
     createGenderOption: 'CreateGenderOptionResult'
     createHostingOption: 'CreateHostingOptionResult'
@@ -877,6 +949,15 @@ export interface NexusGenFieldTypeNames {
     readAt: 'DateTime'
     updatedAt: 'DateTime'
   }
+  OperatorClaim: { // field return type name
+    bookingId: 'ID'
+    createdAt: 'DateTime'
+    id: 'String'
+    operator: 'Operator'
+    operatorId: 'ID'
+    reason: 'String'
+    updatedAt: 'DateTime'
+  }
   OperatorMedia: { // field return type name
     createdAt: 'DateTime'
     id: 'String'
@@ -892,6 +973,8 @@ export interface NexusGenFieldTypeNames {
     allUsers: 'AllUsersResult'
     bookingMessageById: 'BookingMessageByIdResult'
     bookingMessages: 'BookingMessagesResult'
+    claimById: 'ClaimByIdResult'
+    claims: 'ClaimsResult'
     currentAccount: 'CurrentAccountResult'
     currentOperatorMedia: 'CurrentOperatorMediaResult'
     currentUserMedia: 'CurrentUserMediaResult'
@@ -972,6 +1055,15 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'ID'
   }
+  UserClaim: { // field return type name
+    bookingId: 'ID'
+    createdAt: 'DateTime'
+    id: 'String'
+    reason: 'String'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'ID'
+  }
   UserForbiddenError: { // field return type name
     code: 'ErrorCode'
     message: 'ErrorMessage'
@@ -1000,6 +1092,13 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     medias: 'Media'
     readAt: 'DateTime'
+    updatedAt: 'DateTime'
+  }
+  Claim: { // field return type name
+    bookingId: 'ID'
+    createdAt: 'DateTime'
+    id: 'String'
+    reason: 'String'
     updatedAt: 'DateTime'
   }
   Media: { // field return type name
@@ -1036,6 +1135,9 @@ export interface NexusGenArgTypes {
   Mutation: {
     createAccount: { // args
       input: NexusGenInputs['CreateAccountInput']; // CreateAccountInput!
+    }
+    createBookingClaim: { // args
+      input: NexusGenInputs['CreateBookingClaimInput']; // CreateBookingClaimInput!
     }
     createBookingMessage: { // args
       input: NexusGenInputs['CreateBookingMessageInput']; // CreateBookingMessageInput!
@@ -1146,6 +1248,9 @@ export interface NexusGenArgTypes {
     bookingMessageById: { // args
       id: string; // ID!
     }
+    claimById: { // args
+      id: string; // ID!
+    }
     genderOptionById: { // args
       id: string; // ID!
     }
@@ -1177,7 +1282,10 @@ export interface NexusGenAbstractTypeMembers {
   AllUsersResult: "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError" | "UsersList"
   BookingMessageByIdResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   BookingMessagesResult: "BookingMessagesList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
+  ClaimByIdResult: "NotFoundError" | "OperatorClaim" | "UserAuthenticationError" | "UserClaim" | "UserForbiddenError"
+  ClaimsResult: "ClaimsList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   CreateAccountResult: "Account" | "InvalidArgumentsError" | "UnableToProcessError"
+  CreateBookingClaimResult: "InvalidArgumentsError" | "OperatorClaim" | "UnableToProcessError" | "UserAuthenticationError" | "UserClaim"
   CreateBookingMessageResult: "InvalidArgumentsError" | "OperatorBookingMessage" | "UnableToProcessError" | "UserAuthenticationError" | "UserBookingMessage"
   CreateGenderOptionResult: "GenderOption" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   CreateHostingOptionResult: "HostingOption" | "InvalidArgumentsError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
@@ -1229,8 +1337,9 @@ export interface NexusGenAbstractTypeMembers {
   VerifyUserResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   Actor: "IndividualOperator" | "User"
   BookingMessage: "OperatorBookingMessage" | "UserBookingMessage"
+  Claim: "OperatorClaim" | "UserClaim"
   Media: "OperatorMedia" | "SharedMedia" | "UserMedia"
-  Node: "Account" | "IndividualOperator" | "OperatorBookingMessage" | "OperatorMedia" | "SharedMedia" | "User" | "UserBookingMessage" | "UserMedia"
+  Node: "Account" | "IndividualOperator" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "SharedMedia" | "User" | "UserBookingMessage" | "UserClaim" | "UserMedia"
   Operator: "IndividualOperator"
 }
 
@@ -1238,13 +1347,16 @@ export interface NexusGenTypeInterfaces {
   Account: "Node"
   IndividualOperator: "Actor" | "Node" | "Operator"
   OperatorBookingMessage: "BookingMessage" | "Node"
+  OperatorClaim: "Claim" | "Node"
   OperatorMedia: "Media" | "Node"
   SharedMedia: "Media" | "Node"
   User: "Actor" | "Node"
   UserBookingMessage: "BookingMessage" | "Node"
+  UserClaim: "Claim" | "Node"
   UserMedia: "Media" | "Node"
   Actor: "Node"
   BookingMessage: "Node"
+  Claim: "Node"
   Media: "Node"
   Operator: "Actor" | "Node"
 }
@@ -1261,7 +1373,7 @@ export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = keyof NexusGenUnions;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BookingMessagesList" | "BooleanResult" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "LanguageOption" | "LanguageOptionsList" | "MediasList" | "NotFoundError" | "OperatorBookingMessage" | "OperatorMedia" | "ServiceOption" | "ServiceOptionsList" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "StorageInfos" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserForbiddenError" | "UserMedia" | "UsersList";
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BookingMessagesList" | "BooleanResult" | "ClaimsList" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "LanguageOption" | "LanguageOptionsList" | "MediasList" | "NotFoundError" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "ServiceOption" | "ServiceOptionsList" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "StorageInfos" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserClaim" | "UserForbiddenError" | "UserMedia" | "UsersList";
 
 export type NexusGenAbstractsUsingStrategyResolveType = never;
 

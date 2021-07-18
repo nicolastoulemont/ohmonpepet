@@ -5,7 +5,8 @@ export const ValidatorsRegistry = {
 	pwd: validatePassword,
 	ph: validateFrenchPhoneNumber,
 	date: validateDate,
-	req: validateReq
+	req: validateReq,
+	saveAs: validateSaveAs
 } as const
 
 export const isEmpty = (value: any): boolean =>
@@ -81,6 +82,20 @@ export function validateDate(key: string, value: number | string): string | null
 export function validateReq(key: string, value: number | string): string | null {
 	if (isEmpty(value)) {
 		return `${key.charAt(0).toUpperCase() + key.slice(1)} is required`
+	} else {
+		return null
+	}
+}
+
+export const saveAsOptions = ['user', 'operator', 'admin']
+
+export function validateSaveAs(key: string, value: number | string): string | null {
+	if (isEmpty(value)) {
+		return `${key.charAt(0).toUpperCase() + key.slice(1)} is required`
+	} else if (!saveAsOptions.includes(String(value))) {
+		return `${
+			key.charAt(0).toUpperCase() + key.slice(1)
+		} must be have either of the following values: user, operator, admin`
 	} else {
 		return null
 	}

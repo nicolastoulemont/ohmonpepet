@@ -20,6 +20,19 @@ export const schema = makeSchema({
 			isTypeOf: true
 		}
 	},
+	sourceTypes: {
+		modules: [],
+		mapping: {
+			Date: 'Date',
+			DateTime: 'Date',
+			EmailAddress: 'string',
+			JWT: 'string',
+			SaveAsValue: `'user' | 'operator' | 'admin'`,
+			Latitude: 'number',
+			Longitude: 'number',
+			URL: 'string'
+		}
+	},
 	// @ts-expect-error
 	contextType: !isTranspiled()
 		? {

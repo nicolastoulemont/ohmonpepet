@@ -67,6 +67,26 @@ type BooleanResult {
   success: Boolean
 }
 
+interface Claim implements Node {
+  bookingId: ID!
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  reason: String!
+  updatedAt: DateTime
+}
+
+union ClaimByIdResult = NotFoundError | OperatorClaim | UserAuthenticationError | UserClaim | UserForbiddenError
+
+"""List of booking messages"""
+type ClaimsList {
+  claims: [Claim]
+}
+
+"""The result of the bookingMessages query"""
+union ClaimsResult = ClaimsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 input CreateAccountInput {
   email: EmailAddress!
   firstName: String!
@@ -75,6 +95,14 @@ input CreateAccountInput {
 
 """The result of the createAccount mutation"""
 union CreateAccountResult = Account | InvalidArgumentsError | UnableToProcessError
+
+input CreateBookingClaimInput {
+  bookingId: String!
+  reason: String!
+  saveAs: SaveAsValue!
+}
+
+union CreateBookingClaimResult = InvalidArgumentsError | OperatorClaim | UnableToProcessError | UserAuthenticationError | UserClaim
 
 input CreateBookingMessageInput {
   bookingId: String!
@@ -371,6 +399,7 @@ union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | U
 
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountResult
+  createBookingClaim(input: CreateBookingClaimInput!): CreateBookingClaimResult
   createBookingMessage(input: CreateBookingMessageInput!): CreateBookingMessageResult
   createGenderOption(input: CreateGenderOptionInput!): CreateGenderOptionResult
   createHostingOption(input: CreateHostingOptionInput!): CreateHostingOptionResult
@@ -461,6 +490,18 @@ type OperatorBookingMessage implements BookingMessage & Node {
   updatedAt: DateTime
 }
 
+type OperatorClaim implements Claim & Node {
+  bookingId: ID!
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  operator: Operator
+  operatorId: ID
+  reason: String!
+  updatedAt: DateTime
+}
+
 type OperatorMedia implements Media & Node {
   createdAt: DateTime
 
@@ -488,6 +529,10 @@ type Query {
 
   """Access restricted to admin users"""
   bookingMessages: BookingMessagesResult
+  claimById(id: ID!): ClaimByIdResult
+
+  """Access restricted to admin users"""
+  claims: ClaimsResult
 
   """Access restricted to logged in user"""
   currentAccount: CurrentAccountResult
@@ -545,6 +590,9 @@ input ResetPasswordInput {
 
 """The result of the resetPassword mutation"""
 union ResetPasswordResult = BooleanResult | InvalidArgumentsError | UnableToProcessError
+
+"""A field whose value must be either: user, operator, admin"""
+scalar SaveAsValue
 
 """The result of the sendVerificationEmail mutation"""
 union SendVerificationEmailResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError
@@ -722,6 +770,18 @@ type UserBookingMessage implements BookingMessage & Node {
 
 """The result of the userById query"""
 union UserByIdResult = InvalidArgumentsError | NotFoundError | User | UserAuthenticationError | UserForbiddenError
+
+type UserClaim implements Claim & Node {
+  bookingId: ID!
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  reason: String!
+  updatedAt: DateTime
+  user: User
+  userId: ID
+}
 
 type UserForbiddenError {
   code: ErrorCode!

@@ -1,4 +1,5 @@
 import { asNexusMethod } from 'nexus'
+import { SaveAsValueResolver } from './saveAs'
 import {
 	DateTimeResolver,
 	DateResolver,
@@ -22,3 +23,5 @@ export const GQLLat = asNexusMethod(LatitudeResolver, 'latitude')
 export const GQLLong = asNexusMethod(LongitudeResolver, 'longitude')
 
 export const GQLUrl = asNexusMethod(URLResolver, 'url')
+
+export const GQLSaveAs = asNexusMethod(SaveAsValueResolver, 'saveAs')

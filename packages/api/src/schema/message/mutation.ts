@@ -41,7 +41,7 @@ export const createBookingMessage = mutationField('createBookingMessage', {
 		)
 	},
 	authorization: (ctx) => authorize(ctx, 'user'),
-	validation: (args) => checkArgs(args, ['content', 'bookingId']),
+	validation: (args) => checkArgs(args, ['content', 'bookingId', 'saveAs:saveAs']),
 	async resolve(
 		_,
 		{ input: { content, bookingId, saveAs } },

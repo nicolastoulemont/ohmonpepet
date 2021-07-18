@@ -1,4 +1,6 @@
 import { mutationField, objectType, unionType, inputObjectType, nonNull, arg, idArg } from 'nexus'
+import prisma from '../../lib/prisma'
+import { s3Bucket, s3 } from './s3Config'
 import {
 	authorize,
 	checkArgs,
@@ -6,8 +8,6 @@ import {
 	PartialInvalidArgumentsError,
 	UnableToProcessError
 } from '../../utils'
-import prisma from '../../lib/prisma'
-import { s3Bucket, s3 } from './s3Config'
 
 export const StorageInfos = objectType({
 	name: 'StorageInfos',
@@ -43,7 +43,7 @@ export const createMedia = mutationField('createMedia', {
 	type: 'CreateMediaResult',
 	args: { input: nonNull(arg({ type: CreateMediaInput })) },
 	authorization: (ctx) => authorize(ctx, 'user'),
-	validation: (args) => checkArgs(args, ['fileName', 'fileType', 'saveAs']),
+	validation: (args) => checkArgs(args, ['fileName', 'fileType', 'saveAs:saveAs']),
 	async resolve(_, { input: { fileName, fileType, saveAs } }, { user: { operatorId, userId } }) {
 		const s3Params = {
 			Bucket: s3Bucket,
