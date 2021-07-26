@@ -10,6 +10,10 @@ import type { core } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     /**
+     * The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+     */
+    json<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "JSON";
+    /**
      * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
      */
     datetime<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "DateTime";
@@ -41,10 +45,18 @@ declare global {
      * A field whose value must be either: user, operator, admin
      */
     saveAs<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "SaveAsValue";
+    /**
+     * Floats that will have a value greater than 0.
+     */
+    positiveFloat<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "PositiveFloat";
   }
 }
 declare global {
   interface NexusGenCustomOutputMethods<TypeName extends string> {
+    /**
+     * The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+     */
+    json<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "JSON";
     /**
      * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
      */
@@ -77,6 +89,10 @@ declare global {
      * A field whose value must be either: user, operator, admin
      */
     saveAs<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "SaveAsValue";
+    /**
+     * Floats that will have a value greater than 0.
+     */
+    positiveFloat<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "PositiveFloat";
   }
 }
 
@@ -195,9 +211,11 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  BookingStatus: "BOTH_CONFIRMED" | "CANCELED" | "NONE_CONFIRMED" | "PAID" | "PAYMENT_AUTHORIZED" | "PENDING_OWNER_VALIDATION" | "PENDING_SITTER_VALIDATION" | "UNDER_REVIEW"
   ErrorCode: "BAD_REQUEST" | "FORBIDDEN" | "NOT_FOUND" | "UNABLE_TO_PROCESS" | "UNAUTHORIZED"
   ErrorMessage: "FORBIDDEN_YOU_DO_NOT_HAVE_ACCESS_TO_THIS_RESOURCE" | "RESOURCE_NOT_FOUND" | "UNABLE_TO_PROCESS_REQUEST_DUE_TO_CLIENT_ERROR" | "UNABLE_TO_PROCESS_REQUEST_DUE_TO_SERVER_ERROR" | "UNAUTHENTICATED_PLEASE_LOGIN"
   MediaType: "IMAGE" | "VIDEO"
+  PaymentStatus: "AUTHORIZED_BUT_CANCELLED" | "AUTHORIZED_REQUIRE_CAPTURE" | "CAPTURED_AND_PAID" | "ERROR_SENDING_AUTH_REQUIRED_MAIL" | "ERROR_SENDING_INSUFFICIENT_FUNDS_MAIL" | "ERROR_SENDING_UNKOWN_ERROR_MAIL" | "FAILED_CAPTURE" | "FAILED_PAYMENT_INTENT_CREATION_AUTH_REQUIRED" | "FAILED_PAYMENT_INTENT_CREATION_AUTH_REQUIRED_MAIL_SENT" | "FAILED_PAYMENT_INTENT_CREATION_INSUFFICIENT_FUNDS" | "FAILED_PAYMENT_INTENT_CREATION_INSUFFICIENT_FUNDS_MAIL_SENT" | "FAILED_PAYMENT_INTENT_CREATION_UNKOWN_ERROR" | "FAILED_PAYMENT_INTENT_CREATION_UNKOWN_ERROR_MAIL_SENT" | "PENDING_AUTHORIZATION" | "SETUP_INTENT_CONFIRMED_REQUIRED_PAYMENT_INTENT_CREATION" | "SETUP_INTENT_PENDING_CONFIRMATION"
 }
 
 export interface NexusGenScalars {
@@ -209,9 +227,11 @@ export interface NexusGenScalars {
   Date: Date
   DateTime: Date
   EmailAddress: string
+  JSON: any
   JWT: string
   Latitude: number
   Longitude: number
+  PositiveFloat: number
   SaveAsValue: 'user' | 'operator' | 'admin'
   URL: string
 }
@@ -226,6 +246,24 @@ export interface NexusGenObjects {
   }
   AccountsList: { // root type
     accounts?: Array<NexusGenRootTypes['Account'] | null> | null; // [Account]
+  }
+  Booking: { // root type
+    animalsIds?: Array<string | null> | null; // [ID]
+    applictionFeeAmount?: NexusGenScalars['PositiveFloat'] | null; // PositiveFloat
+    canceled?: boolean | null; // Boolean
+    canceledBy?: string | null; // String
+    canceledReason?: string | null; // String
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    endDate?: NexusGenScalars['Date'] | null; // Date
+    id: string; // String!
+    operatorConfirmationDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    ownerConfirmationDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    paid?: boolean | null; // Boolean
+    priceWithOutApplicationFee?: NexusGenScalars['PositiveFloat'] | null; // PositiveFloat
+    selectedOptions?: Array<NexusGenScalars['JSON'] | null> | null; // [JSON]
+    startDate?: NexusGenScalars['Date'] | null; // Date
+    underReview?: boolean | null; // Boolean
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   BookingMessagesList: { // root type
     bookingMessages?: Array<NexusGenRootTypes['BookingMessage'] | null> | null; // [BookingMessage]
@@ -366,6 +404,14 @@ export interface NexusGenObjects {
     signedRequest?: string | null; // String
     url?: string | null; // String
   }
+  StripePayment: { // root type
+    bookingId?: string | null; // ID
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    errorCode?: string | null; // String
+    id: string; // String!
+    status: NexusGenEnums['PaymentStatus']; // PaymentStatus!
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+  }
   UnableToProcessError: {};
   User: { // root type
     accountId?: string | null; // ID
@@ -411,8 +457,9 @@ export interface NexusGenInterfaces {
   BookingMessage: NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['UserBookingMessage'];
   Claim: NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['UserClaim'];
   Media: NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['UserMedia'];
-  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserBookingMessage'] | NexusGenRootTypes['UserClaim'] | NexusGenRootTypes['UserMedia'];
+  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['Booking'] | NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['StripePayment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserBookingMessage'] | NexusGenRootTypes['UserClaim'] | NexusGenRootTypes['UserMedia'];
   Operator: NexusGenRootTypes['IndividualOperator'];
+  Payment: NexusGenRootTypes['StripePayment'];
 }
 
 export interface NexusGenUnions {
@@ -422,6 +469,7 @@ export interface NexusGenUnions {
   AllUsersResult: NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'] | NexusGenRootTypes['UsersList'];
   BookingMessageByIdResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   BookingMessagesResult: NexusGenRootTypes['BookingMessagesList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
+  BookingPayment: NexusGenRootTypes['StripePayment'];
   ClaimByIdResult: NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserClaim'] | NexusGenRootTypes['UserForbiddenError'];
   ClaimsResult: NexusGenRootTypes['ClaimsList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   CreateAccountResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['UnableToProcessError'];
@@ -492,6 +540,31 @@ export interface NexusGenFieldTypes {
   }
   AccountsList: { // field return type
     accounts: Array<NexusGenRootTypes['Account'] | null> | null; // [Account]
+  }
+  Booking: { // field return type
+    animalsIds: Array<string | null> | null; // [ID]
+    applictionFeeAmount: NexusGenScalars['PositiveFloat'] | null; // PositiveFloat
+    canceled: boolean | null; // Boolean
+    canceledBy: string | null; // String
+    canceledReason: string | null; // String
+    claims: Array<NexusGenRootTypes['Claim'] | null> | null; // [Claim]
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    endDate: NexusGenScalars['Date'] | null; // Date
+    id: string; // String!
+    messages: Array<NexusGenRootTypes['BookingMessage'] | null> | null; // [BookingMessage]
+    operator: NexusGenRootTypes['Operator'] | null; // Operator
+    operatorConfirmationDate: NexusGenScalars['DateTime'] | null; // DateTime
+    ownerConfirmationDate: NexusGenScalars['DateTime'] | null; // DateTime
+    paid: boolean | null; // Boolean
+    payment: NexusGenRootTypes['BookingPayment'] | null; // BookingPayment
+    priceWithOutApplicationFee: NexusGenScalars['PositiveFloat'] | null; // PositiveFloat
+    selectedOptions: Array<NexusGenScalars['JSON'] | null> | null; // [JSON]
+    service: NexusGenRootTypes['ServiceOption'] | null; // ServiceOption
+    startDate: NexusGenScalars['Date'] | null; // Date
+    status: NexusGenEnums['BookingStatus'] | null; // BookingStatus
+    underReview: boolean | null; // Boolean
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    user: NexusGenRootTypes['User'] | null; // User
   }
   BookingMessagesList: { // field return type
     bookingMessages: Array<NexusGenRootTypes['BookingMessage'] | null> | null; // [BookingMessage]
@@ -704,6 +777,15 @@ export interface NexusGenFieldTypes {
     signedRequest: string | null; // String
     url: string | null; // String
   }
+  StripePayment: { // field return type
+    booking: NexusGenRootTypes['Booking'] | null; // Booking
+    bookingId: string | null; // ID
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    errorCode: string | null; // String
+    id: string; // String!
+    status: NexusGenEnums['PaymentStatus']; // PaymentStatus!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+  }
   UnableToProcessError: { // field return type
     code: NexusGenEnums['ErrorCode']; // ErrorCode!
     message: NexusGenEnums['ErrorMessage']; // ErrorMessage!
@@ -804,6 +886,13 @@ export interface NexusGenFieldTypes {
     stripeAccountId: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  Payment: { // field return type
+    bookingId: string | null; // ID
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    status: NexusGenEnums['PaymentStatus']; // PaymentStatus!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -817,6 +906,31 @@ export interface NexusGenFieldTypeNames {
   }
   AccountsList: { // field return type name
     accounts: 'Account'
+  }
+  Booking: { // field return type name
+    animalsIds: 'ID'
+    applictionFeeAmount: 'PositiveFloat'
+    canceled: 'Boolean'
+    canceledBy: 'String'
+    canceledReason: 'String'
+    claims: 'Claim'
+    createdAt: 'DateTime'
+    endDate: 'Date'
+    id: 'String'
+    messages: 'BookingMessage'
+    operator: 'Operator'
+    operatorConfirmationDate: 'DateTime'
+    ownerConfirmationDate: 'DateTime'
+    paid: 'Boolean'
+    payment: 'BookingPayment'
+    priceWithOutApplicationFee: 'PositiveFloat'
+    selectedOptions: 'JSON'
+    service: 'ServiceOption'
+    startDate: 'Date'
+    status: 'BookingStatus'
+    underReview: 'Boolean'
+    updatedAt: 'DateTime'
+    user: 'User'
   }
   BookingMessagesList: { // field return type name
     bookingMessages: 'BookingMessage'
@@ -1029,6 +1143,15 @@ export interface NexusGenFieldTypeNames {
     signedRequest: 'String'
     url: 'String'
   }
+  StripePayment: { // field return type name
+    booking: 'Booking'
+    bookingId: 'ID'
+    createdAt: 'DateTime'
+    errorCode: 'String'
+    id: 'String'
+    status: 'PaymentStatus'
+    updatedAt: 'DateTime'
+  }
   UnableToProcessError: { // field return type name
     code: 'ErrorCode'
     message: 'ErrorMessage'
@@ -1127,6 +1250,13 @@ export interface NexusGenFieldTypeNames {
     partnerId: 'String'
     partnerPercentage: 'Int'
     stripeAccountId: 'String'
+    updatedAt: 'DateTime'
+  }
+  Payment: { // field return type name
+    bookingId: 'ID'
+    createdAt: 'DateTime'
+    id: 'String'
+    status: 'PaymentStatus'
     updatedAt: 'DateTime'
   }
 }
@@ -1282,6 +1412,7 @@ export interface NexusGenAbstractTypeMembers {
   AllUsersResult: "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError" | "UsersList"
   BookingMessageByIdResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   BookingMessagesResult: "BookingMessagesList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
+  BookingPayment: "StripePayment"
   ClaimByIdResult: "NotFoundError" | "OperatorClaim" | "UserAuthenticationError" | "UserClaim" | "UserForbiddenError"
   ClaimsResult: "ClaimsList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   CreateAccountResult: "Account" | "InvalidArgumentsError" | "UnableToProcessError"
@@ -1339,17 +1470,20 @@ export interface NexusGenAbstractTypeMembers {
   BookingMessage: "OperatorBookingMessage" | "UserBookingMessage"
   Claim: "OperatorClaim" | "UserClaim"
   Media: "OperatorMedia" | "SharedMedia" | "UserMedia"
-  Node: "Account" | "IndividualOperator" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "SharedMedia" | "User" | "UserBookingMessage" | "UserClaim" | "UserMedia"
+  Node: "Account" | "Booking" | "IndividualOperator" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "SharedMedia" | "StripePayment" | "User" | "UserBookingMessage" | "UserClaim" | "UserMedia"
   Operator: "IndividualOperator"
+  Payment: "StripePayment"
 }
 
 export interface NexusGenTypeInterfaces {
   Account: "Node"
+  Booking: "Node"
   IndividualOperator: "Actor" | "Node" | "Operator"
   OperatorBookingMessage: "BookingMessage" | "Node"
   OperatorClaim: "Claim" | "Node"
   OperatorMedia: "Media" | "Node"
   SharedMedia: "Media" | "Node"
+  StripePayment: "Node" | "Payment"
   User: "Actor" | "Node"
   UserBookingMessage: "BookingMessage" | "Node"
   UserClaim: "Claim" | "Node"
@@ -1359,6 +1493,7 @@ export interface NexusGenTypeInterfaces {
   Claim: "Node"
   Media: "Node"
   Operator: "Actor" | "Node"
+  Payment: "Node"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -1373,7 +1508,7 @@ export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = keyof NexusGenUnions;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "BookingMessagesList" | "BooleanResult" | "ClaimsList" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "LanguageOption" | "LanguageOptionsList" | "MediasList" | "NotFoundError" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "ServiceOption" | "ServiceOptionsList" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "StorageInfos" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserClaim" | "UserForbiddenError" | "UserMedia" | "UsersList";
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "Booking" | "BookingMessagesList" | "BooleanResult" | "ClaimsList" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "InvalidArgumentsError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "LanguageOption" | "LanguageOptionsList" | "MediasList" | "NotFoundError" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "ServiceOption" | "ServiceOptionsList" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "StorageInfos" | "StripePayment" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserClaim" | "UserForbiddenError" | "UserMedia" | "UsersList";
 
 export type NexusGenAbstractsUsingStrategyResolveType = never;
 

@@ -7,8 +7,12 @@ import {
 	JWTResolver,
 	LatitudeResolver,
 	LongitudeResolver,
-	URLResolver
+	URLResolver,
+	JSONResolver,
+	PositiveFloatResolver
 } from 'graphql-scalars'
+
+export const GQLJSON = asNexusMethod(JSONResolver, 'json')
 
 export const GQLDateTime = asNexusMethod(DateTimeResolver, 'datetime')
 
@@ -25,3 +29,5 @@ export const GQLLong = asNexusMethod(LongitudeResolver, 'longitude')
 export const GQLUrl = asNexusMethod(URLResolver, 'url')
 
 export const GQLSaveAs = asNexusMethod(SaveAsValueResolver, 'saveAs')
+
+export const GQLPositiveFloat = asNexusMethod(PositiveFloatResolver, 'positiveFloat')

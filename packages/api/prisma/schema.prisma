@@ -48,7 +48,7 @@ model User {
   firstName        String
   lastName         String?
   stripeCustomerId String?
-  ratings          Rating[]
+  reviews          Review[]
   bookings         Booking[]
   bookingMessages  BookingMessage[]
   claims           BookingClaim[]
@@ -79,7 +79,7 @@ model Operator {
   partner                    Partner?               @relation(fields: [partnerId], references: [id])
   location                   Location?
   medias                     Media[]
-  ratings                    Rating[]
+  reviews                    Review[]
   bookings                   Booking[]
   bookingMessages            BookingMessage[]
   claims                     BookingClaim[]
@@ -165,10 +165,12 @@ model Location {
   operatorId   String
 }
 
-model Rating {
+model Review {
   id         String    @id @default(cuid())
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+  title      String
+  body       String?
   score      Float
   operator   Operator? @relation(fields: [operatorId], references: [id])
   operatorId String?
@@ -205,17 +207,17 @@ model Booking {
   userId                     String
   service                    ServiceOption    @relation(fields: [serviceOptionId], references: [id])
   serviceOptionId            String
-  ratings                    Rating[]
+  reviews                    Review[]
   messages                   BookingMessage[]
   claims                     BookingClaim[]
-  stripePayment              StripePayment[]
+  stripePayment              StripePayment?
 }
 
 model BookingMessage {
   id         String    @id @default(cuid())
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-  content    String?
+  content    String
   readAt     DateTime?
   booking    Booking   @relation(fields: [bookingId], references: [id])
   bookingId  String
@@ -239,11 +241,30 @@ model BookingClaim {
   bookingId  String
 }
 
+enum PaymentStatus {
+  PENDING_AUTHORIZATION
+  SETUP_INTENT_PENDING_CONFIRMATION
+  SETUP_INTENT_CONFIRMED_REQUIRED_PAYMENT_INTENT_CREATION
+  FAILED_PAYMENT_INTENT_CREATION_INSUFFICIENT_FUNDS
+  FAILED_PAYMENT_INTENT_CREATION_AUTH_REQUIRED
+  FAILED_PAYMENT_INTENT_CREATION_UNKOWN_ERROR
+  FAILED_PAYMENT_INTENT_CREATION_AUTH_REQUIRED_MAIL_SENT
+  FAILED_PAYMENT_INTENT_CREATION_INSUFFICIENT_FUNDS_MAIL_SENT
+  FAILED_PAYMENT_INTENT_CREATION_UNKOWN_ERROR_MAIL_SENT
+  ERROR_SENDING_AUTH_REQUIRED_MAIL
+  ERROR_SENDING_INSUFFICIENT_FUNDS_MAIL
+  ERROR_SENDING_UNKOWN_ERROR_MAIL
+  AUTHORIZED_REQUIRE_CAPTURE
+  AUTHORIZED_BUT_CANCELLED
+  CAPTURED_AND_PAID
+  FAILED_CAPTURE
+}
+
 model StripePayment {
-  id                                String    @id @default(cuid())
-  createdAt                         DateTime  @default(now())
-  updatedAt                         DateTime  @updatedAt
-  booking                           Booking   @relation(fields: [bookingId], references: [id])
+  id                                String        @id @default(cuid())
+  createdAt                         DateTime      @default(now())
+  updatedAt                         DateTime      @updatedAt
+  booking                           Booking       @relation(fields: [bookingId], references: [id])
   bookingId                         String
   setupIntentClientSecret           String?
   setupIntentId                     String?
@@ -254,7 +275,7 @@ model StripePayment {
   // For queued payments: setupIntent -> queue -> paymentIntent created 2 days before booking's end
   expectedPaymentIntentCreationDate DateTime?
   paymentMethodId                   String?
-  paymentStatus                     String?
+  status                            PaymentStatus
   errorCode                         String?
 }
 

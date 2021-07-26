@@ -30,7 +30,9 @@ export const schema = makeSchema({
 			SaveAsValue: `'user' | 'operator' | 'admin'`,
 			Latitude: 'number',
 			Longitude: 'number',
-			URL: 'string'
+			URL: 'string',
+			PositiveFloat: 'number',
+			JSON: 'any'
 		}
 	},
 	// @ts-expect-error
