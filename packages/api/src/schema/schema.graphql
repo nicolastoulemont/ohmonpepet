@@ -445,6 +445,18 @@ type MediasList {
 """The result of the medias query"""
 union MediasResult = MediasList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
+type MessageMedia implements Media & Node {
+  bookingMessageId: ID
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  mediaType: MediaType
+  message: BookingMessage
+  storeUrl: URL!
+  updatedAt: DateTime
+}
+
 """The result of the modifyEmail mutation"""
 union ModifyEmailResult = Account | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
 

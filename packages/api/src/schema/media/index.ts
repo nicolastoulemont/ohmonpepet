@@ -63,15 +63,16 @@ export const sharedMedia = objectType({
 	}
 })
 
-// export const messageMedia = objectType({
-// 	name: 'MessageMedia',
-// 	isTypeOf: (data) => Boolean((data as any).bookingMessageId),
-// 	definition(t) {
-// 		t.implements('Media')
-// 		t.id('bookingMessageId')
-// 		t.field('message', {
-// 			type: 'User',
-// 			resolve: async (m) => await prisma.media.findUnique({ where: { id: m.id } }).user()
-// 		})
-// 	}
-// })
+export const messageMedia = objectType({
+	name: 'MessageMedia',
+	isTypeOf: (data) => Boolean((data as any).bookingMessageId),
+	definition(t) {
+		t.implements('Media')
+		t.id('bookingMessageId')
+		t.field('message', {
+			type: 'BookingMessage',
+			resolve: async (m) =>
+				await prisma.media.findUnique({ where: { id: m.id } }).bookingMessage()
+		})
+	}
+})

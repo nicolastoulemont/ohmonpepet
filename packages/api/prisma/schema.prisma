@@ -289,23 +289,24 @@ enum MediaType {
 }
 
 model Media {
-  id               String           @id @default(cuid())
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
+  id               String          @id @default(cuid())
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
   storeUrl         String
-  mediaType        MediaType        @default(IMAGE)
+  mediaType        MediaType       @default(IMAGE)
   // The user pictures
-  user             User?            @relation(fields: [userId], references: [id])
+  user             User?           @relation(fields: [userId], references: [id])
   userId           String?
   // The operator pictures
-  operator         Operator?        @relation(fields: [operatorId], references: [id])
+  operator         Operator?       @relation(fields: [operatorId], references: [id])
   operatorId       String?
   // Booking specific media (picture or video sent to the owner by the chat for example)
-  bookingMessage   BookingMessage?  @relation(fields: [bookingMessageId], references: [id])
+  bookingMessage   BookingMessage? @relation(fields: [bookingMessageId], references: [id])
   bookingMessageId String?
   adminId          String?
-  admin            Admin?           @relation(fields: [adminId], references: [id])
-  languagesOptions LanguageOption[]
+  admin            Admin?          @relation(fields: [adminId], references: [id])
+  languageOptionId String?
+  languageOption   LanguageOption? @relation(fields: [languageOptionId], references: [id])
 }
 
 // Options
@@ -327,8 +328,7 @@ model LanguageOption {
   adminId   String?
   nameEn    String
   nameFr    String
-  mediaId   String
-  media     Media    @relation(fields: [mediaId], references: [id])
+  media     Media?
 }
 
 model HostingOption {
