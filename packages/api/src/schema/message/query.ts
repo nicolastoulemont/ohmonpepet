@@ -4,10 +4,11 @@ import prisma from '../../lib/prisma'
 
 export const bookingMessageByIdResult = unionType({
 	name: 'BookingMessageByIdResult',
-	description: 'The result of the accountById query',
+	description: 'The result of the bookingMessageById query',
 	definition(t) {
 		t.members(
-			'Account',
+			'UserBookingMessage',
+			'OperatorBookingMessage',
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'NotFoundError',

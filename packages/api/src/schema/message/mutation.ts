@@ -132,7 +132,7 @@ export const setAsRead = mutationField('setAsRead', {
 export const updateBookingMessageInput = inputObjectType({
 	name: 'UpdateBookingMessageInput',
 	definition(t) {
-		t.string('content')
+		t.nonNull.string('content')
 		t.date('readAt')
 	}
 })
