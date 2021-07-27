@@ -57,8 +57,10 @@ export const createBookingClaim = mutationField('createBookingClaim', {
 				}
 			})
 
-			// Update booking
-			// await BookingModel.findByIdAndUpdate(bookingId, { underReview: true })
+			await prisma.booking.update({
+				where: { id: bookingId },
+				data: { underReview: true }
+			})
 			return { claim }
 		} catch (error) {
 			return UnableToProcessError
