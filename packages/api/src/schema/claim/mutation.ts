@@ -1,10 +1,11 @@
-import { inputObjectType, mutationField, nonNull, unionType, arg } from 'nexus'
+import { inputObjectType, mutationField, nonNull, unionType, arg, idArg } from 'nexus'
 import prisma from '../../lib/prisma'
 import {
 	checkArgs,
 	authorize,
 	UnableToProcessError,
-	PartialInvalidArgumentsError
+	PartialInvalidArgumentsError,
+	NotFoundError
 } from '../../utils'
 
 export const createBookingClaimResult = unionType({
@@ -64,6 +65,44 @@ export const createBookingClaim = mutationField('createBookingClaim', {
 			return { claim }
 		} catch (error) {
 			return UnableToProcessError
+		}
+	}
+})
+
+export const deleteClaimResult = unionType({
+	name: 'DeleteClaimResult',
+	description: 'The result of the deleteClaim mutation',
+	definition(t) {
+		t.members(
+			'BooleanResult',
+			'UserAuthenticationError',
+			'InvalidArgumentsError',
+			'NotFoundError',
+			'UnableToProcessError'
+		)
+	}
+})
+
+export const deleteClaim = mutationField('deleteClaim', {
+	type: 'DeleteClaimResult',
+	args: {
+		id: nonNull(idArg())
+	},
+	authorization: (ctx) => authorize(ctx, 'user'),
+	validation: (args) => checkArgs(args, ['id']),
+	async resolve(_, { id }, { user: { userId, operatorId } }) {
+		try {
+			const [Claim] = await prisma.bookingClaim.findMany({
+				where: { id, AND: [{ OR: [{ userId }, { operatorId }] }] }
+			})
+
+			if (!Claim) return NotFoundError
+
+			await prisma.bookingClaim.delete({ where: { id: Claim.id } })
+
+			return { success: true }
+		} catch (err) {
+			return { success: false }
 		}
 	}
 })

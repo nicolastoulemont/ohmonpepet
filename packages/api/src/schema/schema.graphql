@@ -251,6 +251,9 @@ union DeleteAccountResult = BooleanResult | InvalidArgumentsError | NotFoundErro
 """The result of the deleteBookingMessage mutation"""
 union DeleteBookingMessageResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
+"""The result of the deleteClaim mutation"""
+union DeleteClaimResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
 union DeleteGenderOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
 union DeleteHostingOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
@@ -493,6 +496,7 @@ type Mutation {
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
   deleteBookingMessage(id: ID!): DeleteBookingMessageResult
+  deleteClaim(id: ID!): DeleteClaimResult
   deleteGenderOption(id: ID!): DeleteGenderOptionResult
   deleteHostingOption(id: ID!): DeleteHostingOptionResult
   deleteLanguageOption(id: ID!): DeleteLanguageOptionResult

@@ -533,6 +533,7 @@ export interface NexusGenUnions {
   CurrentUserMediaResult: NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'] | NexusGenRootTypes['UserMedia'];
   DeleteAccountResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'];
   DeleteBookingMessageResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
+  DeleteClaimResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   DeleteGenderOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   DeleteHostingOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   DeleteLanguageOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
@@ -722,6 +723,7 @@ export interface NexusGenFieldTypes {
     createSpecieOption: NexusGenRootTypes['CreateSpecieOptionResult'] | null; // CreateSpecieOptionResult
     deleteAccount: NexusGenRootTypes['DeleteAccountResult'] | null; // DeleteAccountResult
     deleteBookingMessage: NexusGenRootTypes['DeleteBookingMessageResult'] | null; // DeleteBookingMessageResult
+    deleteClaim: NexusGenRootTypes['DeleteClaimResult'] | null; // DeleteClaimResult
     deleteGenderOption: NexusGenRootTypes['DeleteGenderOptionResult'] | null; // DeleteGenderOptionResult
     deleteHostingOption: NexusGenRootTypes['DeleteHostingOptionResult'] | null; // DeleteHostingOptionResult
     deleteLanguageOption: NexusGenRootTypes['DeleteLanguageOptionResult'] | null; // DeleteLanguageOptionResult
@@ -1141,6 +1143,7 @@ export interface NexusGenFieldTypeNames {
     createSpecieOption: 'CreateSpecieOptionResult'
     deleteAccount: 'DeleteAccountResult'
     deleteBookingMessage: 'DeleteBookingMessageResult'
+    deleteClaim: 'DeleteClaimResult'
     deleteGenderOption: 'DeleteGenderOptionResult'
     deleteHostingOption: 'DeleteHostingOptionResult'
     deleteLanguageOption: 'DeleteLanguageOptionResult'
@@ -1458,6 +1461,9 @@ export interface NexusGenArgTypes {
     deleteBookingMessage: { // args
       id: string; // ID!
     }
+    deleteClaim: { // args
+      id: string; // ID!
+    }
     deleteGenderOption: { // args
       id: string; // ID!
     }
@@ -1601,6 +1607,7 @@ export interface NexusGenAbstractTypeMembers {
   CurrentUserMediaResult: "NotFoundError" | "SharedMedia" | "UserAuthenticationError" | "UserForbiddenError" | "UserMedia"
   DeleteAccountResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError"
   DeleteBookingMessageResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError"
+  DeleteClaimResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError"
   DeleteGenderOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   DeleteHostingOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   DeleteLanguageOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
