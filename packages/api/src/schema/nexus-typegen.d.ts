@@ -139,7 +139,7 @@ export interface NexusGenInputs {
     stripeAccountId?: string | null; // ID
   }
   CreateLanguageOptionInput: { // input type
-    iconUrl: string; // String!
+    mediaId: string; // String!
     nameEn: string; // String!
     nameFr: string; // String!
   }
@@ -194,6 +194,7 @@ export interface NexusGenInputs {
     stripeAccountId?: string | null; // ID
   }
   UpdateLanguageOptionInput: { // input type
+    mediaId?: string | null; // ID
     nameEn?: string | null; // String
     nameFr?: string | null; // String
   }
@@ -276,22 +277,22 @@ export interface NexusGenObjects {
   }
   GenderOption: { // root type
     adminId?: string | null; // ID
-    createdAt?: NexusGenScalars['Date'] | null; // Date
-    id?: string | null; // ID
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt?: NexusGenScalars['Date'] | null; // Date
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   GenderOptionsList: { // root type
     genderOptions?: Array<NexusGenRootTypes['GenderOption'] | null> | null; // [GenderOption]
   }
   HostingOption: { // root type
     adminId?: string | null; // ID
-    createdAt?: NexusGenScalars['Date'] | null; // Date
-    id?: string | null; // ID
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt?: NexusGenScalars['Date'] | null; // Date
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   HostingOptionsList: { // root type
     hostingOptions?: Array<NexusGenRootTypes['HostingOption'] | null> | null; // [HostingOption]
@@ -329,12 +330,12 @@ export interface NexusGenObjects {
   }
   LanguageOption: { // root type
     adminId?: string | null; // ID
-    createdAt?: NexusGenScalars['Date'] | null; // Date
-    iconUrl: string; // String!
-    id?: string | null; // ID
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    mediaId: string; // ID!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt?: NexusGenScalars['Date'] | null; // Date
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   LanguageOptionsList: { // root type
     languageOptions?: Array<NexusGenRootTypes['LanguageOption'] | null> | null; // [LanguageOption]
@@ -371,11 +372,11 @@ export interface NexusGenObjects {
   Query: {};
   ServiceOption: { // root type
     adminId?: string | null; // ID
-    createdAt?: NexusGenScalars['Date'] | null; // Date
-    id?: string | null; // ID
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt?: NexusGenScalars['Date'] | null; // Date
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   ServiceOptionsList: { // root type
     serviceOptions?: Array<NexusGenRootTypes['ServiceOption'] | null> | null; // [ServiceOption]
@@ -391,11 +392,11 @@ export interface NexusGenObjects {
   }
   SpecieOption: { // root type
     adminId?: string | null; // ID
-    createdAt?: NexusGenScalars['Date'] | null; // Date
-    id?: string | null; // ID
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt?: NexusGenScalars['Date'] | null; // Date
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   SpecieOptionsList: { // root type
     specieOptions?: Array<NexusGenRootTypes['SpecieOption'] | null> | null; // [SpecieOption]
@@ -457,7 +458,7 @@ export interface NexusGenInterfaces {
   BookingMessage: NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['UserBookingMessage'];
   Claim: NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['UserClaim'];
   Media: NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['UserMedia'];
-  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['Booking'] | NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['StripePayment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserBookingMessage'] | NexusGenRootTypes['UserClaim'] | NexusGenRootTypes['UserMedia'];
+  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['Booking'] | NexusGenRootTypes['GenderOption'] | NexusGenRootTypes['HostingOption'] | NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['LanguageOption'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['ServiceOption'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['SpecieOption'] | NexusGenRootTypes['StripePayment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserBookingMessage'] | NexusGenRootTypes['UserClaim'] | NexusGenRootTypes['UserMedia'];
   Operator: NexusGenRootTypes['IndividualOperator'];
   Payment: NexusGenRootTypes['StripePayment'];
 }
@@ -577,22 +578,22 @@ export interface NexusGenFieldTypes {
   }
   GenderOption: { // field return type
     adminId: string | null; // ID
-    createdAt: NexusGenScalars['Date'] | null; // Date
-    id: string | null; // ID
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt: NexusGenScalars['Date'] | null; // Date
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   GenderOptionsList: { // field return type
     genderOptions: Array<NexusGenRootTypes['GenderOption'] | null> | null; // [GenderOption]
   }
   HostingOption: { // field return type
     adminId: string | null; // ID
-    createdAt: NexusGenScalars['Date'] | null; // Date
-    id: string | null; // ID
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt: NexusGenScalars['Date'] | null; // Date
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   HostingOptionsList: { // field return type
     hostingOptions: Array<NexusGenRootTypes['HostingOption'] | null> | null; // [HostingOption]
@@ -634,12 +635,13 @@ export interface NexusGenFieldTypes {
   }
   LanguageOption: { // field return type
     adminId: string | null; // ID
-    createdAt: NexusGenScalars['Date'] | null; // Date
-    iconUrl: string; // String!
-    id: string | null; // ID
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    media: NexusGenRootTypes['Media'] | null; // Media
+    mediaId: string; // ID!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt: NexusGenScalars['Date'] | null; // Date
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   LanguageOptionsList: { // field return type
     languageOptions: Array<NexusGenRootTypes['LanguageOption'] | null> | null; // [LanguageOption]
@@ -742,11 +744,11 @@ export interface NexusGenFieldTypes {
   }
   ServiceOption: { // field return type
     adminId: string | null; // ID
-    createdAt: NexusGenScalars['Date'] | null; // Date
-    id: string | null; // ID
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt: NexusGenScalars['Date'] | null; // Date
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   ServiceOptionsList: { // field return type
     serviceOptions: Array<NexusGenRootTypes['ServiceOption'] | null> | null; // [ServiceOption]
@@ -764,11 +766,11 @@ export interface NexusGenFieldTypes {
   }
   SpecieOption: { // field return type
     adminId: string | null; // ID
-    createdAt: NexusGenScalars['Date'] | null; // Date
-    id: string | null; // ID
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
     nameEn: string; // String!
     nameFr: string; // String!
-    updatedAt: NexusGenScalars['Date'] | null; // Date
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   SpecieOptionsList: { // field return type
     specieOptions: Array<NexusGenRootTypes['SpecieOption'] | null> | null; // [SpecieOption]
@@ -943,22 +945,22 @@ export interface NexusGenFieldTypeNames {
   }
   GenderOption: { // field return type name
     adminId: 'ID'
-    createdAt: 'Date'
-    id: 'ID'
+    createdAt: 'DateTime'
+    id: 'String'
     nameEn: 'String'
     nameFr: 'String'
-    updatedAt: 'Date'
+    updatedAt: 'DateTime'
   }
   GenderOptionsList: { // field return type name
     genderOptions: 'GenderOption'
   }
   HostingOption: { // field return type name
     adminId: 'ID'
-    createdAt: 'Date'
-    id: 'ID'
+    createdAt: 'DateTime'
+    id: 'String'
     nameEn: 'String'
     nameFr: 'String'
-    updatedAt: 'Date'
+    updatedAt: 'DateTime'
   }
   HostingOptionsList: { // field return type name
     hostingOptions: 'HostingOption'
@@ -1000,12 +1002,13 @@ export interface NexusGenFieldTypeNames {
   }
   LanguageOption: { // field return type name
     adminId: 'ID'
-    createdAt: 'Date'
-    iconUrl: 'String'
-    id: 'ID'
+    createdAt: 'DateTime'
+    id: 'String'
+    media: 'Media'
+    mediaId: 'ID'
     nameEn: 'String'
     nameFr: 'String'
-    updatedAt: 'Date'
+    updatedAt: 'DateTime'
   }
   LanguageOptionsList: { // field return type name
     languageOptions: 'LanguageOption'
@@ -1108,11 +1111,11 @@ export interface NexusGenFieldTypeNames {
   }
   ServiceOption: { // field return type name
     adminId: 'ID'
-    createdAt: 'Date'
-    id: 'ID'
+    createdAt: 'DateTime'
+    id: 'String'
     nameEn: 'String'
     nameFr: 'String'
-    updatedAt: 'Date'
+    updatedAt: 'DateTime'
   }
   ServiceOptionsList: { // field return type name
     serviceOptions: 'ServiceOption'
@@ -1130,11 +1133,11 @@ export interface NexusGenFieldTypeNames {
   }
   SpecieOption: { // field return type name
     adminId: 'ID'
-    createdAt: 'Date'
-    id: 'ID'
+    createdAt: 'DateTime'
+    id: 'String'
     nameEn: 'String'
     nameFr: 'String'
-    updatedAt: 'Date'
+    updatedAt: 'DateTime'
   }
   SpecieOptionsList: { // field return type name
     specieOptions: 'SpecieOption'
@@ -1470,7 +1473,7 @@ export interface NexusGenAbstractTypeMembers {
   BookingMessage: "OperatorBookingMessage" | "UserBookingMessage"
   Claim: "OperatorClaim" | "UserClaim"
   Media: "OperatorMedia" | "SharedMedia" | "UserMedia"
-  Node: "Account" | "Booking" | "IndividualOperator" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "SharedMedia" | "StripePayment" | "User" | "UserBookingMessage" | "UserClaim" | "UserMedia"
+  Node: "Account" | "Booking" | "GenderOption" | "HostingOption" | "IndividualOperator" | "LanguageOption" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "ServiceOption" | "SharedMedia" | "SpecieOption" | "StripePayment" | "User" | "UserBookingMessage" | "UserClaim" | "UserMedia"
   Operator: "IndividualOperator"
   Payment: "StripePayment"
 }
@@ -1478,11 +1481,16 @@ export interface NexusGenAbstractTypeMembers {
 export interface NexusGenTypeInterfaces {
   Account: "Node"
   Booking: "Node"
+  GenderOption: "Node"
+  HostingOption: "Node"
   IndividualOperator: "Actor" | "Node" | "Operator"
+  LanguageOption: "Node"
   OperatorBookingMessage: "BookingMessage" | "Node"
   OperatorClaim: "Claim" | "Node"
   OperatorMedia: "Media" | "Node"
+  ServiceOption: "Node"
   SharedMedia: "Media" | "Node"
+  SpecieOption: "Node"
   StripePayment: "Node" | "Payment"
   User: "Actor" | "Node"
   UserBookingMessage: "BookingMessage" | "Node"

@@ -36,6 +36,7 @@ model Admin {
   createdGenderOption  GenderOption[]
   createdServiceOption ServiceOption[]
   createdPartners      Partner[]
+  medias               Media[]
 }
 
 // Actors
@@ -72,6 +73,7 @@ model Operator {
   partnerPercentage          Float?
   stripeAccountId            String?
   calendarUpdate             DateTime?
+  averageResponseTime        DateTime?
   accountId                  String                 @unique
   account                    Account                @relation(fields: [accountId], references: [id])
   gender                     GenderOption?          @relation(fields: [genderOptionId], references: [id])
@@ -287,20 +289,23 @@ enum MediaType {
 }
 
 model Media {
-  id               String          @id @default(cuid())
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  id               String           @id @default(cuid())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
   storeUrl         String
-  mediaType        MediaType       @default(IMAGE)
+  mediaType        MediaType        @default(IMAGE)
   // The user pictures
-  user             User?           @relation(fields: [userId], references: [id])
+  user             User?            @relation(fields: [userId], references: [id])
   userId           String?
   // The operator pictures
-  operator         Operator?       @relation(fields: [operatorId], references: [id])
+  operator         Operator?        @relation(fields: [operatorId], references: [id])
   operatorId       String?
   // Booking specific media (picture or video sent to the owner by the chat for example)
-  bookingMessage   BookingMessage? @relation(fields: [bookingMessageId], references: [id])
+  bookingMessage   BookingMessage?  @relation(fields: [bookingMessageId], references: [id])
   bookingMessageId String?
+  adminId          String?
+  admin            Admin?           @relation(fields: [adminId], references: [id])
+  languagesOptions LanguageOption[]
 }
 
 // Options
@@ -322,7 +327,8 @@ model LanguageOption {
   adminId   String?
   nameEn    String
   nameFr    String
-  iconUrl   String
+  mediaId   String
+  media     Media    @relation(fields: [mediaId], references: [id])
 }
 
 model HostingOption {

@@ -7,7 +7,7 @@ export const createLanguageOptionInput = inputObjectType({
 	definition(t) {
 		t.nonNull.string('nameFr')
 		t.nonNull.string('nameEn')
-		t.nonNull.string('iconUrl')
+		t.nonNull.string('mediaId')
 	}
 })
 
@@ -34,14 +34,12 @@ export const createLanguageOption = mutationField('createLanguageOption', {
 		)
 	},
 	authorization: (ctx) => authorize(ctx, 'admin'),
-	validation: (args) => checkArgs(args, ['nameFr', 'nameEn', 'iconUrl']),
-	async resolve(_, { input: { nameEn, nameFr, iconUrl } }, { user: { userId } }) {
+	validation: (args) => checkArgs(args, ['nameFr', 'nameEn', 'mediaId']),
+	async resolve(_, { input }, { user: { userId } }) {
 		try {
 			const LanguageOption = await prisma.languageOption.create({
 				data: {
-					nameEn,
-					nameFr,
-					iconUrl,
+					...input,
 					adminId: userId // Change to the adminId when admins are done
 				}
 			})
@@ -57,6 +55,7 @@ export const updateLanguageOptionInput = inputObjectType({
 	definition(t) {
 		t.string('nameFr')
 		t.string('nameEn')
+		t.id('mediaId')
 	}
 })
 
@@ -85,7 +84,7 @@ export const updateLanguageOption = mutationField('updateLanguageOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'admin'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { userId } }) {
+	async resolve(_, { id, input: { nameEn, nameFr, mediaId } }, { user: { userId } }) {
 		try {
 			const LanguageOption = await prisma.languageOption.update({
 				where: {
@@ -94,6 +93,7 @@ export const updateLanguageOption = mutationField('updateLanguageOption', {
 				data: {
 					...(nameEn && { nameEn }),
 					...(nameFr && { nameFr }),
+					...(mediaId && { mediaId }),
 					adminId: userId // Change to the adminId when admins are done
 				}
 			})

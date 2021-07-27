@@ -186,7 +186,7 @@ input CreateIndividualOperatorInput {
 union CreateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | UnableToProcessError
 
 input CreateLanguageOptionInput {
-  iconUrl: String!
+  mediaId: String!
   nameEn: String!
   nameFr: String!
 }
@@ -281,13 +281,15 @@ enum ErrorMessage {
   UNAUTHENTICATED_PLEASE_LOGIN
 }
 
-type GenderOption {
+type GenderOption implements Node {
   adminId: ID
-  createdAt: Date
-  id: ID
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
   nameEn: String!
   nameFr: String!
-  updatedAt: Date
+  updatedAt: DateTime
 }
 
 """The result of the genderOptionById query"""
@@ -301,13 +303,15 @@ type GenderOptionsList {
 """The result of the gendersOptions query"""
 union GenderOptionsResult = GenderOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
-type HostingOption {
+type HostingOption implements Node {
   adminId: ID
-  createdAt: Date
-  id: ID
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
   nameEn: String!
   nameFr: String!
-  updatedAt: Date
+  updatedAt: DateTime
 }
 
 """The result of the hostingOptionById query"""
@@ -376,14 +380,17 @@ A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 """
 scalar JWT
 
-type LanguageOption {
+type LanguageOption implements Node {
   adminId: ID
-  createdAt: Date
-  iconUrl: String!
-  id: ID
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  media: Media
+  mediaId: ID!
   nameEn: String!
   nameFr: String!
-  updatedAt: Date
+  updatedAt: DateTime
 }
 
 """The result of the languageOptionById query"""
@@ -677,13 +684,15 @@ scalar SaveAsValue
 """The result of the sendVerificationEmail mutation"""
 union SendVerificationEmailResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError
 
-type ServiceOption {
+type ServiceOption implements Node {
   adminId: ID
-  createdAt: Date
-  id: ID
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
   nameEn: String!
   nameFr: String!
-  updatedAt: Date
+  updatedAt: DateTime
 }
 
 """The result of the serviceOptionById query"""
@@ -725,13 +734,15 @@ union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToP
 """The result of the signOut mutation"""
 union SignOutResult = BooleanResult | UserAuthenticationError
 
-type SpecieOption {
+type SpecieOption implements Node {
   adminId: ID
-  createdAt: Date
-  id: ID
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
   nameEn: String!
   nameFr: String!
-  updatedAt: Date
+  updatedAt: DateTime
 }
 
 """The result of the specieOptionById query"""
@@ -811,6 +822,7 @@ input UpdateIndividualOperatorInput {
 union UpdateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | NotFoundError | UnableToProcessError
 
 input UpdateLanguageOptionInput {
+  mediaId: ID
   nameEn: String
   nameFr: String
 }
