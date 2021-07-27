@@ -1,4 +1,4 @@
-import { objectType, inputObjectType, enumType, interfaceType, unionType } from 'nexus'
+import { objectType, inputObjectType, enumType, unionType } from 'nexus'
 import { PAYMENT_STATUS } from './constants'
 import prisma from '../../lib/prisma'
 // export * from './mutation'
@@ -95,6 +95,11 @@ export const booking = objectType({
 			type: 'ServiceOption',
 			resolve: async (b) => await prisma.booking.findUnique({ where: { id: b.id } }).service()
 		})
+		t.field('payment', {
+			type: 'BookingPayment',
+			resolve: async (b) =>
+				await prisma.booking.findUnique({ where: { id: b.id } }).stripePayment()
+		})
 		t.list.field('messages', {
 			type: 'BookingMessage',
 			resolve: async (b) =>
@@ -104,102 +109,9 @@ export const booking = objectType({
 			type: 'Claim',
 			resolve: async (b) => await prisma.booking.findUnique({ where: { id: b.id } }).claims()
 		})
-		t.field('payment', {
-			type: 'BookingPayment',
-			resolve: async (b) =>
-				await prisma.booking.findUnique({ where: { id: b.id } }).stripePayment()
+		t.list.field('reviews', {
+			type: 'Review',
+			resolve: async (b) => await prisma.booking.findUnique({ where: { id: b.id } }).reviews()
 		})
-		// Need to implement the review relation resolver
 	}
 })
-
-// export const Booking = objectType({
-// 	name: 'Booking',
-// 	definition(t) {
-// 		t.id('id')
-// 		t.id('ownerId', { description: 'The owner profile id' })
-// 		t.id('sitterId', { description: 'The sitter profile id' })
-// 		t.string('startDate')
-// 		t.string('endDate')
-// 		t.string('service')
-// 		t.float('priceWithoutApplicationFee')
-// 		t.float('priceWithApplicationFee')
-// 		t.float('applicationFeeAmount')
-// 		t.list.string('animalsIds')
-// 		t.list.field('selectedOptions', { type: 'BookingOption' })
-// 		t.field('sitterOk', { type: 'BookingConfirmation' })
-// 		t.field('ownerOk', { type: 'BookingConfirmation' })
-// 		t.boolean('canceled')
-// 		t.boolean('paymentAuthorized')
-// 		t.boolean('underReview')
-// 		t.boolean('paid')
-// 		t.field('cancellationDetails', { type: 'BookingCancellationDetails' })
-// 		t.string('cancellationReason')
-// 		t.string('paymentStatus')
-// 		t.date('captureDate')
-// 		t.field('status', {
-// 			type: 'BookingStatus',
-// 			// @ts-ignore
-// 			resolve(booking) {
-// 				const { canceled, sitterOk, ownerOk, paid, paymentAuthorized, underReview } =
-// 					booking
-
-// 				if (underReview) {
-// 					return 'UNDER_REVIEW'
-// 				} else if (paid) {
-// 					return 'PAID'
-// 				} else if (canceled) {
-// 					return 'CANCELED'
-// 				} else if (paymentAuthorized) {
-// 					return 'PAYMENT_AUTHORIZED'
-// 				} else if (sitterOk?.confirm && ownerOk?.confirm) {
-// 					return 'BOTH_CONFIRMED'
-// 				} else if (!sitterOk?.confirm && ownerOk?.confirm) {
-// 					return 'PENDING_SITTER_VALIDATION'
-// 				} else if (sitterOk?.confirm && !ownerOk?.confirm) {
-// 					return 'PENDING_OWNER_VALIDATION'
-// 				} else {
-// 					return 'NONE_CONFIRMED'
-// 				}
-// 			},
-// 		})
-// 		t.date('createdAt')
-// 		t.date('updatedAt')
-// 		t.id('lastUpdatedBy')
-// 		t.field('owner', {
-// 			type: 'Profile',
-// 			// @ts-ignore
-// 			async resolve(booking, _, { loaders: { BookingOwnerLoader } }) {
-// 				return await BookingOwnerLoader.load(booking.ownerId)
-// 			},
-// 		})
-// 		t.field('sitter', {
-// 			type: 'Profile',
-// 			// @ts-ignore
-// 			async resolve(booking, _, { loaders: { BookingSitterLoader } }) {
-// 				return await BookingSitterLoader.load(booking.sitterId)
-// 			},
-// 		})
-// 		t.list.field('reviews', {
-// 			type: 'Review',
-// 			// @ts-ignore
-// 			async resolve(booking, _, { loaders: { BookingReviewLoader } }) {
-// 				return await BookingReviewLoader.load({
-// 					id: booking.id,
-// 					searchKey: 'bookingId',
-// 					additionalParams: {},
-// 				})
-// 			},
-// 		})
-// 		t.list.field('messages', {
-// 			type: 'Message',
-// 			async resolve(booking, _, { loaders: { BookingMessagesLoader } }) {
-// 				return await BookingMessagesLoader.load({
-// 					id: booking.id,
-// 					searchKey: 'bookingId',
-// 					additionalParams: {},
-// 				})
-// 			},
-// 		})
-// 	},
-// })

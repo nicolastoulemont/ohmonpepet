@@ -59,6 +59,7 @@ type Booking implements Node {
   paid: Boolean
   payment: BookingPayment
   priceWithOutApplicationFee: PositiveFloat
+  reviews: [Review]
   selectedOptions: [JSON]
   service: ServiceOption
   startDate: Date
@@ -80,8 +81,8 @@ interface BookingMessage implements Node {
   updatedAt: DateTime
 }
 
-"""The result of the accountById query"""
-union BookingMessageByIdResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+"""The result of the bookingMessageById query"""
+union BookingMessageByIdResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | UserAuthenticationError | UserBookingMessage | UserForbiddenError
 
 """List of booking messages"""
 type BookingMessagesList {
@@ -201,6 +202,16 @@ input CreateMediaInput {
 
 union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError
 
+input CreateReviewInput {
+  body: String
+  bookingId: String!
+  saveAs: String!
+  score: PositiveFloat!
+  title: String!
+}
+
+union CreateReviewResult = InvalidArgumentsError | OperatorReview | UnableToProcessError | UserAuthenticationError | UserReview
+
 input CreateServiceOptionInput {
   nameEn: String!
   nameFr: String!
@@ -248,6 +259,9 @@ union DeleteLanguageOptionResult = BooleanResult | InvalidArgumentsError | NotFo
 
 """The result of the deleteMedia mutation"""
 union DeleteMediaResult = BooleanResult | InvalidArgumentsError | IsActiveOperatorMainMediaError | IsActiveOperatorWithNoReplacementMediaError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
+"""The result of the deleteReview mutation"""
+union DeleteReviewResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 union DeleteServiceOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
@@ -472,6 +486,7 @@ type Mutation {
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
   createLanguageOption(input: CreateLanguageOptionInput!): CreateLanguageOptionResult
   createMedia(input: CreateMediaInput!): CreateMediaResult
+  createReview(input: CreateReviewInput!): CreateReviewResult
   createServiceOption(input: CreateServiceOptionInput!): CreateServiceOptionResult
   createSpecieOption(input: CreateSpecieOptionInput!): CreateSpecieOptionResult
 
@@ -482,6 +497,7 @@ type Mutation {
   deleteHostingOption(id: ID!): DeleteHostingOptionResult
   deleteLanguageOption(id: ID!): DeleteLanguageOptionResult
   deleteMedia(mediaId: ID!): DeleteMediaResult
+  deleteReview(id: ID!): DeleteReviewResult
   deleteServiceOption(id: ID!): DeleteServiceOptionResult
   deleteSpecieOption(id: ID!): DeleteSpecieOptionResult
   lostPassword(email: String!): LostPasswordResult
@@ -503,6 +519,7 @@ type Mutation {
   updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
   updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
   updateLanguageOption(id: ID!, input: UpdateLanguageOptionInput!): UpdateLanguageOptionResult
+  updateReview(id: ID!, input: UpdateReviewInput!, saveAs: String!): UpdateReviewResult
   updateServiceOption(id: ID!, input: UpdateServiceOptionInput!): UpdateServiceOptionResult
   updateSpecieOption(id: ID!, input: UpdateSpecieOptionInput!): UpdateSpecieOptionResult
   verifyUser(input: VerifyUserInput!): VerifyUserResult
@@ -577,6 +594,21 @@ type OperatorMedia implements Media & Node {
   operator: Operator
   operatorId: ID
   storeUrl: URL!
+  updatedAt: DateTime
+}
+
+type OperatorReview implements Node & Review {
+  body: String
+  booking: Booking
+  bookingId: ID
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  operator: Operator
+  operatorId: ID
+  score: Float!
+  title: String!
   updatedAt: DateTime
 }
 
@@ -667,6 +699,12 @@ type Query {
   medias: MediasResult
 
   """Access restricted to admin users"""
+  reviewById(id: ID!): ReviewByIdResult
+
+  """Access restricted to admin users"""
+  reviews: ReviewsResult
+
+  """Access restricted to admin users"""
   serviceOptionById(id: ID!): ServiceOptionByIdResult
 
   """Access restricted to admin users"""
@@ -689,6 +727,30 @@ input ResetPasswordInput {
 
 """The result of the resetPassword mutation"""
 union ResetPasswordResult = BooleanResult | InvalidArgumentsError | UnableToProcessError
+
+interface Review implements Node {
+  body: String
+  booking: Booking
+  bookingId: ID
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  score: Float!
+  title: String!
+  updatedAt: DateTime
+}
+
+"""The result of the reviewById query"""
+union ReviewByIdResult = InvalidArgumentsError | NotFoundError | OperatorReview | UserAuthenticationError | UserForbiddenError | UserReview
+
+"""List of reviews"""
+type ReviewsList {
+  reviews: [Review]
+}
+
+"""The result of the reviews query"""
+union ReviewsResult = ReviewsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 """A field whose value must be either: user, operator, admin"""
 scalar SaveAsValue
@@ -796,7 +858,7 @@ type UnableToProcessError {
 }
 
 input UpdateBookingMessageInput {
-  content: String
+  content: String!
   readAt: Date
 }
 
@@ -840,6 +902,14 @@ input UpdateLanguageOptionInput {
 }
 
 union UpdateLanguageOptionResult = InvalidArgumentsError | LanguageOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+input UpdateReviewInput {
+  body: String
+  score: PositiveFloat!
+  title: String!
+}
+
+union UpdateReviewResult = InvalidArgumentsError | NotFoundError | OperatorReview | UnableToProcessError | UserAuthenticationError | UserReview
 
 input UpdateServiceOptionInput {
   nameEn: String
@@ -911,6 +981,21 @@ type UserMedia implements Media & Node {
   id: String!
   mediaType: MediaType
   storeUrl: URL!
+  updatedAt: DateTime
+  user: User
+  userId: ID
+}
+
+type UserReview implements Node & Review {
+  body: String
+  booking: Booking
+  bookingId: ID
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  score: Float!
+  title: String!
   updatedAt: DateTime
   user: User
   userId: ID
