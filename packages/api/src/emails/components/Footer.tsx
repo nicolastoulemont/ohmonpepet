@@ -12,7 +12,7 @@ export function Footer() {
 				tableLayout: 'fixed',
 				backgroundColor: '#f2f2f2',
 				margin: '0 auto',
-				border: '0'
+				border: '0',
 			}}
 		>
 			<tbody>
@@ -35,7 +35,7 @@ export function Footer() {
 												style={{
 													width: '100%',
 													lineHeight: '160% !important',
-													margin: '0 auto'
+													margin: '0 auto',
 												}}
 												// @ts-ignore
 												border='0'
@@ -49,7 +49,7 @@ export function Footer() {
 															style={{
 																fontSize: '11px',
 																color: '#f2f2f2',
-																padding: '0 0 32px'
+																padding: '0 0 32px',
 															}}
 														>
 															<table
@@ -59,7 +59,7 @@ export function Footer() {
 																	fontSize: '12px',
 																	borderBottom:
 																		'1px solid #d6d6d6',
-																	padding: '0'
+																	padding: '0',
 																}}
 																width='100%'
 																//@ts-ignore
@@ -76,22 +76,23 @@ export function Footer() {
 																					'collapse',
 																				padding:
 																					'23px 0 23px 0',
-																				lineHeight: '153%'
+																				lineHeight: '153%',
 																			}}
 																			align='center'
 																		>
 																			<a
 																				href={`${process.env.DOMAIN_URL}`}
 																				style={{
-																					color: '#888888 !important',
+																					color:
+																						'#888888 !important',
 																					textDecoration:
 																						'none',
 																					padding:
-																						'0 10px 0 0'
+																						'0 10px 0 0',
 																				}}
 																				target='_blank'
 																			>
-																				BRAND_ROOT_PAGE
+																				Trouver un petsitter
 																			</a>
 																			<span
 																				style={{
@@ -99,7 +100,7 @@ export function Footer() {
 																					height: '0',
 																					fontSize: '0',
 																					lineHeight: '0',
-																					display: 'none'
+																					display: 'none',
 																				}}
 																			>
 																				&nbsp;
@@ -110,14 +111,15 @@ export function Footer() {
 																					height: '0',
 																					fontSize: '0',
 																					lineHeight: '0',
-																					display: 'none'
+																					display: 'none',
 																				}}
 																			>
 																				&nbsp;
 																			</span>
 																			<span
 																				style={{
-																					color: '#d6d6d6 !important'
+																					color:
+																						'#d6d6d6 !important',
 																				}}
 																				aria-hidden='true'
 																			>
@@ -126,15 +128,16 @@ export function Footer() {
 																			<a
 																				href={`${process.env.DOMAIN_URL}/onboarding`}
 																				style={{
-																					color: '#888888 !important',
+																					color:
+																						'#888888 !important',
 																					textDecoration:
 																						'none',
 																					padding:
-																						'0 12px 0 12px'
+																						'0 12px 0 12px',
 																				}}
 																				target='_blank'
 																			>
-																				DIRECT_ONBOARDING
+																				Devenir un petsitter
 																			</a>
 																			<span
 																				style={{
@@ -142,7 +145,7 @@ export function Footer() {
 																					height: '0',
 																					fontSize: '0',
 																					lineHeight: '0',
-																					display: 'none'
+																					display: 'none',
 																				}}
 																			>
 																				&nbsp;
@@ -153,7 +156,7 @@ export function Footer() {
 																					height: '0',
 																					fontSize: '0',
 																					lineHeight: '0',
-																					display: 'none'
+																					display: 'none',
 																				}}
 																			>
 																				&nbsp;
@@ -168,7 +171,7 @@ export function Footer() {
 																	fontSize: '11px',
 																	padding: '10px 0',
 																	width: '100%',
-																	border: '0'
+																	border: '0',
 																}}
 																width='100%'
 																// @ts-ignore
@@ -181,51 +184,56 @@ export function Footer() {
 																	<tr>
 																		<td
 																			style={{
-																				color: '#888888 !important',
+																				color:
+																					'#888888 !important',
 																				borderCollapse:
 																					'collapse',
 																				padding: '20px 0 0',
-																				lineHeight: '153%'
+																				lineHeight: '153%',
 																			}}
 																		>
 																			<p
 																				style={{
 																					padding:
 																						'0 0 6px 0',
-																					margin: '0'
+																					margin: '0',
 																				}}
 																			>
 																				Copyright ©{' '}
 																				{new Date().getFullYear()}{' '}
 																				<span>
-																					BRAND_NAME
+																					Ohmonpepet
 																				</span>{' '}
 																				Tous droits
 																				réservés.
 																			</p>
 																			<p>
 																				<span>
-																					BRAND_NAME
+																					Ohmonpepet
 																				</span>{' '}
-																				COMPANY ADDRESS
+																				32 rue de
+																				montmorency, 75003
+																				Paris France
 																			</p>
 																			<p
 																				style={{
-																					color: '#555555 !important',
+																					color:
+																						'#555555 !important',
 																					padding: '0',
 																					margin: '0',
 																					lineHeight:
-																						'2.2em'
+																						'2.2em',
 																				}}
 																			>
 																				<a
 																					href={`${process.env.DOMAIN_URL}/confidentiality-policy`}
 																					style={{
-																						color: '#555555 !important',
+																						color:
+																							'#555555 !important',
 																						textDecoration:
 																							'none',
 																						whiteSpace:
-																							'nowrap'
+																							'nowrap',
 																					}}
 																					target='_blank'
 																				>
@@ -234,7 +242,8 @@ export function Footer() {
 																				</a>
 																				<span
 																					style={{
-																						color: '#d6d6d6 !important'
+																						color:
+																							'#d6d6d6 !important',
 																					}}
 																					aria-hidden='true'
 																				>
@@ -243,11 +252,12 @@ export function Footer() {
 																				<a
 																					href={`${process.env.DOMAIN_URL}/cgs`}
 																					style={{
-																						color: '#555555 !important',
+																						color:
+																							'#555555 !important',
 																						textDecoration:
 																							'none',
 																						whiteSpace:
-																							'nowrap'
+																							'nowrap',
 																					}}
 																					target='_blank'
 																				>
@@ -256,7 +266,8 @@ export function Footer() {
 																				</a>
 																				<span
 																					style={{
-																						color: '#d6d6d6 !important'
+																						color:
+																							'#d6d6d6 !important',
 																					}}
 																					aria-hidden='true'
 																				>
@@ -265,11 +276,12 @@ export function Footer() {
 																				<a
 																					href={`${process.env.DOMAIN_URL}/information-and-consent`}
 																					style={{
-																						color: '#555555 !important',
+																						color:
+																							'#555555 !important',
 																						textDecoration:
 																							'none',
 																						whiteSpace:
-																							'nowrap'
+																							'nowrap',
 																					}}
 																					target='_blank'
 																				>

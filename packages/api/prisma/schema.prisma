@@ -19,15 +19,15 @@ model Account {
   password   String
   verifiedAt DateTime?
   user       User?
-  admin      Admin?
+  staff      Staff?
   operator   Operator?
 }
 
-model Admin {
-  id                   String           @id @default(cuid())
-  createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @default(now())
-  account              Account          @relation(fields: [accountId], references: [id])
+model Staff {
+  id                   String             @id @default(cuid())
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now())
+  account              Account            @relation(fields: [accountId], references: [id])
   accountId            String
   phoneNumber          String // Required for potential 2 factor auth
   createdSpecies       SpecieOption[]
@@ -37,6 +37,7 @@ model Admin {
   createdServiceOption ServiceOption[]
   createdPartners      Partner[]
   medias               Media[]
+  donationsReceipts    DonationsReceipt[]
 }
 
 // Actors
@@ -70,7 +71,7 @@ model Operator {
   genderOptionId             String? // Needed for filtering, with relation because its possible
   hostingOptionId            String // Needed for filtering, with relation because its possible
   partnerId                  String?
-  partnerPercentage          Float?
+  partnerPercentage          Int?
   stripeAccountId            String?
   calendarUpdate             DateTime?
   averageResponseTime        DateTime?
@@ -88,6 +89,7 @@ model Operator {
   coreServices               CoreOperatorService[]
   extraServices              ExtraOperatorService?
   availabilities             OperatorAvailability[]
+  donations                  Donation[]
 }
 
 // Actors related informations
@@ -140,19 +142,6 @@ model ExtraOperatorService {
   isProfessionalOperator          Boolean?
 }
 
-model Partner {
-  id          String     @id @default(cuid())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  creator     Admin?     @relation(fields: [adminId], references: [id])
-  adminId     String?
-  name        String
-  description String
-  websiteUrl  String
-  logoUrl     String
-  operators   Operator[]
-}
-
 model Location {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
@@ -167,19 +156,49 @@ model Location {
   operatorId   String
 }
 
-model Review {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  title      String
-  body       String?
-  score      Float
-  operator   Operator? @relation(fields: [operatorId], references: [id])
-  operatorId String?
-  user       User?     @relation(fields: [userId], references: [id])
-  userId     String?
-  booking    Booking   @relation(fields: [bookingId], references: [id])
-  bookingId  String
+// Partners and partners related fields
+model Partner {
+  id                String             @id @default(cuid())
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  creator           Staff?             @relation(fields: [staffId], references: [id])
+  staffId           String?
+  name              String
+  description       String
+  websiteUrl        String
+  logoUrl           String
+  operators         Operator[]
+  donations         Donation[]
+  donationsReceipts DonationsReceipt[]
+}
+
+model Donation {
+  id                                  String            @id @default(cuid())
+  createdAt                           DateTime          @default(now())
+  updatedAt                           DateTime          @updatedAt
+  partnerPercentageAtDonationCreation Int
+  amountToDonate                      Float
+  donationDate                        DateTime?
+  partner                             Partner           @relation(fields: [partnerId], references: [id])
+  partnerId                           String
+  operator                            Operator          @relation(fields: [operatorId], references: [id])
+  operatorId                          String
+  booking                             Booking           @relation(fields: [bookingId], references: [id])
+  bookingId                           String
+  donationReceipt                     DonationsReceipt? @relation(fields: [donationsReceiptId], references: [id])
+  donationsReceiptId                  String?
+}
+
+model DonationsReceipt {
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  partner   Partner    @relation(fields: [partnerId], references: [id])
+  partnerId String
+  author    Staff      @relation(fields: [staffId], references: [id])
+  staffId   String
+  files     Media[]
+  donations Donation[]
 }
 
 // Bookings related infos
@@ -202,7 +221,7 @@ model Booking {
   canceledBy                 String?
   canceledReason             String?
   paid                       Boolean          @default(false)
-  underReview                Boolean? // Claim related field
+  underReview                Boolean          @default(false)
   operator                   Operator         @relation(fields: [operatorId], references: [id])
   operatorId                 String
   user                       User             @relation(fields: [userId], references: [id])
@@ -213,6 +232,7 @@ model Booking {
   messages                   BookingMessage[]
   claims                     BookingClaim[]
   stripePayment              StripePayment?
+  donation                   Donation?
 }
 
 model BookingMessage {
@@ -276,9 +296,25 @@ model StripePayment {
   paymentIntentCreationDate         DateTime?
   // For queued payments: setupIntent -> queue -> paymentIntent created 2 days before booking's end
   expectedPaymentIntentCreationDate DateTime?
+  expectedPaymentIntentCaptureDate  DateTime?
   paymentMethodId                   String?
   status                            PaymentStatus
   errorCode                         String?
+}
+
+model Review {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  title      String
+  body       String?
+  score      Float
+  operator   Operator? @relation(fields: [operatorId], references: [id])
+  operatorId String?
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     String?
+  booking    Booking   @relation(fields: [bookingId], references: [id])
+  bookingId  String
 }
 
 // Transversal
@@ -289,24 +325,27 @@ enum MediaType {
 }
 
 model Media {
-  id               String          @id @default(cuid())
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  storeUrl         String
-  mediaType        MediaType       @default(IMAGE)
+  id                String            @id @default(cuid())
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  storeUrl          String
+  mediaType         MediaType         @default(IMAGE)
   // The user pictures
-  user             User?           @relation(fields: [userId], references: [id])
-  userId           String?
+  user              User?             @relation(fields: [userId], references: [id])
+  userId            String?
   // The operator pictures
-  operator         Operator?       @relation(fields: [operatorId], references: [id])
-  operatorId       String?
+  operator          Operator?         @relation(fields: [operatorId], references: [id])
+  operatorId        String?
   // Booking specific media (picture or video sent to the owner by the chat for example)
-  bookingMessage   BookingMessage? @relation(fields: [bookingMessageId], references: [id])
-  bookingMessageId String?
-  adminId          String?
-  admin            Admin?          @relation(fields: [adminId], references: [id])
-  languageOptionId String?
-  languageOption   LanguageOption? @relation(fields: [languageOptionId], references: [id])
+  bookingMessage    BookingMessage?   @relation(fields: [bookingMessageId], references: [id])
+  bookingMessageId  String?
+  staffId           String?
+  staff             Staff?            @relation(fields: [staffId], references: [id])
+  languageOptionId  String?
+  languageOption    LanguageOption?   @relation(fields: [languageOptionId], references: [id])
+  donationReceiptId String?
+  donationReceipt   DonationsReceipt? @relation(fields: [donationReceiptId], references: [id])
+
 }
 
 // Options
@@ -314,8 +353,8 @@ model SpecieOption {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  creator   Admin?   @relation(fields: [adminId], references: [id])
-  adminId   String?
+  creator   Staff    @relation(fields: [staffId], references: [id])
+  staffId   String
   nameEn    String
   nameFr    String
 }
@@ -324,8 +363,8 @@ model LanguageOption {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  creator   Admin?   @relation(fields: [adminId], references: [id])
-  adminId   String?
+  creator   Staff    @relation(fields: [staffId], references: [id])
+  staffId   String
   nameEn    String
   nameFr    String
   media     Media?
@@ -335,8 +374,8 @@ model HostingOption {
   id        String     @id @default(cuid())
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  creator   Admin?     @relation(fields: [adminId], references: [id])
-  adminId   String?
+  creator   Staff      @relation(fields: [staffId], references: [id])
+  staffId   String
   nameEn    String
   nameFr    String
   operators Operator[]
@@ -346,8 +385,8 @@ model GenderOption {
   id        String     @id @default(cuid())
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  creator   Admin?     @relation(fields: [adminId], references: [id])
-  adminId   String?
+  creator   Staff      @relation(fields: [staffId], references: [id])
+  staffId   String
   nameEn    String
   nameFr    String
   operators Operator[]
@@ -357,8 +396,8 @@ model ServiceOption {
   id                   String                @id @default(cuid())
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
-  creator              Admin?                @relation(fields: [adminId], references: [id])
-  adminId              String?
+  creator              Staff                 @relation(fields: [staffId], references: [id])
+  staffId              String
   nameEn               String
   nameFr               String
   bookings             Booking[]

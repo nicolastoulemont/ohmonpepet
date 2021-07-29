@@ -23,7 +23,7 @@ export const reviewById = queryField('reviewById', {
 		id: nonNull(idArg())
 	},
 	description: 'Access restricted to admin users',
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
@@ -62,7 +62,7 @@ export const reviewsResult = unionType({
 export const reviews = queryField('reviews', {
 	type: 'ReviewsResult',
 	description: 'Access restricted to admin users',
-	// authorization: (ctx) => authorize(ctx, 'admin'),
+	// authorization: (ctx) => authorize(ctx, 'staff'),
 	async resolve() {
 		try {
 			const reviews = await prisma.review.findMany()

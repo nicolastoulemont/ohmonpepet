@@ -37,6 +37,9 @@ interface Actor implements Node {
 """The result of the accounts query"""
 union AllAccountsResult = AccountsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
+"""The result of the allStaffs query"""
+union AllStaffsResult = StaffsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 """The result of the allUsers query"""
 union AllUsersResult = UnableToProcessError | UserAuthenticationError | UserForbiddenError | UsersList
 
@@ -226,6 +229,21 @@ input CreateSpecieOptionInput {
 
 union CreateSpecieOptionResult = InvalidArgumentsError | SpecieOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
+input CreateStaffAccountInput {
+  email: EmailAddress!
+  password: String!
+  phoneNumber: String!
+}
+
+"""The result of the createStaffAccount mutation"""
+union CreateStaffAccountResult = Account | InvalidArgumentsError | UnableToProcessError
+
+type CronStatus {
+  status: String
+}
+
+union CronSubscriptionsResult = BooleanResult | UserAuthenticationError | UserForbiddenError
+
 """The result of the currentAccount query"""
 union CurrentAccountResult = Account | NotFoundError | UserAuthenticationError | UserForbiddenError
 
@@ -270,6 +288,36 @@ union DeleteServiceOptionResult = BooleanResult | InvalidArgumentsError | NotFou
 
 union DeleteSpecieOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
+type Donation implements Node {
+  amountToDonate: PositiveFloat
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  updatedAt: DateTime
+}
+
+type DonationReceipt implements Node {
+  amountDonated: PositiveFloat
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  updatedAt: DateTime
+}
+
+type DonationReceiptMedia implements Media & Node {
+  createdAt: DateTime
+  donationReceipt: DonationReceipt
+  donationReceiptId: ID
+
+  """GUID for a resource"""
+  id: String!
+  mediaType: MediaType
+  storeUrl: URL!
+  updatedAt: DateTime
+}
+
 """
 A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/.
 """
@@ -299,7 +347,6 @@ enum ErrorMessage {
 }
 
 type GenderOption implements Node {
-  adminId: ID
   createdAt: DateTime
 
   """GUID for a resource"""
@@ -320,8 +367,9 @@ type GenderOptionsList {
 """The result of the gendersOptions query"""
 union GenderOptionsResult = GenderOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
+union GetCronStatusResult = CronStatus | UserAuthenticationError | UserForbiddenError
+
 type HostingOption implements Node {
-  adminId: ID
   createdAt: DateTime
 
   """GUID for a resource"""
@@ -398,13 +446,11 @@ A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 scalar JWT
 
 type LanguageOption implements Node {
-  adminId: ID
   createdAt: DateTime
 
   """GUID for a resource"""
   id: String!
   media: Media
-  mediaId: ID!
   nameEn: String!
   nameFr: String!
   updatedAt: DateTime
@@ -412,6 +458,18 @@ type LanguageOption implements Node {
 
 """The result of the languageOptionById query"""
 union LanguageOptionByIdResult = InvalidArgumentsError | LanguageOption | NotFoundError | UserAuthenticationError | UserForbiddenError
+
+type LanguageOptionMedia implements Media & Node {
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  language: LanguageOption
+  languageOptionId: ID
+  mediaType: MediaType
+  storeUrl: URL!
+  updatedAt: DateTime
+}
 
 """List of languageOptions"""
 type LanguageOptionsList {
@@ -492,6 +550,7 @@ type Mutation {
   createReview(input: CreateReviewInput!): CreateReviewResult
   createServiceOption(input: CreateServiceOptionInput!): CreateServiceOptionResult
   createSpecieOption(input: CreateSpecieOptionInput!): CreateSpecieOptionResult
+  createStaffAccount(input: CreateStaffAccountInput!): CreateStaffAccountResult
 
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
@@ -518,6 +577,8 @@ type Mutation {
 
   """Access restricted to logged in user"""
   signOut: SignOutResult
+  startCron(cronName: String!): StartCronResult
+  stopCron(cronName: String!): StopCronResult
   updateBookingMessage(id: ID!, input: UpdateBookingMessageInput!, saveAs: String!): UpdateBookingMessageResult
   updateGenderOption(id: ID!, input: UpdateGenderOptionInput!): UpdateGenderOptionResult
   updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
@@ -656,6 +717,9 @@ type Query {
   """Access restricted to admin users"""
   allAccounts: AllAccountsResult
 
+  """Access restricted to Staff Staffs"""
+  allStaffs: AllStaffsResult
+
   """Access restricted to admin users"""
   allUsers: AllUsersResult
 
@@ -680,20 +744,15 @@ type Query {
 
   """Access restricted to admin users"""
   genderOptionById(id: ID!): GenderOptionByIdResult
-
-  """Access restricted to admin users"""
   gendersOptions: GenderOptionsResult
+  getCronStatus(cronName: String!): GetCronStatusResult
 
   """Access restricted to admin users"""
   hostingOptionById(id: ID!): HostingOptionByIdResult
-
-  """Access restricted to admin users"""
   hostingsOptions: HostingOptionsResult
 
   """Access restricted to admin users"""
   languageOptionById(id: ID!): LanguageOptionByIdResult
-
-  """Access restricted to admin users"""
   languagesOptions: LanguageOptionsResult
 
   """Access restricted to admin users"""
@@ -710,15 +769,14 @@ type Query {
 
   """Access restricted to admin users"""
   serviceOptionById(id: ID!): ServiceOptionByIdResult
-
-  """Access restricted to admin users"""
   servicesOptions: ServiceOptionsResult
 
   """Access restricted to admin users"""
   specieOptionById(id: ID!): SpecieOptionByIdResult
-
-  """Access restricted to admin users"""
   speciesOptions: SpecieOptionsResult
+
+  """Access restricted to Staff Staffs"""
+  staffById(id: ID!): StaffByIdResult
 
   """Access restricted to admin users"""
   userById(id: ID!): UserByIdResult
@@ -763,7 +821,6 @@ scalar SaveAsValue
 union SendVerificationEmailResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError
 
 type ServiceOption implements Node {
-  adminId: ID
   createdAt: DateTime
 
   """GUID for a resource"""
@@ -813,7 +870,6 @@ union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToP
 union SignOutResult = BooleanResult | UserAuthenticationError
 
 type SpecieOption implements Node {
-  adminId: ID
   createdAt: DateTime
 
   """GUID for a resource"""
@@ -834,6 +890,29 @@ type SpecieOptionsList {
 """The result of the speciesOptions query"""
 union SpecieOptionsResult = SpecieOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
+type Staff implements Node {
+  access: String
+  createdAt: DateTime
+  email: String
+
+  """GUID for a resource"""
+  id: String!
+  phoneNumber: String
+  updatedAt: DateTime
+}
+
+"""The result of the StaffById query"""
+union StaffByIdResult = InvalidArgumentsError | NotFoundError | Staff | UserAuthenticationError | UserForbiddenError
+
+"""List of Staffs"""
+type StaffsList {
+  staffs: [Staff]
+}
+
+union StartCronResult = BooleanResult | UserAuthenticationError | UserForbiddenError
+
+union StopCronResult = BooleanResult | UserAuthenticationError | UserForbiddenError
+
 type StorageInfos {
   signedRequest: String
   url: String
@@ -849,6 +928,12 @@ type StripePayment implements Node & Payment {
   id: String!
   status: PaymentStatus!
   updatedAt: DateTime
+}
+
+type Subscription {
+  errorsEmailCronSub: CronSubscriptionsResult
+  pendingPaymentCronSub: CronSubscriptionsResult
+  setupIntentCronSub: CronSubscriptionsResult
 }
 
 """

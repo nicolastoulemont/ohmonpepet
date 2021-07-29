@@ -8,7 +8,6 @@ export const GenderOption = objectType({
 	isTypeOf: (data) => Boolean((data as any).nameFr && (data as any).nameEn),
 	definition(t) {
 		t.implements('Node')
-		t.id('adminId')
 		t.nonNull.string('nameFr')
 		t.nonNull.string('nameEn')
 	}

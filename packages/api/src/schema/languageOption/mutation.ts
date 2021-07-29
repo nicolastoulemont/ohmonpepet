@@ -33,14 +33,14 @@ export const createLanguageOption = mutationField('createLanguageOption', {
 			})
 		)
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn', 'mediaId']),
 	async resolve(_, { input }, { user: { userId } }) {
 		try {
 			const LanguageOption = await prisma.languageOption.create({
 				data: {
 					...input,
-					adminId: userId // Change to the adminId when admins are done
+					staffId: userId // Change to the staffId when staff are done
 				}
 			})
 			return LanguageOption
@@ -82,7 +82,7 @@ export const updateLanguageOption = mutationField('updateLanguageOption', {
 			})
 		)
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
 	async resolve(_, { id, input: { nameEn, nameFr, mediaId } }, { user: { userId } }) {
 		try {
@@ -94,7 +94,7 @@ export const updateLanguageOption = mutationField('updateLanguageOption', {
 					...(nameEn && { nameEn }),
 					...(nameFr && { nameFr }),
 					...(mediaId && { mediaId }),
-					adminId: userId // Change to the adminId when admins are done
+					staffId: userId // Change to the staffId when staff are done
 				}
 			})
 			return LanguageOption
@@ -122,7 +122,7 @@ export const deleteLanguageOption = mutationField('deleteLanguageOption', {
 	args: {
 		id: nonNull(idArg())
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {

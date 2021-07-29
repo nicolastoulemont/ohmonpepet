@@ -23,7 +23,7 @@ export const bookingMessageById = queryField('bookingMessageById', {
 		id: nonNull(idArg())
 	},
 	description: 'Access restricted to admin users',
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
@@ -62,7 +62,7 @@ export const bookingMessagesResult = unionType({
 export const bookingMessages = queryField('bookingMessages', {
 	type: 'BookingMessagesResult',
 	description: 'Access restricted to admin users',
-	// authorization: (ctx) => authorize(ctx, 'admin'),
+	// authorization: (ctx) => authorize(ctx, 'staff'),
 	async resolve() {
 		try {
 			const bookingMessages = await prisma.bookingMessage.findMany()

@@ -4,18 +4,15 @@ import jwt from 'jsonwebtoken'
 import { isAfter } from 'date-fns'
 import prisma from '../../lib/prisma'
 import { COOKIE_NAME } from '../../constants'
-import {
-	sendForgotPwdEmail,
-	sendVerificationEmail,
-	DecodedForgotPwdEmailToken,
-	DecodedVerificationEmailToken
-} from '../../emails/userEmails'
+import { sendForgotPwdEmail, sendVerificationEmail } from '../../emails'
 import {
 	authorize,
 	checkArgs,
 	NotFoundError,
 	PartialInvalidArgumentsError,
-	UnableToProcessError
+	UnableToProcessError,
+	DecodedForgotPwdEmailToken,
+	DecodedVerificationEmailToken
 } from '../../utils'
 
 export const EmailAndPasswordInput = inputObjectType({
@@ -86,6 +83,77 @@ export const createAccount = mutationField('createAccount', {
 	}
 })
 
+export const createStaffAccountResult = unionType({
+	name: 'CreateStaffAccountResult',
+	description: 'The result of the createStaffAccount mutation',
+	definition(t) {
+		t.members('Account', 'InvalidArgumentsError', 'UnableToProcessError')
+	}
+})
+
+export const CreateStaffAccountInput = inputObjectType({
+	name: 'CreateStaffAccountInput',
+	definition(t) {
+		t.nonNull.email('email')
+		t.nonNull.string('password')
+		t.nonNull.string('phoneNumber')
+	}
+})
+
+export const createStaffAccount = mutationField('createStaffAccount', {
+	type: 'CreateStaffAccountResult',
+	args: {
+		input: nonNull(arg({ type: CreateStaffAccountInput }))
+	},
+	validation: (args) => checkArgs(args, ['email:mail', 'password:pwd', 'phoneNumber:ph']),
+	async resolve(_, { input: { password, email, phoneNumber } }) {
+		const existingAccount = await prisma.account.findUnique({
+			where: { email }
+		})
+
+		if (existingAccount) {
+			const validPassword = await bcrypt.compare(password, existingAccount.password)
+			if (!validPassword) {
+				return {
+					...PartialInvalidArgumentsError,
+					invalidArguments: [{ key: 'email', message: 'Email taken' }]
+				}
+			}
+
+			await prisma.staff.create({
+				data: {
+					accountId: existingAccount.id,
+					phoneNumber
+				}
+			})
+			return existingAccount
+		}
+
+		const hash = await bcrypt.hash(password, 12)
+		const account = await prisma.account.create({
+			data: {
+				password: hash,
+				email
+			}
+		})
+		if (!account) return UnableToProcessError
+
+		await prisma.staff.create({
+			data: {
+				accountId: account.id,
+				phoneNumber
+			}
+		})
+
+		try {
+			// await sendVerificationEmail(account, 'fr')
+			return account
+		} catch (error) {
+			return UnableToProcessError
+		}
+	}
+})
+
 export const signInResult = unionType({
 	name: 'SignInResult',
 	description: 'The result of the signIn mutation',
@@ -113,7 +181,7 @@ export const signIn = mutationField('signIn', {
 				operator: {
 					select: { id: true }
 				},
-				admin: {
+				staff: {
 					select: { id: true }
 				}
 			}
@@ -132,10 +200,10 @@ export const signIn = mutationField('signIn', {
 
 		ctx.req.session.user = {
 			accountId: account.id,
-			userId: account.user.id,
-			access: Boolean(account.admin) ? 'admin' : 'user',
+			...(account.user && { userId: account.user.id }),
 			...(account.operator && { operatorId: account.operator.id }),
-			...(account.admin && { adminId: account.admin.id })
+			...(account.staff && { staffId: account.staff.id }),
+			access: Boolean(account.staff) ? 'staff' : 'user'
 		}
 
 		return account
@@ -320,10 +388,13 @@ export const lostPassword = mutationField('lostPassword', {
 	},
 	validation: (args) => checkArgs(args, ['email:mail']),
 	async resolve(_, { email }) {
-		const account = await prisma.account.findUnique({ where: { email } })
+		const account = await prisma.account.findUnique({
+			where: { email },
+			include: { user: true }
+		})
 		if (!account) return NotFoundError
 
-		await sendForgotPwdEmail(account)
+		await sendForgotPwdEmail(account.user?.id, account.email, 'fr')
 		return { success: true }
 	}
 })

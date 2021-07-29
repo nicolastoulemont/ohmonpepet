@@ -32,7 +32,7 @@ export const createHostingOption = mutationField('createHostingOption', {
 			})
 		)
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
 	async resolve(_, { input: { nameEn, nameFr } }, { user: { userId } }) {
 		try {
@@ -40,7 +40,7 @@ export const createHostingOption = mutationField('createHostingOption', {
 				data: {
 					nameEn,
 					nameFr,
-					adminId: userId // Change to the adminId when admins are done
+					staffId: userId // Change to the staffId when staff are done
 				}
 			})
 			return HostingOption
@@ -81,7 +81,7 @@ export const updateHostingOption = mutationField('updateHostingOption', {
 			})
 		)
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
 	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { userId } }) {
 		try {
@@ -92,7 +92,7 @@ export const updateHostingOption = mutationField('updateHostingOption', {
 				data: {
 					...(nameEn && { nameEn }),
 					...(nameFr && { nameFr }),
-					adminId: userId // Change to the adminId when admins are done
+					staffId: userId // Change to the staffId when staff are done
 				}
 			})
 			return HostingOption
@@ -120,7 +120,7 @@ export const deleteHostingOption = mutationField('deleteHostingOption', {
 	args: {
 		id: nonNull(idArg())
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {

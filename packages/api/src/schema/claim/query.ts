@@ -20,7 +20,7 @@ export const claimById = queryField('claimById', {
 	args: {
 		id: nonNull(idArg())
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
@@ -59,7 +59,7 @@ export const ClaimsResult = unionType({
 export const Claims = queryField('claims', {
 	type: 'ClaimsResult',
 	description: 'Access restricted to admin users',
-	// authorization: (ctx) => authorize(ctx, 'admin'),
+	// authorization: (ctx) => authorize(ctx, 'staff'),
 	async resolve() {
 		try {
 			const claims = await prisma.bookingClaim.findMany()

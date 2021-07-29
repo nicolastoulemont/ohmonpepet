@@ -8,7 +8,7 @@ export function getUserFromSession(req: RequestWithSession): UserSessionData | u
 	return req.session.user
 }
 
-export type Access = 'admin' | 'user'
+export type Access = 'staff' | 'user'
 
 export function authorize(
 	ctx: ApiContext,
@@ -29,12 +29,12 @@ export function authorize(
 
 export const handleAccess = (userAccess: string, requiredAccess: Access): boolean => {
 	switch (userAccess) {
-		case 'admin':
-			// Admin access always grant access
+		case 'staff':
+			// Staff access always grant access
 			return true
 		case 'user':
 			switch (requiredAccess) {
-				case 'admin':
+				case 'staff':
 					return false
 				case 'user':
 					return true

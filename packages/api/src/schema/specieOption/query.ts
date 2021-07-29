@@ -22,7 +22,7 @@ export const specieOptionById = queryField('specieOptionById', {
 		id: nonNull(idArg())
 	},
 	description: 'Access restricted to admin users',
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
@@ -60,8 +60,6 @@ export const specieOptionsResult = unionType({
 
 export const specieOptions = queryField('speciesOptions', {
 	type: 'SpecieOptionsResult',
-	description: 'Access restricted to admin users',
-	// authorization: (ctx) => authorize(ctx, 'admin'),
 	async resolve() {
 		try {
 			const specieOptions = await prisma.specieOption.findMany()

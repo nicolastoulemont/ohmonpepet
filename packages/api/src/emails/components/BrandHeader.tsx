@@ -11,7 +11,7 @@ export function BrandHeader() {
 				width: '100%',
 				lineHeight: '160% !important',
 				maxWidth: '660px',
-				border: '0'
+				border: '0',
 			}}
 			role='presentation'
 		>
@@ -27,16 +27,16 @@ export function BrandHeader() {
 							verticalAlign: 'middle',
 							textAlign: 'left',
 							outline: 'none',
-							margin: '0'
+							margin: '0',
 						}}
 					>
 						<img
-							src='LOGO_URL'
-							alt='brand logo'
+							src='https://ohmonpepet-dev.s3.eu-west-3.amazonaws.com/email-assets/logo-2-fullname-adjusted.png'
+							alt='ohmonpepet logo'
 							style={{
 								display: 'block !important',
 								height: '75px !important',
-								padding: '0 !important'
+								padding: '0 !important',
 							}}
 						/>
 					</td>

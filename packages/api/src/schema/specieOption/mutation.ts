@@ -32,7 +32,7 @@ export const createSpecieOption = mutationField('createSpecieOption', {
 			})
 		)
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
 	async resolve(_, { input: { nameEn, nameFr } }, { user: { userId } }) {
 		try {
@@ -40,7 +40,7 @@ export const createSpecieOption = mutationField('createSpecieOption', {
 				data: {
 					nameEn,
 					nameFr,
-					adminId: userId // Change to the adminId when admins are done
+					staffId: userId // Change to the staffId when staff are done
 				}
 			})
 			return specieOption
@@ -81,7 +81,7 @@ export const updateSpecieOption = mutationField('updateSpecieOption', {
 			})
 		)
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
 	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { userId } }) {
 		try {
@@ -92,7 +92,7 @@ export const updateSpecieOption = mutationField('updateSpecieOption', {
 				data: {
 					...(nameEn && { nameEn }),
 					...(nameFr && { nameFr }),
-					adminId: userId // Change to the adminId when admins are done
+					staffId: userId // Change to the staffId when staff are done
 				}
 			})
 			return specieOption
@@ -120,7 +120,7 @@ export const deleteSpecieOption = mutationField('deleteSpecieOption', {
 	args: {
 		id: nonNull(idArg())
 	},
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {

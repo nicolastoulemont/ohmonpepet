@@ -22,7 +22,7 @@ export const hostingOptionById = queryField('hostingOptionById', {
 		id: nonNull(idArg())
 	},
 	description: 'Access restricted to admin users',
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
@@ -60,8 +60,6 @@ export const hostingOptionsResult = unionType({
 
 export const hostingOptions = queryField('hostingsOptions', {
 	type: 'HostingOptionsResult',
-	description: 'Access restricted to admin users',
-	// authorization: (ctx) => authorize(ctx, 'admin'),
 	async resolve() {
 		try {
 			const hostingOptions = await prisma.hostingOption.findMany()

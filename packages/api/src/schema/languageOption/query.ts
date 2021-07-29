@@ -22,7 +22,7 @@ export const languageOptionById = queryField('languageOptionById', {
 		id: nonNull(idArg())
 	},
 	description: 'Access restricted to admin users',
-	authorization: (ctx) => authorize(ctx, 'admin'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
@@ -60,8 +60,6 @@ export const languageOptionsResult = unionType({
 
 export const languageOptions = queryField('languagesOptions', {
 	type: 'LanguageOptionsResult',
-	description: 'Access restricted to admin users',
-	// authorization: (ctx) => authorize(ctx, 'admin'),
 	async resolve() {
 		try {
 			const languageOptions = await prisma.languageOption.findMany()

@@ -5,12 +5,9 @@ export * from './query'
 
 export const LanguageOption = objectType({
 	name: 'LanguageOption',
-	isTypeOf: (data) =>
-		Boolean((data as any).nameFr && (data as any).nameEn && (data as any).mediaId),
+	isTypeOf: (data) => Boolean((data as any).nameFr && (data as any).nameEn),
 	definition(t) {
 		t.implements('Node')
-		t.id('adminId')
-		t.nonNull.id('mediaId')
 		t.nonNull.string('nameFr')
 		t.nonNull.string('nameEn')
 		t.field('media', {

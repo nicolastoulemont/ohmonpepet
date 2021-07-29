@@ -1,4 +1,4 @@
-import { ONE_HOUR, ONE_DAY, DecodedToken } from '../utils'
+import { ONE_HOUR, ONE_DAY } from '../utils'
 import jwt from 'jsonwebtoken'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
@@ -7,24 +7,14 @@ import { ForgotPassword } from '../emails/layouts/ForgotPassword'
 import { createTransporter, emailStyles } from './config'
 import { __prod__ } from '../constants'
 
-interface AccountWithEmail {
-	id: string
-	email: string
-}
-
-export interface DecodedVerificationEmailToken extends DecodedToken {
-	id: string
-	originUrl?: string
-}
-
 export const sendVerificationEmail = async (
-	account: AccountWithEmail,
+	user: any,
 	lang: 'fr' | 'en' = 'fr',
 	originUrl?: string | undefined | null
 ) => {
 	const transporter = createTransporter()
 
-	const payload = originUrl ? { id: account.id, originUrl } : { id: account.id }
+	const payload = originUrl ? { id: user.id, originUrl } : { id: user.id }
 
 	const emailToken = jwt.sign(payload, process.env.TOKEN_SECRET as string, {
 		expiresIn: ONE_DAY
@@ -59,7 +49,7 @@ export const sendVerificationEmail = async (
 	try {
 		await transporter.sendMail({
 			from: 'Ohmonpepet <contact@ohmonpepet.com>',
-			to: account.email,
+			to: user.email,
 			subject: `Ohmonpepet - ${verification.subject[lang]}`,
 			html: emailHTML
 		})
@@ -68,13 +58,9 @@ export const sendVerificationEmail = async (
 	}
 }
 
-export interface DecodedForgotPwdEmailToken extends DecodedToken {
-	id: string
-}
-
-export const sendForgotPwdEmail = async (account: AccountWithEmail, lang: 'fr' | 'en' = 'fr') => {
+export const sendForgotPwdEmail = async (user: any, email: any, lang: 'fr' | 'en' = 'fr') => {
 	const transporter = createTransporter()
-	const resetPwdToken = jwt.sign({ id: account.id }, process.env.TOKEN_SECRET as string, {
+	const resetPwdToken = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET as string, {
 		expiresIn: ONE_HOUR
 	})
 
@@ -104,7 +90,7 @@ export const sendForgotPwdEmail = async (account: AccountWithEmail, lang: 'fr' |
 	try {
 		await transporter.sendMail({
 			from: 'Ohmonpepet <contact@ohmonpepet.com>',
-			to: account.email,
+			to: email,
 			subject: `Ohmonpepet - ${forgot.subject[lang]}`,
 			html: emailHTML
 		})
