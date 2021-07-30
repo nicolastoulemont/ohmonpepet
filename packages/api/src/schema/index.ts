@@ -5,10 +5,10 @@ import * as types from './typeDefs'
 import path from 'path'
 import fs from 'fs'
 
-const isTranspiled = () => !fs.existsSync(path.resolve(__dirname, '../', 'config', 'context.ts'))
+const isTranspiled = !fs.existsSync(path.resolve(__dirname, '../', 'config', 'context.ts'))
 
 export const schema = makeSchema({
-	shouldGenerateArtifacts: !isTranspiled() && !__prod__,
+	shouldGenerateArtifacts: !isTranspiled && !__prod__,
 	types,
 	outputs: {
 		schema: path.join(__dirname, './schema.graphql'),
@@ -36,7 +36,7 @@ export const schema = makeSchema({
 		}
 	},
 	// @ts-expect-error
-	contextType: !isTranspiled()
+	contextType: !isTranspiled
 		? {
 				module: path.join(__dirname, '../', 'config', 'context.ts'),
 				export: 'ApiContext'
