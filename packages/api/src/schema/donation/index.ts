@@ -1,4 +1,5 @@
 import { objectType } from 'nexus'
+export * from './query'
 
 export const donation = objectType({
 	name: 'Donation',

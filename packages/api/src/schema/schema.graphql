@@ -247,6 +247,8 @@ union CronSubscriptionsResult = BooleanResult | UserAuthenticationError | UserFo
 """The result of the currentAccount query"""
 union CurrentAccountResult = Account | NotFoundError | UserAuthenticationError | UserForbiddenError
 
+union CurrentOperatorDonationsResult = DonationsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 """The result of the currentOperatorMedia query"""
 union CurrentOperatorMediaResult = NotFoundError | OperatorMedia | SharedMedia | UserAuthenticationError | UserForbiddenError
 
@@ -297,6 +299,8 @@ type Donation implements Node {
   updatedAt: DateTime
 }
 
+union DonationByIdResult = Donation | InvalidArgumentsError | NotFoundError
+
 type DonationReceipt implements Node {
   amountDonated: PositiveFloat
   createdAt: DateTime
@@ -317,6 +321,14 @@ type DonationReceiptMedia implements Media & Node {
   storeUrl: URL!
   updatedAt: DateTime
 }
+
+"""List of donations"""
+type DonationsList {
+  donations: [Donation]
+}
+
+"""The result of the donations query"""
+union DonationsResult = DonationsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 """
 A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/.
@@ -735,12 +747,15 @@ type Query {
 
   """Access restricted to logged in user"""
   currentAccount: CurrentAccountResult
+  currentOperatorDonations: CurrentOperatorDonationsResult
 
   """Access restricted to logged in user"""
   currentOperatorMedia: CurrentOperatorMediaResult
 
   """Access restricted to logged in user"""
   currentUserMedia: CurrentUserMediaResult
+  donationById(id: ID!): DonationByIdResult
+  donations: DonationsResult
 
   """Access restricted to admin users"""
   genderOptionById(id: ID!): GenderOptionByIdResult
@@ -766,6 +781,7 @@ type Query {
 
   """Access restricted to admin users"""
   reviews: ReviewsResult
+  searchDonations(input: SearchDonationsInput!): SearchDonationsResult
 
   """Access restricted to admin users"""
   serviceOptionById(id: ID!): ServiceOptionByIdResult
@@ -816,6 +832,15 @@ union ReviewsResult = ReviewsList | UnableToProcessError | UserAuthenticationErr
 
 """A field whose value must be either: user, operator, admin"""
 scalar SaveAsValue
+
+input SearchDonationsInput {
+  donated: Boolean
+  endDate: Date
+  partnerId: String
+  startDate: Date
+}
+
+union SearchDonationsResult = DonationsList | InvalidArgumentsError | UnableToProcessError
 
 """The result of the sendVerificationEmail mutation"""
 union SendVerificationEmailResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError
