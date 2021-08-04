@@ -610,6 +610,7 @@ export interface NexusGenUnions {
   DeleteAccountResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'];
   DeleteBookingMessageResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
   DeleteClaimResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
+  DeleteDonationReceiptResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   DeleteGenderOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   DeleteHostingOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   DeleteLanguageOptionResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
@@ -849,6 +850,7 @@ export interface NexusGenFieldTypes {
     deleteAccount: NexusGenRootTypes['DeleteAccountResult'] | null; // DeleteAccountResult
     deleteBookingMessage: NexusGenRootTypes['DeleteBookingMessageResult'] | null; // DeleteBookingMessageResult
     deleteClaim: NexusGenRootTypes['DeleteClaimResult'] | null; // DeleteClaimResult
+    deleteDonationReceipt: NexusGenRootTypes['DeleteDonationReceiptResult'] | null; // DeleteDonationReceiptResult
     deleteGenderOption: NexusGenRootTypes['DeleteGenderOptionResult'] | null; // DeleteGenderOptionResult
     deleteHostingOption: NexusGenRootTypes['DeleteHostingOptionResult'] | null; // DeleteHostingOptionResult
     deleteLanguageOption: NexusGenRootTypes['DeleteLanguageOptionResult'] | null; // DeleteLanguageOptionResult
@@ -867,11 +869,11 @@ export interface NexusGenFieldTypes {
     startCron: NexusGenRootTypes['StartCronResult'] | null; // StartCronResult
     stopCron: NexusGenRootTypes['StopCronResult'] | null; // StopCronResult
     updateBookingMessage: NexusGenRootTypes['UpdateBookingMessageResult'] | null; // UpdateBookingMessageResult
+    updateDonationReceipt: NexusGenRootTypes['UpdateDonationReceiptResult'] | null; // UpdateDonationReceiptResult
     updateGenderOption: NexusGenRootTypes['UpdateGenderOptionResult'] | null; // UpdateGenderOptionResult
     updateHostingOption: NexusGenRootTypes['UpdateHostingOptionResult'] | null; // UpdateHostingOptionResult
     updateIndividualOperator: NexusGenRootTypes['IndividualOperatorResult'] | null; // IndividualOperatorResult
     updateLanguageOption: NexusGenRootTypes['UpdateLanguageOptionResult'] | null; // UpdateLanguageOptionResult
-    updateReceipt: NexusGenRootTypes['UpdateDonationReceiptResult'] | null; // UpdateDonationReceiptResult
     updateReview: NexusGenRootTypes['UpdateReviewResult'] | null; // UpdateReviewResult
     updateServiceOption: NexusGenRootTypes['UpdateServiceOptionResult'] | null; // UpdateServiceOptionResult
     updateSpecieOption: NexusGenRootTypes['UpdateSpecieOptionResult'] | null; // UpdateSpecieOptionResult
@@ -1332,6 +1334,7 @@ export interface NexusGenFieldTypeNames {
     deleteAccount: 'DeleteAccountResult'
     deleteBookingMessage: 'DeleteBookingMessageResult'
     deleteClaim: 'DeleteClaimResult'
+    deleteDonationReceipt: 'DeleteDonationReceiptResult'
     deleteGenderOption: 'DeleteGenderOptionResult'
     deleteHostingOption: 'DeleteHostingOptionResult'
     deleteLanguageOption: 'DeleteLanguageOptionResult'
@@ -1350,11 +1353,11 @@ export interface NexusGenFieldTypeNames {
     startCron: 'StartCronResult'
     stopCron: 'StopCronResult'
     updateBookingMessage: 'UpdateBookingMessageResult'
+    updateDonationReceipt: 'UpdateDonationReceiptResult'
     updateGenderOption: 'UpdateGenderOptionResult'
     updateHostingOption: 'UpdateHostingOptionResult'
     updateIndividualOperator: 'IndividualOperatorResult'
     updateLanguageOption: 'UpdateLanguageOptionResult'
-    updateReceipt: 'UpdateDonationReceiptResult'
     updateReview: 'UpdateReviewResult'
     updateServiceOption: 'UpdateServiceOptionResult'
     updateSpecieOption: 'UpdateSpecieOptionResult'
@@ -1683,6 +1686,9 @@ export interface NexusGenArgTypes {
     deleteClaim: { // args
       id: string; // ID!
     }
+    deleteDonationReceipt: { // args
+      id: string; // ID!
+    }
     deleteGenderOption: { // args
       id: string; // ID!
     }
@@ -1737,6 +1743,9 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['UpdateBookingMessageInput']; // UpdateBookingMessageInput!
       saveAs: string; // String!
     }
+    updateDonationReceipt: { // args
+      input: NexusGenInputs['UpdateDonationReceiptInput']; // UpdateDonationReceiptInput!
+    }
     updateGenderOption: { // args
       id: string; // ID!
       input: NexusGenInputs['UpdateGenderOptionInput']; // UpdateGenderOptionInput!
@@ -1751,9 +1760,6 @@ export interface NexusGenArgTypes {
     updateLanguageOption: { // args
       id: string; // ID!
       input: NexusGenInputs['UpdateLanguageOptionInput']; // UpdateLanguageOptionInput!
-    }
-    updateReceipt: { // args
-      input: NexusGenInputs['UpdateDonationReceiptInput']; // UpdateDonationReceiptInput!
     }
     updateReview: { // args
       id: string; // ID!
@@ -1856,6 +1862,7 @@ export interface NexusGenAbstractTypeMembers {
   DeleteAccountResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError"
   DeleteBookingMessageResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError"
   DeleteClaimResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError"
+  DeleteDonationReceiptResult: "BooleanResult" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   DeleteGenderOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   DeleteHostingOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"
   DeleteLanguageOptionResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UserAuthenticationError" | "UserForbiddenError"

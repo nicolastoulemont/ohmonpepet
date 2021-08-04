@@ -99,7 +99,7 @@ export const UpdateDonationReceiptResult = unionType({
 	}
 })
 
-export const updateReceipt = mutationField('updateReceipt', {
+export const updateDonationReceipt = mutationField('updateDonationReceipt', {
 	type: 'UpdateDonationReceiptResult',
 	args: {
 		input: nonNull(
@@ -124,24 +124,32 @@ export const updateReceipt = mutationField('updateReceipt', {
 	}
 })
 
-// export const deleteReceipt = mutationField('deleteReceipt', {
-// 	type: 'BooleanResponse',
-// 	args: {
-// 		id: nonNull(idArg())
-// 	},
-// 	authorization: (ctx) => authorize(ctx, 'staff'),
-// 	validate: (args) => checkFields(args, ['id']),
-// 	// @ts-ignore
-// 	async resolve(_, args, ctx) {
-// 		const authErrors = authorize(ctx, 'admin')
-// 		if (authErrors) return { errors: authErrors }
-// 		const errors = checkFields(args, ['id'])
-// 		if (errors) return { errors }
-// 		try {
-// 			await ReceiptModel.findByIdAndDelete({ _id: args.id, adminId: ctx.user.id })
-// 			return { success: true }
-// 		} catch (err) {
-// 			return { success: false }
-// 		}
-// 	}
-// })
+export const DeleteDonationReceiptResult = unionType({
+	name: 'DeleteDonationReceiptResult',
+	definition(t) {
+		t.members(
+			'BooleanResult',
+			'UserAuthenticationError',
+			'UserForbiddenError',
+			'UnableToProcessError',
+			'NotFoundError'
+		)
+	}
+})
+
+export const deleteDonationReceipt = mutationField('deleteDonationReceipt', {
+	type: 'DeleteDonationReceiptResult',
+	args: {
+		id: nonNull(idArg())
+	},
+	authorization: (ctx) => authorize(ctx, 'staff'),
+	validation: (args) => checkArgs(args, ['id']),
+	async resolve(_, { id }) {
+		try {
+			await prisma.donationsReceipt.delete({ where: { id } })
+			return { success: true }
+		} catch (err) {
+			return { success: false }
+		}
+	}
+})
