@@ -87,7 +87,7 @@ export function validateReq(key: string, value: number | string): string | null 
 	}
 }
 
-export const saveAsOptions = ['user', 'operator', 'admin']
+export const saveAsOptions = ['user', 'operator', 'staff']
 
 export function validateSaveAs(key: string, value: number | string): string | null {
 	if (isEmpty(value)) {
@@ -95,7 +95,7 @@ export function validateSaveAs(key: string, value: number | string): string | nu
 	} else if (!saveAsOptions.includes(String(value))) {
 		return `${
 			key.charAt(0).toUpperCase() + key.slice(1)
-		} must be have either of the following values: user, operator, admin`
+		} must be have either of the following values: user, operator, staff`
 	} else {
 		return null
 	}

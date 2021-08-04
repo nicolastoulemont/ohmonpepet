@@ -103,10 +103,10 @@ export const updateIndividualOperator = mutationField('updateIndividualOperator'
 	args: {
 		input: nonNull(arg({ type: createIndividualOperatorInput }))
 	},
-	async resolve(_, { input }, { user }) {
+	async resolve(_, { input }, { user: { accountId } }) {
 		try {
 			const operator = await prisma.operator.update({
-				where: { accountId: user.accountId },
+				where: { accountId },
 				data: { ...input }
 			})
 			if (!operator) return NotFoundError

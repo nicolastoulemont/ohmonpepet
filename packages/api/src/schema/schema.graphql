@@ -8,6 +8,7 @@ type Account implements Node {
 
   """GUID for a resource"""
   id: String!
+  staff: Staff
   updatedAt: DateTime
   user: User
   verifiedAt: DateTime
@@ -158,6 +159,15 @@ input CreateBookingMessageInput {
 
 union CreateBookingMessageResult = InvalidArgumentsError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
 
+input CreateDonationReceiptInput {
+  amountDonated: Float!
+  donationsIds: [ID]!
+  filesUrls: [URL]!
+  partnerId: ID!
+}
+
+union CreateDonationReceiptResult = DonationReceipt | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 input CreateGenderOptionInput {
   nameEn: String!
   nameFr: String!
@@ -203,7 +213,7 @@ input CreateMediaInput {
   saveAs: String!
 }
 
-union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError
+union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input CreateReviewInput {
   body: String
@@ -310,6 +320,8 @@ type DonationReceipt implements Node {
   updatedAt: DateTime
 }
 
+union DonationReceiptByIdResult = DonationReceipt | InvalidArgumentsError | NotFoundError
+
 type DonationReceiptMedia implements Media & Node {
   createdAt: DateTime
   donationReceipt: DonationReceipt
@@ -321,6 +333,14 @@ type DonationReceiptMedia implements Media & Node {
   storeUrl: URL!
   updatedAt: DateTime
 }
+
+"""List of DonationReceipts"""
+type DonationReceiptsList {
+  donationReceipts: [DonationReceipt]
+}
+
+"""The result of the gendersOptions query"""
+union DonationReceiptsResult = DonationReceiptsList | UnableToProcessError
 
 """List of donations"""
 type DonationsList {
@@ -369,7 +389,7 @@ type GenderOption implements Node {
 }
 
 """The result of the genderOptionById query"""
-union GenderOptionByIdResult = GenderOption | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+union GenderOptionByIdResult = GenderOption | InvalidArgumentsError | NotFoundError
 
 """List of genderOptions"""
 type GenderOptionsList {
@@ -377,7 +397,7 @@ type GenderOptionsList {
 }
 
 """The result of the gendersOptions query"""
-union GenderOptionsResult = GenderOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union GenderOptionsResult = GenderOptionsList | UnableToProcessError
 
 union GetCronStatusResult = CronStatus | UserAuthenticationError | UserForbiddenError
 
@@ -392,7 +412,7 @@ type HostingOption implements Node {
 }
 
 """The result of the hostingOptionById query"""
-union HostingOptionByIdResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+union HostingOptionByIdResult = Account | InvalidArgumentsError | NotFoundError
 
 """List of HostingOptions"""
 type HostingOptionsList {
@@ -400,7 +420,7 @@ type HostingOptionsList {
 }
 
 """The result of the hostingsOptions query"""
-union HostingOptionsResult = HostingOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union HostingOptionsResult = HostingOptionsList | UnableToProcessError
 
 type IndividualOperator implements Actor & Node & Operator {
   acceptedSpecieOptionsIds: [String]
@@ -469,7 +489,7 @@ type LanguageOption implements Node {
 }
 
 """The result of the languageOptionById query"""
-union LanguageOptionByIdResult = InvalidArgumentsError | LanguageOption | NotFoundError | UserAuthenticationError | UserForbiddenError
+union LanguageOptionByIdResult = InvalidArgumentsError | LanguageOption | NotFoundError
 
 type LanguageOptionMedia implements Media & Node {
   createdAt: DateTime
@@ -489,7 +509,7 @@ type LanguageOptionsList {
 }
 
 """The result of the languagesOptions query"""
-union LanguageOptionsResult = LanguageOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union LanguageOptionsResult = LanguageOptionsList | UnableToProcessError
 
 """
 A field whose value is a valid decimal degrees latitude number (53.471): https://en.wikipedia.org/wiki/Latitude
@@ -545,7 +565,7 @@ type MessageMedia implements Media & Node {
 }
 
 """The result of the modifyEmail mutation"""
-union ModifyEmailResult = Account | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
+union ModifyEmailResult = Account | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 """The result of the modifyPassword mutation"""
 union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError
@@ -554,6 +574,7 @@ type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountResult
   createBookingClaim(input: CreateBookingClaimInput!): CreateBookingClaimResult
   createBookingMessage(input: CreateBookingMessageInput!): CreateBookingMessageResult
+  createDonationReceipt(input: CreateDonationReceiptInput!): CreateDonationReceiptResult
   createGenderOption(input: CreateGenderOptionInput!): CreateGenderOptionResult
   createHostingOption(input: CreateHostingOptionInput!): CreateHostingOptionResult
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
@@ -596,6 +617,7 @@ type Mutation {
   updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
   updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
   updateLanguageOption(id: ID!, input: UpdateLanguageOptionInput!): UpdateLanguageOptionResult
+  updateReceipt(input: UpdateDonationReceiptInput!): UpdateDonationReceiptResult
   updateReview(id: ID!, input: UpdateReviewInput!, saveAs: String!): UpdateReviewResult
   updateServiceOption(id: ID!, input: UpdateServiceOptionInput!): UpdateServiceOptionResult
   updateSpecieOption(id: ID!, input: UpdateSpecieOptionInput!): UpdateSpecieOptionResult
@@ -755,18 +777,13 @@ type Query {
   """Access restricted to logged in user"""
   currentUserMedia: CurrentUserMediaResult
   donationById(id: ID!): DonationByIdResult
+  donationReceipts: DonationReceiptsResult
   donations: DonationsResult
-
-  """Access restricted to admin users"""
   genderOptionById(id: ID!): GenderOptionByIdResult
   gendersOptions: GenderOptionsResult
   getCronStatus(cronName: String!): GetCronStatusResult
-
-  """Access restricted to admin users"""
   hostingOptionById(id: ID!): HostingOptionByIdResult
   hostingsOptions: HostingOptionsResult
-
-  """Access restricted to admin users"""
   languageOptionById(id: ID!): LanguageOptionByIdResult
   languagesOptions: LanguageOptionsResult
 
@@ -775,6 +792,7 @@ type Query {
 
   """Access restricted to admin users"""
   medias: MediasResult
+  receiptById(id: ID!): DonationReceiptByIdResult
 
   """Access restricted to admin users"""
   reviewById(id: ID!): ReviewByIdResult
@@ -830,8 +848,16 @@ type ReviewsList {
 """The result of the reviews query"""
 union ReviewsResult = ReviewsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
-"""A field whose value must be either: user, operator, admin"""
+"""A field whose value must be either: user, operator, staff"""
 scalar SaveAsValue
+
+input SearchDonationReceiptsInput {
+  endDate: Date
+  partnerId: String
+  startDate: Date
+}
+
+union SearchDonationReceiptsResult = DonationReceiptsList | InvalidArgumentsError | UnableToProcessError
 
 input SearchDonationsInput {
   donated: Boolean
@@ -916,7 +942,6 @@ type SpecieOptionsList {
 union SpecieOptionsResult = SpecieOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type Staff implements Node {
-  access: String
   createdAt: DateTime
   email: String
 
@@ -978,19 +1003,29 @@ input UpdateBookingMessageInput {
 
 union UpdateBookingMessageResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
 
+input UpdateDonationReceiptInput {
+  amountDonated: Float!
+  donationsIds: [ID]!
+  filesUrls: [URL]!
+  id: ID!
+  partnerId: ID!
+}
+
+union UpdateDonationReceiptResult = DonationReceipt | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 input UpdateGenderOptionInput {
   nameEn: String
   nameFr: String
 }
 
-union UpdateGenderOptionResult = GenderOption | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union UpdateGenderOptionResult = GenderOption | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateHostingOptionInput {
   nameEn: String
   nameFr: String
 }
 
-union UpdateHostingOptionResult = HostingOption | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union UpdateHostingOptionResult = HostingOption | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateIndividualOperatorInput {
   acceptedSpecieOptionsIds: [ID]
@@ -1015,7 +1050,7 @@ input UpdateLanguageOptionInput {
   nameFr: String
 }
 
-union UpdateLanguageOptionResult = InvalidArgumentsError | LanguageOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union UpdateLanguageOptionResult = InvalidArgumentsError | LanguageOption | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateReviewInput {
   body: String
@@ -1030,14 +1065,14 @@ input UpdateServiceOptionInput {
   nameFr: String
 }
 
-union UpdateServiceOptionResult = InvalidArgumentsError | ServiceOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union UpdateServiceOptionResult = InvalidArgumentsError | NotFoundError | ServiceOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateSpecieOptionInput {
   nameEn: String
   nameFr: String
 }
 
-union UpdateSpecieOptionResult = InvalidArgumentsError | SpecieOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union UpdateSpecieOptionResult = InvalidArgumentsError | NotFoundError | SpecieOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type User implements Actor & Node {
   accountId: ID

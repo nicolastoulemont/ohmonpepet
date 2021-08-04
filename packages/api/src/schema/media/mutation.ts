@@ -1,12 +1,15 @@
 import { mutationField, objectType, unionType, inputObjectType, nonNull, arg, idArg } from 'nexus'
 import prisma from '../../lib/prisma'
-import { s3Bucket, s3 } from './s3Config'
 import {
 	authorize,
 	checkArgs,
 	NotFoundError,
 	PartialInvalidArgumentsError,
-	UnableToProcessError
+	UnableToProcessError,
+	UserForbiddenError,
+	getS3SignedUrl,
+	getS3StoreUrl,
+	deleteS3Media
 } from '../../utils'
 
 export const StorageInfos = objectType({
@@ -34,6 +37,7 @@ export const CreateMediaResult = unionType({
 			'StorageInfos',
 			'InvalidArgumentsError',
 			'UserAuthenticationError',
+			'UserForbiddenError',
 			'UnableToProcessError'
 		)
 	}
@@ -44,15 +48,11 @@ export const createMedia = mutationField('createMedia', {
 	args: { input: nonNull(arg({ type: CreateMediaInput })) },
 	authorization: (ctx) => authorize(ctx, 'user'),
 	validation: (args) => checkArgs(args, ['fileName', 'fileType', 'saveAs:saveAs']),
-	async resolve(_, { input: { fileName, fileType, saveAs } }, { user: { operatorId, userId } }) {
-		const s3Params = {
-			Bucket: s3Bucket,
-			Key: fileName,
-			Expires: 60,
-			ContentType: fileType,
-			ACL: 'public-read'
-		}
-
+	async resolve(
+		_,
+		{ input: { fileName, fileType, saveAs } },
+		{ user: { operatorId, userId, staffId } }
+	) {
 		if (saveAs === 'operator' && !operatorId) {
 			return {
 				...PartialInvalidArgumentsError,
@@ -64,16 +64,20 @@ export const createMedia = mutationField('createMedia', {
 				]
 			}
 		}
+		if (saveAs === 'staff' && !staffId) {
+			return UserForbiddenError
+		}
 
 		try {
-			const signedRequest = await s3.getSignedUrl('putObject', s3Params)
-			const storeUrl = `https://${s3Bucket}.s3.amazonaws.com/${fileName}`
-
+			const signedRequest = await getS3SignedUrl({ fileName, fileType })
+			const storeUrl = getS3StoreUrl(fileName)
 			try {
 				await prisma.media.create({
 					data: {
 						mediaType: fileType.includes('video') ? 'VIDEO' : 'IMAGE',
 						storeUrl,
+						storageProvider: 'AWS',
+						...(saveAs === 'staff' && staffId && { staffId }),
 						...(saveAs === 'operator' && operatorId && { operatorId }),
 						...(saveAs === 'user' && { userId })
 					}
@@ -124,20 +128,6 @@ export const deleteMediaResult = unionType({
 	}
 })
 
-async function removeMedia({ mediaId, mediaAwsPath }: { mediaId: string; mediaAwsPath: string }) {
-	await s3
-		.deleteObject({
-			Bucket: s3Bucket,
-			Key: mediaAwsPath
-		})
-		.promise()
-
-	await prisma.media.delete({
-		where: { id: mediaId }
-	})
-	return { success: true }
-}
-
 export const deleteMedia = mutationField('deleteMedia', {
 	type: 'DeleteMediaResult',
 	args: {
@@ -151,8 +141,6 @@ export const deleteMedia = mutationField('deleteMedia', {
 				where: { id: mediaId },
 				rejectOnNotFound: true
 			})
-
-			const mediaAwsPath = media.storeUrl.split('s3.amazonaws.com/')[1]
 
 			// For operator media we need to perform additional checks in order to
 			// ensure that active operator always have at least one picture
@@ -177,14 +165,38 @@ export const deleteMedia = mutationField('deleteMedia', {
 								'Cannot delete an active Operator main media, replace this media with another one before deleting or set this operator as unactive'
 						}
 					} else {
-						return await removeMedia({ mediaId, mediaAwsPath })
+						const { success } = await deleteS3Media(media.storeUrl)
+						if (success) {
+							await prisma.media.delete({
+								where: { id: mediaId }
+							})
+							return { success: true }
+						} else {
+							return { success: false }
+						}
 					}
 				} else {
-					return await removeMedia({ mediaId, mediaAwsPath })
+					const { success } = await deleteS3Media(media.storeUrl)
+					if (success) {
+						await prisma.media.delete({
+							where: { id: mediaId }
+						})
+						return { success: true }
+					} else {
+						return { success: false }
+					}
 				}
 			} else {
 				try {
-					return await removeMedia({ mediaId, mediaAwsPath })
+					const { success } = await deleteS3Media(media.storeUrl)
+					if (success) {
+						await prisma.media.delete({
+							where: { id: mediaId }
+						})
+						return { success: true }
+					} else {
+						return { success: false }
+					}
 				} catch (error) {
 					return UnableToProcessError
 				}

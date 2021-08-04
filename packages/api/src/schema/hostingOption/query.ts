@@ -6,13 +6,7 @@ export const hostingOptionByIdResult = unionType({
 	name: 'HostingOptionByIdResult',
 	description: 'The result of the hostingOptionById query',
 	definition(t) {
-		t.members(
-			'Account',
-			'UserAuthenticationError',
-			'UserForbiddenError',
-			'NotFoundError',
-			'InvalidArgumentsError'
-		)
+		t.members('Account', 'NotFoundError', 'InvalidArgumentsError')
 	}
 })
 
@@ -21,8 +15,6 @@ export const hostingOptionById = queryField('hostingOptionById', {
 	args: {
 		id: nonNull(idArg())
 	},
-	description: 'Access restricted to admin users',
-	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
@@ -49,12 +41,7 @@ export const hostingOptionsResult = unionType({
 	name: 'HostingOptionsResult',
 	description: 'The result of the hostingsOptions query',
 	definition(t) {
-		t.members(
-			'HostingOptionsList',
-			'UserAuthenticationError',
-			'UserForbiddenError',
-			'UnableToProcessError'
-		)
+		t.members('HostingOptionsList', 'UnableToProcessError')
 	}
 })
 

@@ -19,6 +19,15 @@ export const Account = objectType({
 					})
 					.user()
 		})
+		t.field('staff', {
+			type: 'Staff',
+			resolve: async (a) =>
+				await prisma.account
+					.findUnique({
+						where: { id: a.id }
+					})
+					.staff()
+		})
 	}
 })
 

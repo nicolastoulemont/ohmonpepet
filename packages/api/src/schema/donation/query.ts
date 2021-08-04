@@ -17,11 +17,10 @@ export const donationById = queryField('donationById', {
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
-			const donation = await prisma.donation.findUnique({
+			return await prisma.donation.findUnique({
 				where: { id },
 				rejectOnNotFound: true
 			})
-			return { donation }
 		} catch {
 			return NotFoundError
 		}
@@ -55,8 +54,8 @@ export const donations = queryField('donations', {
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	async resolve() {
 		try {
-			const genderOptions = await prisma.genderOption.findMany()
-			return { genderOptions }
+			const donations = await prisma.donation.findMany()
+			return { donations }
 		} catch (error) {
 			return UnableToProcessError
 		}

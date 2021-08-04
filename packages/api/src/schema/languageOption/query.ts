@@ -6,13 +6,7 @@ export const languageOptionByIdResult = unionType({
 	name: 'LanguageOptionByIdResult',
 	description: 'The result of the languageOptionById query',
 	definition(t) {
-		t.members(
-			'LanguageOption',
-			'UserAuthenticationError',
-			'UserForbiddenError',
-			'NotFoundError',
-			'InvalidArgumentsError'
-		)
+		t.members('LanguageOption', 'NotFoundError', 'InvalidArgumentsError')
 	}
 })
 
@@ -21,8 +15,6 @@ export const languageOptionById = queryField('languageOptionById', {
 	args: {
 		id: nonNull(idArg())
 	},
-	description: 'Access restricted to admin users',
-	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
@@ -49,12 +41,7 @@ export const languageOptionsResult = unionType({
 	name: 'LanguageOptionsResult',
 	description: 'The result of the languagesOptions query',
 	definition(t) {
-		t.members(
-			'LanguageOptionsList',
-			'UserAuthenticationError',
-			'UserForbiddenError',
-			'UnableToProcessError'
-		)
+		t.members('LanguageOptionsList', 'UnableToProcessError')
 	}
 })
 

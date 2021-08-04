@@ -246,7 +246,8 @@ export const modifyEmailResult = unionType({
 			'Account',
 			'InvalidArgumentsError',
 			'UnableToProcessError',
-			'UserAuthenticationError'
+			'UserAuthenticationError',
+			'NotFoundError'
 		)
 	}
 })
@@ -260,21 +261,25 @@ export const modifyEmail = mutationField('modifyEmail', {
 	authorization: (ctx) => authorize(ctx, 'user'),
 	validation: (args) => checkArgs(args, ['email:mail']),
 	async resolve(_, { email }, { user }) {
-		const existingAccount = await prisma.account.findUnique({ where: { email } })
-		if (existingAccount)
-			return {
-				...PartialInvalidArgumentsError,
-				invalidArguments: [{ key: 'email', message: 'Email already taken' }]
-			}
+		try {
+			const existingAccount = await prisma.account.findUnique({ where: { email } })
+			if (existingAccount)
+				return {
+					...PartialInvalidArgumentsError,
+					invalidArguments: [{ key: 'email', message: 'Email already taken' }]
+				}
 
-		const updatedAccount = await prisma.account.update({
-			where: { id: user.accountId },
-			data: { email }
-		})
+			const updatedAccount = await prisma.account.update({
+				where: { id: user.accountId },
+				data: { email }
+			})
 
-		if (!updatedAccount) return UnableToProcessError
+			if (!updatedAccount) return NotFoundError
 
-		return updatedAccount
+			return updatedAccount
+		} catch (error) {
+			return UnableToProcessError
+		}
 	}
 })
 

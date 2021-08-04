@@ -325,11 +325,16 @@ enum MediaType {
   VIDEO
 }
 
+enum StorageProvider {
+  AWS
+}
+
 model Media {
   id                String            @id @default(cuid())
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
   storeUrl          String
+  storageProvider   StorageProvider
   mediaType         MediaType         @default(IMAGE)
   // The user pictures
   user              User?             @relation(fields: [userId], references: [id])

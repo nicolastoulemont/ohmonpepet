@@ -1,5 +1,8 @@
 import { objectType } from 'nexus'
 
+export * from './mutation'
+export * from './query'
+
 export const donationReceipt = objectType({
 	name: 'DonationReceipt',
 	isTypeOf: (data) => Boolean((data as any).amountDonated),

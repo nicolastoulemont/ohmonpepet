@@ -137,9 +137,10 @@ export const updateReview = mutationField('updateReview', {
 				},
 				data: { ...input }
 			})
+			if (!review) return NotFoundError
 			return review
 		} catch (err) {
-			return NotFoundError
+			return UnableToProcessError
 		}
 	}
 })

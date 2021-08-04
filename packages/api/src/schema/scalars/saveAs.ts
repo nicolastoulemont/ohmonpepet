@@ -13,20 +13,18 @@ const validate = (value: any) => {
 	return value
 }
 
-export const GraphQLCurrencyConfig: GraphQLScalarTypeConfig<string, string> = /*#__PURE__*/ {
+export const GraphQLSaveAsConfig: GraphQLScalarTypeConfig<string, string> = /*#__PURE__*/ {
 	name: 'SaveAsValue',
-	description: 'A field whose value must be either: user, operator, admin',
+	description: 'A field whose value must be either: user, operator, staff',
 	serialize: validate,
 	parseValue: validate,
 	parseLiteral(ast) {
 		if (ast.kind !== Kind.STRING) {
-			throw new GraphQLError(
-				`Can only validate strings as email addresses but got a: ${ast.kind}`
-			)
+			throw new GraphQLError(`Can only validate strings but got a: ${ast.kind}`)
 		}
 
 		return validate(ast.value)
 	}
 }
 
-export const SaveAsValueResolver = /*#__PURE__*/ new GraphQLScalarType(GraphQLCurrencyConfig)
+export const SaveAsValueResolver = /*#__PURE__*/ new GraphQLScalarType(GraphQLSaveAsConfig)

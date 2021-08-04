@@ -92,13 +92,13 @@ export const deleteClaim = mutationField('deleteClaim', {
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }, { user: { userId, operatorId } }) {
 		try {
-			const [Claim] = await prisma.bookingClaim.findMany({
+			const [claim] = await prisma.bookingClaim.findMany({
 				where: { id, AND: [{ OR: [{ userId }, { operatorId }] }] }
 			})
 
-			if (!Claim) return NotFoundError
+			if (!claim) return NotFoundError
 
-			await prisma.bookingClaim.delete({ where: { id: Claim.id } })
+			await prisma.bookingClaim.delete({ where: { id: claim.id } })
 
 			return { success: true }
 		} catch (err) {
