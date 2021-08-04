@@ -35,12 +35,12 @@ export const createLanguageOption = mutationField('createLanguageOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn', 'mediaId']),
-	async resolve(_, { input }, { user: { userId } }) {
+	async resolve(_, { input }, { user: { staffId } }) {
 		try {
 			const LanguageOption = await prisma.languageOption.create({
 				data: {
 					...input,
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
 			return LanguageOption
@@ -67,7 +67,8 @@ export const updateLanguageOptionResult = unionType({
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'InvalidArgumentsError',
-			'UnableToProcessError'
+			'UnableToProcessError',
+			'NotFoundError'
 		)
 	}
 })
@@ -84,9 +85,9 @@ export const updateLanguageOption = mutationField('updateLanguageOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { id, input: { nameEn, nameFr, mediaId } }, { user: { userId } }) {
+	async resolve(_, { id, input: { nameEn, nameFr, mediaId } }, { user: { staffId } }) {
 		try {
-			const LanguageOption = await prisma.languageOption.update({
+			const languageOption = await prisma.languageOption.update({
 				where: {
 					id
 				},
@@ -94,10 +95,11 @@ export const updateLanguageOption = mutationField('updateLanguageOption', {
 					...(nameEn && { nameEn }),
 					...(nameFr && { nameFr }),
 					...(mediaId && { mediaId }),
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
-			return LanguageOption
+			if (!languageOption) return NotFoundError
+			return languageOption
 		} catch (err) {
 			return UnableToProcessError
 		}

@@ -34,13 +34,13 @@ export const createSpecieOption = mutationField('createSpecieOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { input: { nameEn, nameFr } }, { user: { userId } }) {
+	async resolve(_, { input: { nameEn, nameFr } }, { user: { staffId } }) {
 		try {
 			const specieOption = await prisma.specieOption.create({
 				data: {
 					nameEn,
 					nameFr,
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
 			return specieOption
@@ -66,7 +66,8 @@ export const updateSpecieOptionResult = unionType({
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'InvalidArgumentsError',
-			'UnableToProcessError'
+			'UnableToProcessError',
+			'NotFoundError'
 		)
 	}
 })
@@ -83,7 +84,7 @@ export const updateSpecieOption = mutationField('updateSpecieOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { userId } }) {
+	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { staffId } }) {
 		try {
 			const specieOption = await prisma.specieOption.update({
 				where: {
@@ -92,9 +93,10 @@ export const updateSpecieOption = mutationField('updateSpecieOption', {
 				data: {
 					...(nameEn && { nameEn }),
 					...(nameFr && { nameFr }),
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
+			if (!specieOption) return NotFoundError
 			return specieOption
 		} catch (err) {
 			return UnableToProcessError

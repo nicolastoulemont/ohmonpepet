@@ -34,13 +34,13 @@ export const createServiceOption = mutationField('createServiceOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { input: { nameEn, nameFr } }, { user: { userId } }) {
+	async resolve(_, { input: { nameEn, nameFr } }, { user: { staffId } }) {
 		try {
 			const ServiceOption = await prisma.serviceOption.create({
 				data: {
 					nameEn,
 					nameFr,
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
 			return ServiceOption
@@ -66,7 +66,8 @@ export const updateServiceOptionResult = unionType({
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'InvalidArgumentsError',
-			'UnableToProcessError'
+			'UnableToProcessError',
+			'NotFoundError'
 		)
 	}
 })
@@ -83,19 +84,20 @@ export const updateServiceOption = mutationField('updateServiceOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { userId } }) {
+	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { staffId } }) {
 		try {
-			const ServiceOption = await prisma.serviceOption.update({
+			const serviceOption = await prisma.serviceOption.update({
 				where: {
 					id
 				},
 				data: {
 					...(nameEn && { nameEn }),
 					...(nameFr && { nameFr }),
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
-			return ServiceOption
+			if (!serviceOption) return NotFoundError
+			return serviceOption
 		} catch (err) {
 			return UnableToProcessError
 		}

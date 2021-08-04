@@ -34,13 +34,13 @@ export const createHostingOption = mutationField('createHostingOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { input: { nameEn, nameFr } }, { user: { userId } }) {
+	async resolve(_, { input: { nameEn, nameFr } }, { user: { staffId } }) {
 		try {
 			const HostingOption = await prisma.hostingOption.create({
 				data: {
 					nameEn,
 					nameFr,
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
 			return HostingOption
@@ -66,7 +66,8 @@ export const updateHostingOptionResult = unionType({
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'InvalidArgumentsError',
-			'UnableToProcessError'
+			'UnableToProcessError',
+			'NotFoundError'
 		)
 	}
 })
@@ -83,19 +84,20 @@ export const updateHostingOption = mutationField('updateHostingOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { userId } }) {
+	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { staffId } }) {
 		try {
-			const HostingOption = await prisma.hostingOption.update({
+			const hostingOption = await prisma.hostingOption.update({
 				where: {
 					id
 				},
 				data: {
 					...(nameEn && { nameEn }),
 					...(nameFr && { nameFr }),
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
-			return HostingOption
+			if (!hostingOption) return NotFoundError
+			return hostingOption
 		} catch (err) {
 			return UnableToProcessError
 		}

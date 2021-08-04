@@ -34,13 +34,13 @@ export const createGenderOption = mutationField('createGenderOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { input: { nameEn, nameFr } }, { user: { userId } }) {
+	async resolve(_, { input: { nameEn, nameFr } }, { user: { staffId } }) {
 		try {
 			const genderOption = await prisma.genderOption.create({
 				data: {
 					nameEn,
 					nameFr,
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
 			return genderOption
@@ -66,7 +66,8 @@ export const updateGenderOptionResult = unionType({
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'InvalidArgumentsError',
-			'UnableToProcessError'
+			'UnableToProcessError',
+			'NotFoundError'
 		)
 	}
 })
@@ -83,7 +84,7 @@ export const updateGenderOption = mutationField('updateGenderOption', {
 	},
 	authorization: (ctx) => authorize(ctx, 'staff'),
 	validation: (args) => checkArgs(args, ['nameFr', 'nameEn']),
-	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { userId } }) {
+	async resolve(_, { id, input: { nameEn, nameFr } }, { user: { staffId } }) {
 		try {
 			const genderOption = await prisma.genderOption.update({
 				where: {
@@ -92,9 +93,10 @@ export const updateGenderOption = mutationField('updateGenderOption', {
 				data: {
 					...(nameEn && { nameEn }),
 					...(nameFr && { nameFr }),
-					staffId: userId // Change to the staffId when staff are done
+					staffId: staffId as string
 				}
 			})
+			if (!genderOption) return NotFoundError
 			return genderOption
 		} catch (err) {
 			return UnableToProcessError
