@@ -1,5 +1,5 @@
 import { S3 } from 'aws-sdk'
-import { __prod__ } from '../../constants'
+import { __prod__ } from '../../../constants'
 
 export const s3Bucket = __prod__
 	? (process.env.S3_BUCKET_PROD as string)

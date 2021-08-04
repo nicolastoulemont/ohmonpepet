@@ -1,13 +1,14 @@
 import { inputObjectType, arg, mutationField, idArg, nonNull, unionType, stringArg } from 'nexus'
 import prisma from '../../lib/prisma'
+import { NEW_MESSAGE } from '../../constants/pubsub'
 import {
 	checkArgs,
 	authorize,
 	NotFoundError,
 	UnableToProcessError,
-	PartialInvalidArgumentsError
+	PartialInvalidArgumentsError,
+	deleteS3Media
 } from '../../utils'
-import { NEW_MESSAGE } from '../../constants/pubsub'
 
 export const createBookingMessageInput = inputObjectType({
 	name: 'CreateBookingMessageInput',
@@ -189,9 +190,10 @@ export const updateBookingMessage = mutationField('updateBookingMessage', {
 					readAt
 				}
 			})
+			if (!message) return NotFoundError
 			return message
 		} catch (err) {
-			return NotFoundError
+			return UnableToProcessError
 		}
 	}
 })
@@ -230,6 +232,12 @@ export const deleteBookingMessage = mutationField('deleteBookingMessage', {
 
 			if (message.medias.length > 0) {
 				const mediaIds = message.medias.map((media) => media.id)
+				const mediaStoreUrls = message.medias.map((media) => media.storeUrl)
+
+				const removeMediasFromStorage = mediaStoreUrls.map(
+					async (storeUrl) => await deleteS3Media(storeUrl)
+				)
+				await Promise.all(removeMediasFromStorage)
 				await prisma.media.deleteMany({
 					where: { id: { in: mediaIds } }
 				})
