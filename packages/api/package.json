@@ -7,7 +7,7 @@
 	"scripts": {
 		"gen-env": "gen-env-types .env -e .",
 		"start": "export NODE_ENV=production && node dist/main.js",
-		"dev": "tsnd --files src/dev.ts",
+		"dev": "tsnd --files --exit-child src/dev.ts",
 		"build": "tsc"
 	},
 	"license": "MIT",

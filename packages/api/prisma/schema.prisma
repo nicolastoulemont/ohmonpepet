@@ -156,20 +156,19 @@ model Location {
   operatorId   String
 }
 
-// Partners and partners related fields
 model Partner {
   id                String             @id @default(cuid())
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
-  creator           Staff?             @relation(fields: [staffId], references: [id])
-  staffId           String?
+  creator           Staff              @relation(fields: [staffId], references: [id])
+  staffId           String
   name              String
   description       String
   websiteUrl        String
-  logoUrl           String
   operators         Operator[]
   donations         Donation[]
   donationsReceipts DonationsReceipt[]
+  medias            Media[]
 }
 
 model Donation {
@@ -351,7 +350,8 @@ model Media {
   languageOption    LanguageOption?   @relation(fields: [languageOptionId], references: [id])
   donationReceiptId String?
   donationReceipt   DonationsReceipt? @relation(fields: [donationReceiptId], references: [id])
-
+  partnerId         String?
+  partner           Partner?          @relation(fields: [partnerId], references: [id])
 }
 
 // Options

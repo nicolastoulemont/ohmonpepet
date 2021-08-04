@@ -90,6 +90,7 @@ export const donationReceiptMedia = objectType({
 		})
 	}
 })
+
 export const LanguageOptionMedia = objectType({
 	name: 'LanguageOptionMedia',
 	isTypeOf: (data) => Boolean((data as any).languageOptionId),
@@ -100,6 +101,19 @@ export const LanguageOptionMedia = objectType({
 			type: 'LanguageOption',
 			resolve: async (m) =>
 				await prisma.media.findUnique({ where: { id: m.id } }).languageOption()
+		})
+	}
+})
+
+export const PartnerMedia = objectType({
+	name: 'PartnerMedia',
+	isTypeOf: (data) => Boolean((data as any).partnerId),
+	definition(t) {
+		t.implements('Media')
+		t.id('partnerId')
+		t.field('partner', {
+			type: 'Partner',
+			resolve: async (m) => await prisma.media.findUnique({ where: { id: m.id } }).partner()
 		})
 	}
 })

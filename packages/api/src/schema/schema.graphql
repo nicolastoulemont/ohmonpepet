@@ -215,6 +215,15 @@ input CreateMediaInput {
 
 union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
+input CreatePartnerInput {
+  description: String!
+  name: String!
+  storeUrls: [String!]!
+  websiteUrl: String!
+}
+
+union CreatePartnerResult = InvalidArgumentsError | Partner | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 input CreateReviewInput {
   body: String
   bookingId: String!
@@ -294,6 +303,8 @@ union DeleteLanguageOptionResult = BooleanResult | InvalidArgumentsError | NotFo
 
 """The result of the deleteMedia mutation"""
 union DeleteMediaResult = BooleanResult | InvalidArgumentsError | IsActiveOperatorMainMediaError | IsActiveOperatorWithNoReplacementMediaError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
+union DeletePartnerResult = BooleanResult | UserAuthenticationError | UserForbiddenError
 
 """The result of the deleteReview mutation"""
 union DeleteReviewResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
@@ -582,6 +593,7 @@ type Mutation {
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
   createLanguageOption(input: CreateLanguageOptionInput!): CreateLanguageOptionResult
   createMedia(input: CreateMediaInput!): CreateMediaResult
+  createPartner(input: CreatePartnerInput!): CreatePartnerResult
   createReview(input: CreateReviewInput!): CreateReviewResult
   createServiceOption(input: CreateServiceOptionInput!): CreateServiceOptionResult
   createSpecieOption(input: CreateSpecieOptionInput!): CreateSpecieOptionResult
@@ -596,6 +608,7 @@ type Mutation {
   deleteHostingOption(id: ID!): DeleteHostingOptionResult
   deleteLanguageOption(id: ID!): DeleteLanguageOptionResult
   deleteMedia(mediaId: ID!): DeleteMediaResult
+  deletePartner(id: ID!): DeletePartnerResult
   deleteReview(id: ID!): DeleteReviewResult
   deleteServiceOption(id: ID!): DeleteServiceOptionResult
   deleteSpecieOption(id: ID!): DeleteSpecieOptionResult
@@ -621,6 +634,7 @@ type Mutation {
   updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
   updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
   updateLanguageOption(id: ID!, input: UpdateLanguageOptionInput!): UpdateLanguageOptionResult
+  updatePartner(id: ID!, input: UpdatePartnerInput!): UpdatePartnerResult
   updateReview(id: ID!, input: UpdateReviewInput!, saveAs: String!): UpdateReviewResult
   updateServiceOption(id: ID!, input: UpdateServiceOptionInput!): UpdateServiceOptionResult
   updateSpecieOption(id: ID!, input: UpdateSpecieOptionInput!): UpdateSpecieOptionResult
@@ -714,6 +728,45 @@ type OperatorReview implements Node & Review {
   updatedAt: DateTime
 }
 
+type Partner implements Node {
+  createdAt: DateTime
+  creator: Staff
+  description: String!
+  donations: [Donation]
+
+  """GUID for a resource"""
+  id: String!
+
+  """Contains the partner logo"""
+  medias: [Media]
+  name: String!
+  receipts: [DonationReceipt]
+  updatedAt: DateTime
+  websiteUrl: String!
+}
+
+union PartnerByIdResult = NotFoundError | Partner
+
+type PartnerMedia implements Media & Node {
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  mediaType: MediaType
+  partner: Partner
+  partnerId: ID
+  storeUrl: URL!
+  updatedAt: DateTime
+}
+
+"""List of partners"""
+type PartnersList {
+  partners: [Partner]
+}
+
+"""The result of the partners query"""
+union PartnersResult = PartnersList | UnableToProcessError
+
 interface Payment implements Node {
   bookingId: ID
   createdAt: DateTime
@@ -748,6 +801,8 @@ enum PaymentStatus {
 scalar PositiveFloat
 
 type Query {
+  Partners: PartnersResult
+
   """Access restricted to admin users"""
   accountById(id: ID!): AccountByIdResult
 
@@ -795,6 +850,7 @@ type Query {
 
   """Access restricted to admin users"""
   medias: MediasResult
+  partnerById(id: ID!): PartnerByIdResult
   receiptById(id: ID!): DonationReceiptByIdResult
 
   """Access restricted to admin users"""
@@ -802,7 +858,9 @@ type Query {
 
   """Access restricted to admin users"""
   reviews: ReviewsResult
+  searchDonationReceipts(input: SearchDonationReceiptsInput!): SearchDonationReceiptsResult
   searchDonations(input: SearchDonationsInput!): SearchDonationsResult
+  searchPartners(input: SearchPartnersInput!): SearchPartnersResult
 
   """Access restricted to admin users"""
   serviceOptionById(id: ID!): ServiceOptionByIdResult
@@ -870,6 +928,12 @@ input SearchDonationsInput {
 }
 
 union SearchDonationsResult = DonationsList | InvalidArgumentsError | UnableToProcessError
+
+input SearchPartnersInput {
+  query: String!
+}
+
+union SearchPartnersResult = PartnersList | UnableToProcessError
 
 """The result of the sendVerificationEmail mutation"""
 union SendVerificationEmailResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError
@@ -1054,6 +1118,15 @@ input UpdateLanguageOptionInput {
 }
 
 union UpdateLanguageOptionResult = InvalidArgumentsError | LanguageOption | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+input UpdatePartnerInput {
+  description: String!
+  name: String!
+  storeUrls: [String!]!
+  websiteUrl: String!
+}
+
+union UpdatePartnerResult = InvalidArgumentsError | Partner | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateReviewInput {
   body: String

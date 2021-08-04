@@ -72,7 +72,7 @@ export const SearchDonationReceiptsResult = unionType({
 	}
 })
 
-export const searchDonations = queryField('searchDonationReceipts', {
+export const searchDonationReceipts = queryField('searchDonationReceipts', {
 	type: 'SearchDonationReceiptsResult',
 	args: { input: nonNull(arg({ type: 'SearchDonationReceiptsInput' })) },
 	async resolve(_, { input: { partnerId, startDate, endDate } }) {
