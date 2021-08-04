@@ -8,7 +8,7 @@ export function getUserFromSession(req: RequestWithSession): UserSessionData | u
 	return req.session.user
 }
 
-export type Access = 'staff' | 'user'
+export type Access = 'staff' | 'user' | 'operator'
 
 export function authorize(
 	ctx: ApiContext,
@@ -18,7 +18,7 @@ export function authorize(
 	| NexusGenFieldTypes['UserForbiddenError']
 	| undefined {
 	const { user } = ctx
-	if (user && handleAccess(user.access, requiredAccess)) {
+	if (user && validateAccess(user, requiredAccess)) {
 		return undefined
 	} else if (user) {
 		return UserForbiddenError
@@ -27,19 +27,25 @@ export function authorize(
 	}
 }
 
-export const handleAccess = (userAccess: string, requiredAccess: Access): boolean => {
-	switch (userAccess) {
+export const validateAccess = (user: UserSessionData, requiredAccess: Access): boolean => {
+	switch (requiredAccess) {
 		case 'staff':
-			// Staff access always grant access
-			return true
+			if (user.staffId) {
+				return true
+			} else {
+				return false
+			}
+		case 'operator':
+			if (user.operatorId) {
+				return true
+			} else {
+				return false
+			}
 		case 'user':
-			switch (requiredAccess) {
-				case 'staff':
-					return false
-				case 'user':
-					return true
-				default:
-					return false
+			if (user.userId) {
+				return true
+			} else {
+				return false
 			}
 		default:
 			return false
