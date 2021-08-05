@@ -212,7 +212,6 @@ model Booking {
   selectedOptions            Json[] // The option's name and price at the moment of booking's creation
   priceWithOutApplicationFee Float
   applicationFeeAmount       Float
-  animalsIds                 String[]
   // Status related fields
   operatorConfirmationDate   DateTime?
   ownerConfirmationDate      DateTime?
@@ -233,6 +232,17 @@ model Booking {
   claims                     BookingClaim[]
   stripePayment              StripePayment?
   donation                   Donation?
+  animals                    BookingAnimal[]
+}
+
+model BookingAnimal {
+  id             String       @id @default(cuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  booking        Booking      @relation(fields: [bookingId], references: [id])
+  bookingId      String
+  specieOptionId String
+  specie         SpecieOption @relation(fields: [specieOptionId], references: [id])
 }
 
 model BookingMessage {
@@ -356,13 +366,14 @@ model Media {
 
 // Options
 model SpecieOption {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  creator   Staff    @relation(fields: [staffId], references: [id])
-  staffId   String
-  nameEn    String
-  nameFr    String
+  id             String          @id @default(cuid())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  creator        Staff           @relation(fields: [staffId], references: [id])
+  staffId        String
+  nameEn         String
+  nameFr         String
+  bookingAnimals BookingAnimal[]
 }
 
 model LanguageOption {

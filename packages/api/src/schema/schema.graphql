@@ -90,6 +90,8 @@ interface BookingMessage implements Node {
 """The result of the bookingMessageById query"""
 union BookingMessageByIdResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | UserAuthenticationError | UserBookingMessage | UserForbiddenError
 
+union BookingMessageSubscriptionResult = OperatorBookingMessage | UserAuthenticationError | UserBookingMessage | UserForbiddenError
+
 """List of booking messages"""
 type BookingMessagesList {
   bookingMessages: [BookingMessage]
@@ -112,6 +114,8 @@ enum BookingStatus {
   UNDER_REVIEW
 }
 
+union BookingSubscriptionResult = Booking | UserAuthenticationError | UserForbiddenError
+
 input BookingWithPaymentStatusInput {
   paymentStatus: String
   underReview: Boolean
@@ -128,6 +132,10 @@ union BookingsResult = BookingsList | UnableToProcessError | UserAuthenticationE
 
 type BooleanResult {
   success: Boolean
+}
+
+type CannotBookHimSelfError {
+  cannotBookHimSelfError: String
 }
 
 interface Claim implements Node {
@@ -167,6 +175,16 @@ input CreateBookingClaimInput {
 
 union CreateBookingClaimResult = InvalidArgumentsError | OperatorClaim | UnableToProcessError | UserAuthenticationError | UserClaim
 
+input CreateBookingInput {
+  animalsIds: [String!]!
+  endDate: String!
+  message: String
+  operatorId: ID!
+  selectedOptions: [JSON]
+  serviceOptionId: ID!
+  startDate: String!
+}
+
 input CreateBookingMessageInput {
   bookingId: String!
   content: String!
@@ -174,6 +192,8 @@ input CreateBookingMessageInput {
 }
 
 union CreateBookingMessageResult = InvalidArgumentsError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
+
+union CreateBookingResult = Booking | CannotBookHimSelfError | ExistingBookingError | InvalidArgumentsError | NotFoundError | NotSupportedExtraServiceError | UnableToProcessError | UserAuthenticationError
 
 input CreateDonationReceiptInput {
   amountDonated: Float!
@@ -418,6 +438,10 @@ enum ErrorMessage {
   UNAUTHENTICATED_PLEASE_LOGIN
 }
 
+type ExistingBookingError {
+  existingBookingError: String
+}
+
 type GenderOption implements Node {
   createdAt: DateTime
 
@@ -612,6 +636,7 @@ union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | U
 
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountResult
+  createBooking(input: CreateBookingInput!): CreateBookingResult
   createBookingClaim(input: CreateBookingClaimInput!): CreateBookingClaimResult
   createBookingMessage(input: CreateBookingMessageInput!): CreateBookingMessageResult
   createDonationReceipt(input: CreateDonationReceiptInput!): CreateDonationReceiptResult
@@ -679,6 +704,10 @@ interface Node {
 type NotFoundError {
   code: ErrorCode!
   message: ErrorMessage!
+}
+
+type NotSupportedExtraServiceError {
+  notSupportedExtraServiceError: String
 }
 
 """
@@ -1080,9 +1109,13 @@ type StripePayment implements Node & Payment {
 }
 
 type Subscription {
+  bookingByIdChatSub(bookingId: ID!): BookingMessageSubscriptionResult
   errorsEmailCronSub: CronSubscriptionsResult
+  newlyCreatedBookingsAsSitterSub(sitterId: ID): BookingSubscriptionResult
   pendingPaymentCronSub: CronSubscriptionsResult
   setupIntentCronSub: CronSubscriptionsResult
+  userBookingsMessagesChangesSub(authorId: ID, bookingIds: [ID]): BookingMessageSubscriptionResult
+  userBookingsStatusChangesSub(bookingIds: [ID]): BookingSubscriptionResult
 }
 
 """
