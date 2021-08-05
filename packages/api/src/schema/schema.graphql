@@ -73,6 +73,8 @@ type Booking implements Node {
   user: User
 }
 
+union BookingByIdResult = Booking | InvalidArgumentsError | NotFoundError
+
 """The minimum required fields for message types"""
 interface BookingMessage implements Node {
   content: String!
@@ -109,6 +111,20 @@ enum BookingStatus {
   PENDING_SITTER_VALIDATION
   UNDER_REVIEW
 }
+
+input BookingWithPaymentStatusInput {
+  paymentStatus: String
+  underReview: Boolean
+}
+
+union BookingWithPaymentStatusResult = BookingsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+"""List of bookings"""
+type BookingsList {
+  bookings: [Booking]
+}
+
+union BookingsResult = BookingsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type BooleanResult {
   success: Boolean
@@ -270,6 +286,17 @@ union CurrentOperatorDonationsResult = DonationsList | UnableToProcessError | Us
 
 """The result of the currentOperatorMedia query"""
 union CurrentOperatorMediaResult = NotFoundError | OperatorMedia | SharedMedia | UserAuthenticationError | UserForbiddenError
+
+input CurrentUserBookingFilterInput {
+  endDate: Date
+  includeFinished: Boolean
+  serviceOptionId: ID
+  sortKey: String
+  sortValue: String
+  startDate: Date
+}
+
+union CurrentUserBookingsResult = BookingsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 """The result of the currentUserMedia query"""
 union CurrentUserMediaResult = NotFoundError | SharedMedia | UserAuthenticationError | UserForbiddenError | UserMedia
@@ -814,12 +841,15 @@ type Query {
 
   """Access restricted to admin users"""
   allUsers: AllUsersResult
+  bookingById(id: ID!): BookingByIdResult
 
   """Access restricted to admin users"""
   bookingMessageById(id: ID!): BookingMessageByIdResult
 
   """Access restricted to admin users"""
   bookingMessages: BookingMessagesResult
+  bookings: BookingsResult
+  bookingsWithPaymentStatus(input: BookingWithPaymentStatusInput!): BookingWithPaymentStatusResult
   claimById(id: ID!): ClaimByIdResult
 
   """Access restricted to admin users"""
@@ -834,6 +864,8 @@ type Query {
 
   """Access restricted to logged in user"""
   currentUserMedia: CurrentUserMediaResult
+  currentUserOperatorBookings(input: CurrentUserBookingFilterInput!): CurrentUserBookingsResult
+  currentUserOwnerBookings(input: CurrentUserBookingFilterInput!): CurrentUserBookingsResult
   donationById(id: ID!): DonationByIdResult
   donationReceipts: DonationReceiptsResult
   donations: DonationsResult

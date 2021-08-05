@@ -2,7 +2,7 @@ import { objectType, inputObjectType, enumType, unionType } from 'nexus'
 import { PAYMENT_STATUS } from './constants'
 import prisma from '../../lib/prisma'
 // export * from './mutation'
-// export * from './query'
+export * from './query'
 // export * from './subscriptions'
 
 export const bookingPayment = unionType({
