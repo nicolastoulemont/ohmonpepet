@@ -201,6 +201,10 @@ export const createBooking = mutationField('createBooking', {
 				}
 			})
 
+			await prisma.bookingAnimal.createMany({
+				data: animalsIds.map((id) => ({ bookingId: booking.id, specieOptionId: id }))
+			})
+
 			if (message) {
 				await prisma.bookingMessage.create({
 					data: {
