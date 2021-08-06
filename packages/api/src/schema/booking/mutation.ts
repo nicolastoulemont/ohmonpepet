@@ -576,16 +576,36 @@ export const authorizePayment = mutationField('authorizePayment', {
 						}
 					})
 
-					await prisma.stripePayment.create({
-						data: {
-							bookingId: booking.id,
-							paymentIntentClientSecret: paymentIntent.client_secret,
-							paymentIntentId: paymentIntent.id,
-							status: PAYMENT_STATUS.PENDING_AUTHORIZATION,
-							expectedPaymentIntentCreationDate: new Date(),
-							expectedPaymentIntentCaptureDate: addDays(new Date(booking.endDate), 2)
-						}
-					})
+					// If pre-existing paymentRef, we update it
+					if (booking.stripePayment?.id) {
+						await prisma.stripePayment.update({
+							where: { id: booking.stripePayment.id },
+							data: {
+								paymentIntentClientSecret: paymentIntent.client_secret,
+								paymentIntentId: paymentIntent.id,
+								status: PAYMENT_STATUS.PENDING_AUTHORIZATION,
+								expectedPaymentIntentCreationDate: new Date(),
+								expectedPaymentIntentCaptureDate: addDays(
+									new Date(booking.endDate),
+									2
+								)
+							}
+						})
+					} else {
+						await prisma.stripePayment.create({
+							data: {
+								bookingId: booking.id,
+								paymentIntentClientSecret: paymentIntent.client_secret,
+								paymentIntentId: paymentIntent.id,
+								status: PAYMENT_STATUS.PENDING_AUTHORIZATION,
+								expectedPaymentIntentCreationDate: new Date(),
+								expectedPaymentIntentCaptureDate: addDays(
+									new Date(booking.endDate),
+									2
+								)
+							}
+						})
+					}
 
 					return {
 						clientSecret: paymentIntent.client_secret,
