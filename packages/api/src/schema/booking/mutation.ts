@@ -19,7 +19,8 @@ import {
 	stripe,
 	useBookingPrice,
 	PartialInvalidArgumentsError,
-	UnableToProcessError
+	UnableToProcessError,
+	UserForbiddenError
 } from '../../utils'
 import prisma from '../../lib/prisma'
 import { addDays, isAfter, subDays } from 'date-fns'
@@ -243,403 +244,362 @@ export const createBooking = mutationField('createBooking', {
 // 	},
 // })
 
-// export const confirmBooking = mutationField('confirmBooking', {
-// 	type: 'BookingResponse',
-// 	args: {
-// 		id: nonNull(idArg()),
-// 		source: nonNull(stringArg()),
-// 	},
-// 	authorization: (ctx) => authorizeUser(ctx, 'user'),
-// 	validate: (args) => checkFields(args, ['id']),
-// 	async resolve(_, args, ctx) {
-// 		try {
-// 			const { id, source } = args
-// 			let update: any = {
-// 				updatedAt: Date.now(),
-// 			}
-// 			if (source === 'OWNER') {
-// 				update = {
-// 					...update,
-// 					ownerOk: { confirm: true, updatedAt: Date.now() },
-// 				}
-// 			} else if (source === 'SITTER') {
-// 				update = {
-// 					...update,
-// 					sitterOk: { confirm: true, updatedAt: Date.now() },
-// 				}
-// 			}
-// 			const booking = await BookingModel.findOneAndUpdate(
-// 				{
-// 					_id: id,
-// 					$or: [{ ownerId: ctx.user.profileId }, { sitterId: ctx.user.profileId }],
-// 				},
-// 				update,
-// 				{
-// 					new: true,
-// 				},
-// 			)
-// 			if (source === 'SITTER') {
-// 				sendOwnerPetSitterAcceptedBookingEmail(booking!.id, booking!.ownerEmail, 'fr')
-// 			}
-// 			ctx.pubsub.publish(UPDATED_BOOKING, { booking })
-// 			return { booking }
-// 		} catch (error) {
-// 			console.error(error)
-// 			return { errors: [{ key: 'booking', message: "Couldn't confirm the booking" }] }
-// 		}
-// 	},
-// })
+export const ConfirmBookingResult = unionType({
+	name: 'ConfirmBookingResult',
+	definition(t) {
+		t.members(
+			'Booking',
+			'UserAuthenticationError',
+			'InvalidArgumentsError',
+			'NotFoundError',
+			'UnableToProcessError'
+		)
+	}
+})
 
-// export const cancelBooking = mutationField('cancelBooking', {
-// 	type: 'BookingResponse',
-// 	args: {
-// 		id: nonNull(idArg()),
-// 		source: nonNull(stringArg()),
-// 	},
-// 	authorization: (ctx) => authorizeUser(ctx, 'user'),
-// 	validate: (args) => checkFields(args, ['id', 'source']),
-// 	async resolve(_, args, ctx) {
-// 		try {
-// 			const { id, source } = args
-// 			let update: any = {
-// 				canceled: true,
-// 				cancellationDetails: {
-// 					cancelledBy: source as string,
-// 					updatedAt: Date.now(),
-// 				},
-// 				updatedAt: Date.now(),
-// 				lastUpdatedBy: ctx.user.profileId,
-// 			}
-// 			const booking = await BookingModel.findOneAndUpdate(
-// 				{
-// 					_id: id,
-// 					$or: [{ ownerId: ctx.user.profileId }, { sitterId: ctx.user.profileId }],
-// 				},
-// 				update,
-// 				{
-// 					new: true,
-// 				},
-// 			)
-// 			if (source === 'SITTER') {
-// 				sendOwnerPetSitterRejectedBookingEmail(booking!.ownerEmail, 'fr')
-// 			} else if (source === 'OWNER') {
-// 				const sitter = await ProfileModel.findById(booking?.sitterId)
-// 				const sitterAccount = await UserModel.findById(sitter?.userId)
-// 				sendPetSitterBookingCanceledEmail(sitterAccount?.email, 'fr')
-// 			}
-// 			ctx.pubsub.publish(UPDATED_BOOKING, { booking })
-// 			return { booking }
-// 		} catch (error) {
-// 			console.error(error)
-// 			return { errors: [{ key: 'booking', message: "Couldn't cancel the booking" }] }
-// 		}
-// 	},
-// })
+export const confirmBooking = mutationField('confirmBooking', {
+	type: 'ConfirmBookingResult',
+	args: {
+		id: nonNull(idArg()),
+		source: nonNull(stringArg())
+	},
+	authorization: (ctx) => authorize(ctx, 'user'),
+	validation: (args) => checkArgs(args, ['id']),
+	async resolve(_, { id, source }, { pubsub }) {
+		try {
+			const booking = await prisma.booking.update({
+				where: { id },
+				data: {
+					...(source === 'OWNER' && { ownerConfirmationDate: new Date() }),
+					...(source === 'OPERATOR' && { operatorConfirmationDate: new Date() })
+				},
+				include: {
+					user: {
+						select: {
+							account: { select: { email: true } }
+						}
+					}
+				}
+			})
 
-// export const cancelOnGoingBooking = mutationField('cancelOnGoingBooking', {
-// 	type: 'BookingResponse',
-// 	args: {
-// 		id: nonNull(idArg()),
-// 		source: nonNull(stringArg()),
-// 		reason: nonNull(stringArg()),
-// 	},
-// 	authorization: (ctx) => authorizeUser(ctx, 'user'),
-// 	validate: (args) => checkFields(args, ['id', 'source', 'reason']),
-// 	async resolve(_, args, ctx) {
-// 		try {
-// 			const { id, source, reason } = args
-// 			let update: any = {
-// 				canceled: true,
-// 				cancellationDetails: {
-// 					cancelledBy: source as string,
-// 					updatedAt: Date.now(),
-// 				},
-// 				cancellationReason: reason,
-// 				updatedAt: Date.now(),
-// 				underReview: true,
-// 				lastUpdatedBy: ctx.user.profileId,
-// 				paymentStatus: PAYMENT_STATUS.AUTHORIZED_BUT_CANCELLED,
-// 			}
+			if (!booking) return NotFoundError
 
-// 			const booking = await BookingModel.findOneAndUpdate(
-// 				{
-// 					_id: id,
-// 					$or: [{ ownerId: ctx.user.profileId }, { sitterId: ctx.user.profileId }],
-// 				},
-// 				update,
-// 				{
-// 					new: true,
-// 				},
-// 			)
-// 			ctx.pubsub.publish(UPDATED_BOOKING, { booking })
-// 			return { booking }
-// 		} catch (error) {
-// 			console.error(error)
-// 			return { errors: [{ key: 'booking', message: "Couldn't cancel the booking" }] }
-// 		}
-// 	},
-// })
+			if (source === 'SITTER') {
+				sendOwnerPetSitterAcceptedBookingEmail(booking.id, booking.user.account.email, 'fr')
+			}
+			pubsub.publish(UPDATED_BOOKING, { booking })
+			return booking
+		} catch (error) {
+			console.error(error)
+			return UnableToProcessError
+		}
+	}
+})
 
-// export const changeBooking = mutationField('changeBooking', {
-// 	type: 'BookingResponse',
-// 	args: {
-// 		id: nonNull(idArg()),
-// 		input: nonNull(
-// 			arg({
-// 				type: ChangeBookingInput,
-// 			}),
-// 		),
-// 	},
-// 	authorization: (ctx) => authorizeUser(ctx, 'user'),
-// 	validate: (args) => checkFields(args, ['id']),
-// 	async resolve(_, args, ctx) {
-// 		try {
-// 			const { id, input } = args
-// 			if (!input.startDate && !input.endDate && !input.service && !input.selectedOptions) {
-// 				const update: any = {
-// 					...input,
-// 					lastUpdatedBy: ctx.user.profileId,
-// 					updatedAt: Date.now(),
-// 				}
+export const CancelBookingResult = unionType({
+	name: 'CancelBookingResult',
+	definition(t) {
+		t.members(
+			'Booking',
+			'UserAuthenticationError',
+			'InvalidArgumentsError',
+			'NotFoundError',
+			'UnableToProcessError'
+		)
+	}
+})
 
-// 				const booking = await BookingModel.findByIdAndUpdate({ _id: id }, update, {
-// 					new: true,
-// 				})
-// 				ctx.pubsub.publish(UPDATED_BOOKING, { booking })
-// 				return { booking }
-// 			} else {
-// 				const booking = await BookingModel.findById(id).lean()
-// 				if (!booking) return notFound()
+export const cancelBooking = mutationField('cancelBooking', {
+	type: 'CancelBookingResult',
+	args: {
+		id: nonNull(idArg()),
+		source: nonNull(stringArg()),
+		canceledReason: stringArg()
+	},
+	authorization: (ctx) => authorize(ctx, 'user'),
+	validation: (args) => checkArgs(args, ['id', 'source']),
+	async resolve(_, { id, source, canceledReason }, ctx) {
+		try {
+			const booking = await prisma.booking.update({
+				where: { id },
+				data: {
+					canceled: true,
+					canceledBy: source === 'OWNER' ? 'OWNER' : 'OPERATOR',
+					canceledReason
+				},
+				include: {
+					user: {
+						select: { account: { select: { email: true } } }
+					},
+					operator: {
+						select: { account: { select: { email: true } } }
+					}
+				}
+			})
 
-// 				const {
-// 					priceWithoutApplicationFee,
-// 					priceWithApplicationFee,
-// 					applicationFeeAmount,
-// 				} = await useBookingPrice({
-// 					sitterId: booking.sitterId,
-// 					service: input.service ? input.service : booking.service,
-// 					startDate: input.startDate ? input.startDate : booking.startDate,
-// 					endDate: input.endDate ? input.endDate : booking.endDate,
-// 					selectedOptions: input.selectedOptions
-// 						? input.selectedOptions
-// 						: booking.selectedOptions,
-// 				})
+			if (!booking) return NotFoundError
 
-// 				const update: any = {
-// 					...input,
-// 					priceWithoutApplicationFee,
-// 					priceWithApplicationFee,
-// 					applicationFeeAmount,
-// 					lastUpdatedBy: ctx.user.profileId,
-// 					updatedAt: Date.now(),
-// 				}
+			if (source === 'SITTER') {
+				sendOwnerPetSitterRejectedBookingEmail(booking.user.account.email, 'fr')
+			} else if (source === 'OWNER') {
+				sendPetSitterBookingCanceledEmail(booking.operator.account.email, 'fr')
+			}
+			ctx.pubsub.publish(UPDATED_BOOKING, { booking })
+			return booking
+		} catch (error) {
+			console.error(error)
+			return UnableToProcessError
+		}
+	}
+})
 
-// 				const updatedBooking = await BookingModel.findByIdAndUpdate({ _id: id }, update, {
-// 					new: true,
-// 				})
-// 				ctx.pubsub.publish(UPDATED_BOOKING, { updatedBooking })
-// 				return { booking: updatedBooking }
-// 			}
-// 		} catch (err) {
-// 			return notFound()
-// 		}
-// 	},
-// })
+export const CancelOnGoingBookingResult = unionType({
+	name: 'CancelOnGoingBookingResult',
+	definition(t) {
+		t.members(
+			'Booking',
+			'UserAuthenticationError',
+			'InvalidArgumentsError',
+			'NotFoundError',
+			'UnableToProcessError'
+		)
+	}
+})
 
-// export const deleteBooking = mutationField('deleteBooking', {
-// 	type: 'BooleanResponse',
-// 	args: {
-// 		id: nonNull(idArg()),
-// 	},
-// 	authorization: (ctx) => authorizeUser(ctx, 'user'),
-// 	validate: (args) => checkFields(args, ['id']),
-// 	async resolve(_, args, ctx) {
-// 		try {
-// 			await BookingModel.findByIdAndDelete({ _id: args.id, ownerId: ctx.user.profileId })
-// 			return { success: true }
-// 		} catch (err) {
-// 			return { success: false }
-// 		}
-// 	},
-// })
+export const cancelOnGoingBooking = mutationField('cancelOnGoingBooking', {
+	type: 'CancelOnGoingBookingResult',
+	args: {
+		id: nonNull(idArg()),
+		source: nonNull(stringArg()),
+		canceledReason: stringArg()
+	},
+	authorization: (ctx) => authorize(ctx, 'user'),
+	validation: (args) => checkArgs(args, ['id', 'source', 'canceledReason']),
+	async resolve(_, { id, source, canceledReason }, ctx) {
+		try {
+			const booking = await prisma.booking.update({
+				where: { id },
+				data: {
+					canceled: true,
+					canceledBy: source === 'OWNER' ? 'OWNER' : 'OPERATOR',
+					canceledReason,
+					underReview: true,
+					stripePayment: {
+						update: { status: PAYMENT_STATUS.AUTHORIZED_BUT_CANCELLED }
+					}
+				}
+			})
+			ctx.pubsub.publish(UPDATED_BOOKING, { booking })
+			return booking
+		} catch (error) {
+			console.error(error)
+			return { errors: [{ key: 'booking', message: "Couldn't cancel the booking" }] }
+		}
+	}
+})
 
-// export const BookingAuthorizationResponse = objectType({
-// 	name: 'BookingAuthorizationResponse',
-// 	definition(t) {
-// 		t.string('clientSecret')
-// 		t.boolean('hadRef')
-// 		t.string('stripeTargetApi')
-// 		t.list.field('errors', { type: 'Error' })
-// 	},
-// })
+export const AuthorizedPayment = objectType({
+	name: 'AuthorizedPayment',
+	isTypeOf: (data) => Boolean((data as any).clientSecret),
+	definition(t) {
+		t.string('clientSecret')
+		t.boolean('hadRef')
+		t.string('stripeTargetApi')
+	}
+})
 
-// export const authorizePayment = mutationField('authorizePayment', {
-// 	type: 'BookingAuthorizationResponse',
-// 	args: {
-// 		bookingId: nonNull(idArg()),
-// 	},
-// 	authorization: (ctx) => authorizeUser(ctx, 'user'),
-// 	validate: (args) => checkFields(args, ['bookingId']),
-// 	async resolve(_, args, ctx) {
-// 		try {
-// 			const booking = await BookingModel.findById(args.bookingId)
-// 			if (
-// 				!booking ||
-// 				!booking.priceWithoutApplicationFee ||
-// 				!booking.priceWithApplicationFee ||
-// 				!booking.applicationFeeAmount
-// 			)
-// 				return notFound()
+export const OperatorCannotProcessPaymentsError = objectType({
+	name: 'OperatorCannotProcessPaymentsError',
+	isTypeOf: (data) => Boolean((data as any).operatorCannotProcessPaymentsError),
+	definition(t) {
+		t.string('operatorCannotProcessPaymentsError')
+	}
+})
+export const InvalidOperatorError = objectType({
+	name: 'InvalidOperatorError',
+	isTypeOf: (data) => Boolean((data as any).invalidOperatorError),
+	definition(t) {
+		t.string('invalidOperatorError')
+	}
+})
 
-// 			if (booking.ownerId !== ctx.user.profileId)
-// 				return { errors: [{ key: 'user', message: 'You cannot pay this booking' }] }
+export const AuthorizePaymentResult = unionType({
+	name: 'AuthorizePaymentResult',
+	definition(t) {
+		t.members(
+			'AuthorizedPayment',
+			'UserAuthenticationError',
+			'NotFoundError',
+			'UnableToProcessError',
+			'OperatorCannotProcessPaymentsError',
+			'InvalidOperatorError'
+		)
+	}
+})
 
-// 			const sitter = await ProfileModel.findById(booking.sitterId)
-// 			if (!sitter)
-// 				return {
-// 					errors: [
-// 						{ key: 'sitter', message: "The booking selected sitter doesn't exist" },
-// 					],
-// 				}
-// 			if (!sitter.stripeAccountId)
-// 				return {
-// 					errors: [
-// 						{
-// 							key: 'sitter',
-// 							message: 'The selected sitter cannot process payments at the moment',
-// 						},
-// 					],
-// 				}
+export const authorizePayment = mutationField('authorizePayment', {
+	type: 'AuthorizePaymentResult',
+	args: {
+		id: nonNull(idArg())
+	},
+	authorization: (ctx) => authorize(ctx, 'user'),
+	validation: (args) => checkArgs(args, ['id']),
+	async resolve(_, { id }, { user: { userId } }) {
+		try {
+			const booking = await prisma.booking.findFirst({
+				where: { id, userId },
+				include: {
+					user: {
+						select: {
+							id: true,
+							stripeCustomerId: true,
+							account: { select: { email: true } }
+						}
+					},
+					operator: {
+						select: {
+							id: true,
+							stripeAccountId: true,
+							partnerId: true,
+							partnerPercentage: true
+						}
+					},
+					stripePayment: true
+				}
+			})
+			if (!booking || !booking.priceWithOutApplicationFee || !booking.applicationFeeAmount)
+				return NotFoundError
 
-// 			const user = await UserModel.findById(ctx.user.id)
-// 			if (!user) {
-// 				return {
-// 					errors: [
-// 						{
-// 							key: 'user',
-// 							message: 'You cannot create a booking payment',
-// 						},
-// 					],
-// 				}
-// 			}
+			if (!booking.operator)
+				return { invalidOperatorError: 'This booking operator does not exist anymore' }
 
-// 			const dayIn4days = addDays(new Date(), 4)
-// 			const shouldUseSetupIntentApi = isAfter(new Date(booking.endDate), dayIn4days)
+			if (!booking.operator.stripeAccountId)
+				return {
+					operatorCannotProcessPaymentsError:
+						'This booking operator cannot process payments'
+				}
 
-// 			if (shouldUseSetupIntentApi) {
-// 				// Verify if the booking already has a setupIntentClientSecret
-// 				if (booking.setupIntentClientSecret) {
-// 					return {
-// 						clientSecret: booking.setupIntentClientSecret,
-// 						stripeTargetApi: STRIPE_TARGET_APIS.SETUP_INTENT,
-// 						hadRef: true,
-// 					}
-// 				} else {
-// 					// Verify if the user already has a stripeCustomerId or not
-// 					const profile = await ProfileModel.findById(ctx.user.profileId).lean()
-// 					let customerId
-// 					if (profile?.stripeCustomerId) {
-// 						customerId = profile.stripeCustomerId
-// 					} else {
-// 						const customer = await stripe.customers.create()
-// 						customerId = customer.id
-// 						await ProfileModel.findByIdAndUpdate(ctx.user.profileId, {
-// 							stripeCustomerId: customer.id,
-// 						})
-// 					}
-// 					const setupIntent = await stripe.setupIntents.create({
-// 						customer: customerId,
-// 						usage: 'off_session',
-// 						payment_method_types: ['card'],
-// 					})
+			const dayIn4days = addDays(new Date(), 4)
+			const shouldUseSetupIntentApi = isAfter(new Date(booking.endDate), dayIn4days)
 
-// 					const captureDate = addDays(new Date(booking.endDate), 2)
+			if (shouldUseSetupIntentApi) {
+				// Verify if the booking already has a setupIntentClientSecret
+				if (booking.stripePayment?.setupIntentClientSecret) {
+					return {
+						clientSecret: booking.stripePayment.setupIntentClientSecret,
+						stripeTargetApi: STRIPE_TARGET_APIS.SETUP_INTENT,
+						hadRef: true
+					}
+				} else {
+					// Verify if the user already has a stripeCustomerId or not
+					let customerId
+					if (booking.user?.stripeCustomerId) {
+						customerId = booking.user.stripeCustomerId
+					} else {
+						const customer = await stripe.customers.create()
+						customerId = customer.id
+						await prisma.user.update({
+							where: { id: userId },
+							data: { stripeCustomerId: customer.id }
+						})
+					}
 
-// 					await BookingModel.findByIdAndUpdate(booking._id, {
-// 						setupIntentClientSecret: setupIntent.client_secret,
-// 						setupIntentId: setupIntent.id,
-// 						paymentStatus: PAYMENT_STATUS.SETUP_INTENT_PENDING_CONFIRMATION,
-// 						captureDate: captureDate,
-// 						expectedPaymentIntentCreationDate: subDays(captureDate, 4),
-// 						sitterStripeAccountId: sitter.stripeAccountId,
-// 						ownerCustomerId: customerId,
-// 					})
+					const setupIntent = await stripe.setupIntents.create({
+						customer: customerId,
+						usage: 'off_session',
+						payment_method_types: ['card']
+					})
 
-// 					return {
-// 						clientSecret: setupIntent.client_secret,
-// 						stripeTargetApi: STRIPE_TARGET_APIS.SETUP_INTENT,
-// 						hadRef: false,
-// 					}
-// 				}
-// 			} else {
-// 				if (booking.paymentIntentClientSecret) {
-// 					return {
-// 						clientSecret: booking.paymentIntentClientSecret,
-// 						stripeTargetApi: STRIPE_TARGET_APIS.PAYMENT_INTENT,
-// 						hadRef: true,
-// 					}
-// 				} else {
-// 					// Add the donated percentage to the application fee amount to be
-// 					// later donated
-// 					let applicationFeeAmount: number
+					const captureDate = addDays(new Date(booking.endDate), 2)
 
-// 					const sitterHasValidPartnerShip =
-// 						sitter?.partnerId &&
-// 						sitter?.partnerPercentage &&
-// 						sitter?.partnerPercentage > 0
+					await prisma.stripePayment.create({
+						data: {
+							bookingId: booking.id,
+							setupIntentClientSecret: setupIntent.client_secret,
+							setupIntentId: setupIntent.id,
+							setupIntentCreationDate: new Date(),
+							status: PAYMENT_STATUS.SETUP_INTENT_PENDING_CONFIRMATION,
+							expectedPaymentIntentCaptureDate: captureDate
+						}
+					})
 
-// 					if (sitterHasValidPartnerShip) {
-// 						applicationFeeAmount =
-// 							booking.applicationFeeAmount +
-// 							getValueFromPercentage(
-// 								sitter.partnerPercentage,
-// 								booking.priceWithoutApplicationFee,
-// 							)
-// 					} else {
-// 						applicationFeeAmount = booking.applicationFeeAmount
-// 					}
+					return {
+						clientSecret: setupIntent.client_secret,
+						stripeTargetApi: STRIPE_TARGET_APIS.SETUP_INTENT,
+						hadRef: false
+					}
+				}
+			} else {
+				if (booking.stripePayment?.paymentIntentClientSecret) {
+					return {
+						clientSecret: booking.stripePayment.paymentIntentClientSecret,
+						stripeTargetApi: STRIPE_TARGET_APIS.PAYMENT_INTENT,
+						hadRef: true
+					}
+				} else {
+					// Add the donated percentage to the application fee amount to be
+					// later donated
+					let applicationFeeAmount: number
 
-// 					// Fees amounts in cents
-// 					const applicationFeeAmountInCents = priceInCents(applicationFeeAmount)
-// 					const bookingPriceWithApplicationFeeInCents = priceInCents(
-// 						booking.priceWithApplicationFee,
-// 					)
+					const sitterHasValidPartnerShip =
+						booking.operator?.partnerId &&
+						booking.operator?.partnerPercentage &&
+						booking.operator?.partnerPercentage > 0
 
-// 					const paymentIntent = await stripe.paymentIntents.create({
-// 						payment_method_types: ['card'],
-// 						amount: bookingPriceWithApplicationFeeInCents,
-// 						application_fee_amount: applicationFeeAmountInCents,
-// 						currency: 'eur',
-// 						capture_method: 'manual',
-// 						receipt_email: user?.email,
-// 						on_behalf_of: sitter!.stripeAccountId,
-// 						transfer_data: {
-// 							destination: sitter!.stripeAccountId,
-// 						},
-// 					})
+					if (sitterHasValidPartnerShip) {
+						applicationFeeAmount =
+							booking.applicationFeeAmount +
+							getValueFromPercentage(
+								booking.operator.partnerPercentage as number,
+								booking.priceWithOutApplicationFee
+							)
+					} else {
+						applicationFeeAmount = booking.applicationFeeAmount
+					}
 
-// 					await BookingModel.findByIdAndUpdate(booking._id, {
-// 						paymentIntentClientSecret: paymentIntent.client_secret,
-// 						paymentIntentId: paymentIntent.id,
-// 						paymentStatus: PAYMENT_STATUS.PENDING_AUTHORIZATION,
-// 						captureDate: addDays(new Date(booking.endDate), 2),
-// 						expectedPaymentIntentCreationDate: new Date(),
-// 						sitterStripeAccountId: sitter.stripeAccountId,
-// 					})
+					// Fees amounts in cents
+					const applicationFeeAmountInCents = priceInCents(applicationFeeAmount)
+					const bookingPriceWithApplicationFeeInCents = priceInCents(
+						booking.priceWithOutApplicationFee + applicationFeeAmount
+					)
 
-// 					return {
-// 						clientSecret: paymentIntent.client_secret,
-// 						stripeTargetApi: STRIPE_TARGET_APIS.PAYMENT_INTENT,
-// 						hadRef: false,
-// 					}
-// 				}
-// 			}
-// 		} catch (err) {
-// 			console.log(err)
-// 			return notFound()
-// 		}
-// 	},
-// })
+					const paymentIntent = await stripe.paymentIntents.create({
+						payment_method_types: ['card'],
+						amount: bookingPriceWithApplicationFeeInCents,
+						application_fee_amount: applicationFeeAmountInCents,
+						currency: 'eur',
+						capture_method: 'manual',
+						receipt_email: booking.user.account?.email,
+						on_behalf_of: booking.operator.stripeAccountId,
+						transfer_data: {
+							destination: booking.operator.stripeAccountId
+						}
+					})
+
+					await prisma.stripePayment.create({
+						data: {
+							bookingId: booking.id,
+							paymentIntentClientSecret: paymentIntent.client_secret,
+							paymentIntentId: paymentIntent.id,
+							status: PAYMENT_STATUS.PENDING_AUTHORIZATION,
+							expectedPaymentIntentCreationDate: new Date(),
+							expectedPaymentIntentCaptureDate: addDays(new Date(booking.endDate), 2)
+						}
+					})
+
+					return {
+						clientSecret: paymentIntent.client_secret,
+						stripeTargetApi: STRIPE_TARGET_APIS.PAYMENT_INTENT,
+						hadRef: false
+					}
+				}
+			}
+		} catch (err) {
+			console.error(err)
+			return UnableToProcessError
+		}
+	}
+})
 
 // export const updateBookingPaymentStatus = mutationField('updateBookingPaymentStatus', {
 // 	type: 'BooleanResponse',

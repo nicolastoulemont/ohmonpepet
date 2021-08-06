@@ -1,5 +1,4 @@
 import { getPercentage, getIntervalDays } from '../index'
-import prisma from '../../lib/prisma'
 
 interface BookingPriceParams {
 	coreServicePrice: number

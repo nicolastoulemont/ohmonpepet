@@ -44,6 +44,14 @@ union AllStaffsResult = StaffsList | UnableToProcessError | UserAuthenticationEr
 """The result of the allUsers query"""
 union AllUsersResult = UnableToProcessError | UserAuthenticationError | UserForbiddenError | UsersList
 
+union AuthorizePaymentResult = AuthorizedPayment | InvalidOperatorError | NotFoundError | OperatorCannotProcessPaymentsError | UnableToProcessError | UserAuthenticationError
+
+type AuthorizedPayment {
+  clientSecret: String
+  hadRef: Boolean
+  stripeTargetApi: String
+}
+
 type Booking implements Node {
   animalsIds: [ID]
   applictionFeeAmount: PositiveFloat
@@ -134,6 +142,10 @@ type BooleanResult {
   success: Boolean
 }
 
+union CancelBookingResult = Booking | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
+union CancelOnGoingBookingResult = Booking | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
 type CannotBookHimSelfError {
   cannotBookHimSelfError: String
 }
@@ -157,6 +169,8 @@ type ClaimsList {
 
 """The result of the bookingMessages query"""
 union ClaimsResult = ClaimsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+union ConfirmBookingResult = Booking | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 input CreateAccountInput {
   email: EmailAddress!
@@ -523,6 +537,10 @@ type InvalidArgumentsError {
   message: ErrorMessage!
 }
 
+type InvalidOperatorError {
+  invalidOperatorError: String
+}
+
 type IsActiveOperatorMainMediaError {
   activeOperatorMainMediaError: String!
 }
@@ -635,6 +653,10 @@ union ModifyEmailResult = Account | InvalidArgumentsError | NotFoundError | Unab
 union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError
 
 type Mutation {
+  authorizePayment(id: ID!): AuthorizePaymentResult
+  cancelBooking(canceledReason: String, id: ID!, source: String!): CancelBookingResult
+  cancelOnGoingBooking(canceledReason: String, id: ID!, source: String!): CancelOnGoingBookingResult
+  confirmBooking(id: ID!, source: String!): ConfirmBookingResult
   createAccount(input: CreateAccountInput!): CreateAccountResult
   createBooking(input: CreateBookingInput!): CreateBookingResult
   createBookingClaim(input: CreateBookingClaimInput!): CreateBookingClaimResult
@@ -743,6 +765,10 @@ type OperatorBookingMessage implements BookingMessage & Node {
   operatorId: ID
   readAt: DateTime
   updatedAt: DateTime
+}
+
+type OperatorCannotProcessPaymentsError {
+  operatorCannotProcessPaymentsError: String
 }
 
 type OperatorClaim implements Claim & Node {
