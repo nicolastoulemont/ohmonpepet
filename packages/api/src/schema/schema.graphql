@@ -142,7 +142,19 @@ type BooleanResult {
   success: Boolean
 }
 
+input CancelBookingInput {
+  canceledReason: String
+  id: ID!
+  source: SourceValue!
+}
+
 union CancelBookingResult = Booking | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
+input CancelOnGoingBookingInput {
+  canceledReason: String!
+  id: ID!
+  source: SourceValue!
+}
 
 union CancelOnGoingBookingResult = Booking | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
@@ -169,6 +181,11 @@ type ClaimsList {
 
 """The result of the bookingMessages query"""
 union ClaimsResult = ClaimsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+input ConfirmBookingInput {
+  id: ID!
+  source: SourceValue!
+}
 
 union ConfirmBookingResult = Booking | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
@@ -654,9 +671,9 @@ union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | U
 
 type Mutation {
   authorizePayment(id: ID!): AuthorizePaymentResult
-  cancelBooking(canceledReason: String, id: ID!, source: String!): CancelBookingResult
-  cancelOnGoingBooking(canceledReason: String, id: ID!, source: String!): CancelOnGoingBookingResult
-  confirmBooking(id: ID!, source: String!): ConfirmBookingResult
+  cancelBooking(input: CancelBookingInput!): CancelBookingResult
+  cancelOnGoingBooking(input: CancelOnGoingBookingInput!): CancelOnGoingBookingResult
+  confirmBooking(input: ConfirmBookingInput!): ConfirmBookingResult
   createAccount(input: CreateAccountInput!): CreateAccountResult
   createBooking(input: CreateBookingInput!): CreateBookingResult
   createBookingClaim(input: CreateBookingClaimInput!): CreateBookingClaimResult
@@ -703,6 +720,7 @@ type Mutation {
   startCron(cronName: String!): StartCronResult
   stopCron(cronName: String!): StopCronResult
   updateBookingMessage(id: ID!, input: UpdateBookingMessageInput!, saveAs: String!): UpdateBookingMessageResult
+  updateBookingPaymentStatus(input: UpdateBookingPaymentStatusInput!): UpdateBookingPaymentStatusResult
   updateDonationReceipt(input: UpdateDonationReceiptInput!): UpdateDonationReceiptResult
   updateGenderOption(id: ID!, input: UpdateGenderOptionInput!): UpdateGenderOptionResult
   updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
@@ -857,6 +875,10 @@ interface Payment implements Node {
   id: String!
   status: PaymentStatus!
   updatedAt: DateTime
+}
+
+type PaymentProcessorError {
+  paymentProcessorError: String
 }
 
 """All possible payment status"""
@@ -1074,6 +1096,9 @@ union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToP
 """The result of the signOut mutation"""
 union SignOutResult = BooleanResult | UserAuthenticationError
 
+"""A field whose value must be either: USER, OPERATOR"""
+scalar SourceValue
+
 type SpecieOption implements Node {
   createdAt: DateTime
 
@@ -1160,6 +1185,13 @@ input UpdateBookingMessageInput {
 }
 
 union UpdateBookingMessageResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
+
+input UpdateBookingPaymentStatusInput {
+  id: ID!
+  paymentMethodId: String
+}
+
+union UpdateBookingPaymentStatusResult = BooleanResult | InvalidArgumentsError | NotFoundError | PaymentProcessorError | UnableToProcessError | UserAuthenticationError
 
 input UpdateDonationReceiptInput {
   amountDonated: Float!

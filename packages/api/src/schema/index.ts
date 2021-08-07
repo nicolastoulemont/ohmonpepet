@@ -28,6 +28,7 @@ export const schema = makeSchema({
 			EmailAddress: 'string',
 			JWT: 'string',
 			SaveAsValue: `'user' | 'operator' | 'staff'`,
+			SourceValue: `'USER' | 'OPERATOR'`,
 			Latitude: 'number',
 			Longitude: 'number',
 			URL: 'string',
