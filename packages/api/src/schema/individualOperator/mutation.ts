@@ -1,6 +1,13 @@
 import { inputObjectType, mutationField, nonNull, unionType, arg } from 'nexus'
-import { NotFoundError, PartialInvalidArgumentsError, UnableToProcessError } from '../../utils'
+import {
+	authorize,
+	checkArgs,
+	NotFoundError,
+	PartialInvalidArgumentsError,
+	UnableToProcessError
+} from '../../utils'
 import prisma from '../../lib/prisma'
+export * from './services'
 
 export const createIndividualOperatorInput = inputObjectType({
 	name: 'CreateIndividualOperatorInput',
@@ -32,6 +39,7 @@ export const createIndividualOperator = mutationField('createIndividualOperator'
 	args: {
 		input: nonNull(arg({ type: createIndividualOperatorInput }))
 	},
+	authorization: (ctx) => authorize(ctx, 'user'),
 	async resolve(_, { input }, { user, req }) {
 		const existingOperator = await prisma.operator.findUnique({
 			where: { accountId: user.accountId }
@@ -101,12 +109,14 @@ export const updateIndividualOperatorResult = unionType({
 export const updateIndividualOperator = mutationField('updateIndividualOperator', {
 	type: 'IndividualOperatorResult',
 	args: {
-		input: nonNull(arg({ type: createIndividualOperatorInput }))
+		input: nonNull(arg({ type: 'UpdateIndividualOperatorInput' }))
 	},
+	authorization: (ctx) => authorize(ctx, 'operator'),
 	async resolve(_, { input }, { user: { accountId } }) {
 		try {
 			const operator = await prisma.operator.update({
 				where: { accountId },
+				// @ts-expect-error
 				data: { ...input }
 			})
 			if (!operator) return NotFoundError

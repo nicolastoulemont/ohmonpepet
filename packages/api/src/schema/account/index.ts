@@ -28,6 +28,15 @@ export const Account = objectType({
 					})
 					.staff()
 		})
+		t.field('operator', {
+			type: 'Operator',
+			resolve: async (a) =>
+				await prisma.account
+					.findUnique({
+						where: { id: a.id }
+					})
+					.operator()
+		})
 	}
 })
 

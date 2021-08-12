@@ -102,7 +102,8 @@ model OperatorAvailability {
   operatorId String
   date       DateTime @db.Date
 
-  @@index(fields: [date], name: "availability_date_index")
+  @@unique([date, operatorId])
+  @@index(fields: [date], name: "operator_availability_date_index")
 }
 
 model CoreOperatorService {
@@ -114,6 +115,9 @@ model CoreOperatorService {
   service         ServiceOption @relation(fields: [serviceOptionId], references: [id])
   serviceOptionId String
   price           Int
+
+  @@index(fields: [serviceOptionId], name: "operator_service_option_id_index")
+  @@index(fields: [price], name: "operator_service_price_index")
 }
 
 model ExtraOperatorService {
@@ -154,6 +158,8 @@ model Location {
   longitude    Float
   operator     Operator @relation(fields: [operatorId], references: [id])
   operatorId   String
+
+  @@index(fields: [latitude, longitude], name: "operator_latitude_longitude_index")
 }
 
 model Partner {
@@ -194,7 +200,7 @@ model DonationsReceipt {
   updatedAt     DateTime   @updatedAt
   amountDonated Float
   partner       Partner    @relation(fields: [partnerId], references: [id])
-  partnerId     String
+  partnerId     String     @unique
   author        Staff      @relation(fields: [staffId], references: [id])
   staffId       String
   files         Media[]

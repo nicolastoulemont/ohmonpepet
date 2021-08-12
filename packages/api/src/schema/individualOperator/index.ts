@@ -1,7 +1,9 @@
 import { objectType, unionType } from 'nexus'
 import prisma from '../../lib/prisma'
-// export * from './query'
+export * from './query'
 export * from './mutation'
+export * from './services'
+export * from './availability'
 
 export const IndividualOperator = objectType({
 	isTypeOf: (data) => Boolean((data as any).birthDate),
@@ -9,7 +11,6 @@ export const IndividualOperator = objectType({
 	definition(t) {
 		t.implements('Operator')
 		t.date('birthDate')
-		t.string('genderOptionId')
 		t.field('account', {
 			type: 'Account',
 			resolve: async (i) =>
@@ -19,6 +20,42 @@ export const IndividualOperator = objectType({
 					})
 					.account()
 		})
+		t.field('hosting', {
+			type: 'HostingOption',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.hosting()
+		})
+		t.field('gender', {
+			type: 'GenderOption',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.gender()
+		})
+		t.field('partner', {
+			type: 'Partner',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.partner()
+		})
+		t.field('extraServices', {
+			type: 'Account',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.extraServices()
+		})
 		t.list.field('medias', {
 			type: 'Media',
 			resolve: async (i) =>
@@ -27,6 +64,24 @@ export const IndividualOperator = objectType({
 						where: { id: i.id }
 					})
 					.medias()
+		})
+		t.list.field('coreServices', {
+			type: 'IndividualOperatorCoreService',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.coreServices()
+		})
+		t.list.field('availabilities', {
+			type: 'OperatorAvailability',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.availabilities()
 		})
 	}
 })

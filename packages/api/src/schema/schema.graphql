@@ -8,6 +8,7 @@ type Account implements Node {
 
   """GUID for a resource"""
   id: String!
+  operator: Operator
   staff: Staff
   updatedAt: DateTime
   user: User
@@ -37,6 +38,8 @@ interface Actor implements Node {
 
 """The result of the accounts query"""
 union AllAccountsResult = AccountsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+union AllOperatorsResult = Operators | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 """The result of the allStaffs query"""
 union AllStaffsResult = StaffsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
@@ -266,6 +269,15 @@ input CreateIndividualOperatorInput {
 """The result of the createIndividualOperator mutation"""
 union CreateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | UnableToProcessError
 
+input CreateInvidualOperatorCoreServicesInput {
+  price: Int!
+  serviceOptionId: ID!
+}
+
+union CreateInvidualOperatorCoreServicesResult = BooleanResult | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
+
+union CreateInvidualOperatorExtraServicesResult = BooleanResult | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
+
 input CreateLanguageOptionInput {
   mediaId: String!
   nameEn: String!
@@ -281,6 +293,12 @@ input CreateMediaInput {
 }
 
 union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+input CreateOperatorAvailabilityInput {
+  date: Date!
+}
+
+union CreateOperatorAvailabilityResult = BooleanResult | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
 
 input CreatePartnerInput {
   description: String!
@@ -338,6 +356,8 @@ union CurrentOperatorDonationsResult = DonationsList | UnableToProcessError | Us
 """The result of the currentOperatorMedia query"""
 union CurrentOperatorMediaResult = NotFoundError | OperatorMedia | SharedMedia | UserAuthenticationError | UserForbiddenError
 
+union CurrentOperatorResult = IndividualOperator | NotFoundError | UserAuthenticationError | UserForbiddenError
+
 input CurrentUserBookingFilterInput {
   endDate: Date
   includeFinished: Boolean
@@ -377,10 +397,16 @@ union DeleteGenderOptionResult = BooleanResult | InvalidArgumentsError | NotFoun
 
 union DeleteHostingOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
+union DeleteInvidualOperatorCoreServicesResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
+union DeleteInvidualOperatorExtraServicesResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
 union DeleteLanguageOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
 """The result of the deleteMedia mutation"""
 union DeleteMediaResult = BooleanResult | InvalidArgumentsError | IsActiveOperatorMainMediaError | IsActiveOperatorWithNoReplacementMediaError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
+union DeleteOperatorAvailabilityResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 union DeletePartnerResult = BooleanResult | UserAuthenticationError | UserForbiddenError
 
@@ -521,11 +547,15 @@ type IndividualOperator implements Actor & Node & Operator {
   acceptedSpecieOptionsIds: [String]
   account: Account
   accountId: ID
+  availabilities: [OperatorAvailability]
   birthDate: Date
   calendarUpdate: DateTime
+  coreServices: [IndividualOperatorCoreService]
   createdAt: DateTime
   description: String
-  genderOptionId: String
+  extraServices: Account
+  gender: GenderOption
+  hosting: HostingOption
   hostingOptionId: String
 
   """GUID for a resource"""
@@ -534,9 +564,49 @@ type IndividualOperator implements Actor & Node & Operator {
   mainMediaId: String
   medias: [Media]
   ownAnimalsSpecieOptionsIds: [String]
+  partner: Partner
   partnerId: String
   partnerPercentage: Int
   stripeAccountId: String
+  updatedAt: DateTime
+}
+
+type IndividualOperatorCoreService implements Node {
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  operator: IndividualOperator
+  price: Int!
+  service: ServiceOption
+  serviceOptionId: ID!
+  updatedAt: DateTime
+}
+
+type IndividualOperatorExtraService implements Node {
+  abilityToProvideMedicalCare: Boolean
+  acceptShortNotice: Boolean
+  atHomeComeGetPet: Boolean
+  atHomeComeGetPetExtraPrice: Int
+  atHomeContinuously: Boolean
+  atHomeContinuouslyExtraPrice: Int
+  atHomeExclusivity: Boolean
+  atHomeExlusivityExtraPrice: Int
+  atHomeOnlyBringPet: Boolean
+  atHomeOnlyBringPetExtraPrice: Int
+  atOwnerHomeCurtains: Boolean
+  atOwnerHomeCurtainsExtraPrice: Int
+  atOwnerHomeMail: Boolean
+  atOwnerHomeMailExtraPrice: Int
+  atOwnerHomePlantsCare: Boolean
+  atOwnerHomePlantsCareExtraPrice: Int
+  createdAt: DateTime
+  flexibleCancelation: Boolean
+
+  """GUID for a resource"""
+  id: String!
+  isProfessionalOperator: Boolean
+  operator: IndividualOperator
   updatedAt: DateTime
 }
 
@@ -556,6 +626,27 @@ type InvalidArgumentsError {
 
 type InvalidOperatorError {
   invalidOperatorError: String
+}
+
+input InvidualOperatorExtraServicesInput {
+  abilityToProvideMedicalCare: Boolean
+  acceptShortNotice: Boolean
+  atHomeComeGetPet: Boolean
+  atHomeComeGetPetExtraPrice: Int
+  atHomeContinuously: Boolean
+  atHomeContinuouslyExtraPrice: Int
+  atHomeExclusivity: Boolean
+  atHomeExlusivityExtraPrice: Int
+  atHomeOnlyBringPet: Boolean
+  atHomeOnlyBringPetExtraPrice: Int
+  atOwnerHomeCurtains: Boolean
+  atOwnerHomeCurtainsExtraPrice: Int
+  atOwnerHomeMail: Boolean
+  atOwnerHomeMailExtraPrice: Int
+  atOwnerHomePlantsCare: Boolean
+  atOwnerHomePlantsCareExtraPrice: Int
+  flexibleCancelation: Boolean
+  isProfessionalOperator: Boolean
 }
 
 type IsActiveOperatorMainMediaError {
@@ -682,8 +773,11 @@ type Mutation {
   createGenderOption(input: CreateGenderOptionInput!): CreateGenderOptionResult
   createHostingOption(input: CreateHostingOptionInput!): CreateHostingOptionResult
   createIndividualOperator(input: CreateIndividualOperatorInput!): CreateIndividualOperatorResult
+  createInvidualOperatorCoreServices(input: CreateInvidualOperatorCoreServicesInput!): CreateInvidualOperatorCoreServicesResult
+  createInvidualOperatorExtraServices(input: InvidualOperatorExtraServicesInput!): CreateInvidualOperatorExtraServicesResult
   createLanguageOption(input: CreateLanguageOptionInput!): CreateLanguageOptionResult
   createMedia(input: CreateMediaInput!): CreateMediaResult
+  createOperatorAvailability(input: CreateOperatorAvailabilityInput!): CreateOperatorAvailabilityResult
   createPartner(input: CreatePartnerInput!): CreatePartnerResult
   createReview(input: CreateReviewInput!): CreateReviewResult
   createServiceOption(input: CreateServiceOptionInput!): CreateServiceOptionResult
@@ -694,11 +788,14 @@ type Mutation {
   deleteAccount(confirmPassword: String!): DeleteAccountResult
   deleteBookingMessage(id: ID!): DeleteBookingMessageResult
   deleteClaim(id: ID!): DeleteClaimResult
+  deleteCoreIndividualOperatorService(id: ID!): DeleteInvidualOperatorCoreServicesResult
   deleteDonationReceipt(id: ID!): DeleteDonationReceiptResult
+  deleteExtraIndividualOperatorService(id: ID!): DeleteInvidualOperatorExtraServicesResult
   deleteGenderOption(id: ID!): DeleteGenderOptionResult
   deleteHostingOption(id: ID!): DeleteHostingOptionResult
   deleteLanguageOption(id: ID!): DeleteLanguageOptionResult
   deleteMedia(mediaId: ID!): DeleteMediaResult
+  deleteOperatorAvailability(id: ID!): DeleteOperatorAvailabilityResult
   deletePartner(id: ID!): DeletePartnerResult
   deleteReview(id: ID!): DeleteReviewResult
   deleteServiceOption(id: ID!): DeleteServiceOptionResult
@@ -724,7 +821,9 @@ type Mutation {
   updateDonationReceipt(input: UpdateDonationReceiptInput!): UpdateDonationReceiptResult
   updateGenderOption(id: ID!, input: UpdateGenderOptionInput!): UpdateGenderOptionResult
   updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
-  updateIndividualOperator(input: CreateIndividualOperatorInput!): IndividualOperatorResult
+  updateIndividualOperator(input: UpdateIndividualOperatorInput!): IndividualOperatorResult
+  updateInvidualOperatorCoreServices(input: UpdateInvidualOperatorCoreServicesInput!): UpdateInvidualOperatorCoreServicesResult
+  updateInvidualOperatorExtraServices(id: ID!, input: InvidualOperatorExtraServicesInput!): UpdateInvidualOperatorExtraServicesResult
   updateLanguageOption(id: ID!, input: UpdateLanguageOptionInput!): UpdateLanguageOptionResult
   updatePartner(id: ID!, input: UpdatePartnerInput!): UpdatePartnerResult
   updateReview(id: ID!, input: UpdateReviewInput!, saveAs: String!): UpdateReviewResult
@@ -772,6 +871,16 @@ interface Operator implements Actor & Node {
   updatedAt: DateTime
 }
 
+type OperatorAvailability implements Node {
+  createdAt: DateTime
+  date: Date
+
+  """GUID for a resource"""
+  id: String!
+  operator: IndividualOperator
+  updatedAt: DateTime
+}
+
 type OperatorBookingMessage implements BookingMessage & Node {
   content: String!
   createdAt: DateTime
@@ -784,6 +893,8 @@ type OperatorBookingMessage implements BookingMessage & Node {
   readAt: DateTime
   updatedAt: DateTime
 }
+
+union OperatorByIdResult = IndividualOperator | NotFoundError
 
 type OperatorCannotProcessPaymentsError {
   operatorCannotProcessPaymentsError: String
@@ -826,6 +937,10 @@ type OperatorReview implements Node & Review {
   score: Float!
   title: String!
   updatedAt: DateTime
+}
+
+type Operators {
+  operators: [IndividualOperator]
 }
 
 type Partner implements Node {
@@ -912,6 +1027,7 @@ type Query {
 
   """Access restricted to admin users"""
   allAccounts: AllAccountsResult
+  allOperators: AllOperatorsResult
 
   """Access restricted to Staff Staffs"""
   allStaffs: AllStaffsResult
@@ -934,6 +1050,7 @@ type Query {
 
   """Access restricted to logged in user"""
   currentAccount: CurrentAccountResult
+  currentOperator: CurrentOperatorResult
   currentOperatorDonations: CurrentOperatorDonationsResult
 
   """Access restricted to logged in user"""
@@ -959,6 +1076,7 @@ type Query {
 
   """Access restricted to admin users"""
   medias: MediasResult
+  operatorById(id: ID!): OperatorByIdResult
   partnerById(id: ID!): PartnerByIdResult
   receiptById(id: ID!): DonationReceiptByIdResult
 
@@ -969,6 +1087,7 @@ type Query {
   reviews: ReviewsResult
   searchDonationReceipts(input: SearchDonationReceiptsInput!): SearchDonationReceiptsResult
   searchDonations(input: SearchDonationsInput!): SearchDonationsResult
+  searchOperators(input: SearchOperatorsInput!): SearchOperatorsResult
   searchPartners(input: SearchPartnersInput!): SearchPartnersResult
 
   """Access restricted to admin users"""
@@ -1037,6 +1156,35 @@ input SearchDonationsInput {
 }
 
 union SearchDonationsResult = DonationsList | InvalidArgumentsError | UnableToProcessError
+
+input SearchOperatorsInput {
+  abilityToProvideMedicalCare: Boolean
+  acceptShortNotice: Boolean
+  acceptedSpecieOptionsIds: [ID!]
+  atHomeComeGetPet: Boolean
+  atHomeContinuously: Boolean
+  atHomeExclusivity: Boolean
+  atHomeOnlyBringPet: Boolean
+  atOwnerHomeCurtains: Boolean
+  atOwnerHomeMail: Boolean
+  atOwnerHomePlantsCare: Boolean
+  endDate: Date!
+  flexibleCancelation: Boolean
+  genderOptionId: [String!]
+  hostingOptionId: [String!]
+  isProfessionalOperator: Boolean
+  languageOptionIds: [ID!]
+  latitude: Latitude!
+  longitude: Longitude!
+  maxDistanceInKms: Float = 10
+  ownAnimalsSpecieOptionsIds: [ID!]
+  score: Float
+  serviceMaxPrice: Float
+  serviceOptionId: String
+  startDate: Date!
+}
+
+union SearchOperatorsResult = Operators | UnableToProcessError
 
 input SearchPartnersInput {
   query: String!
@@ -1233,6 +1381,16 @@ input UpdateIndividualOperatorInput {
 
 """The result of the updateIndividualOperator mutation"""
 union UpdateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | NotFoundError | UnableToProcessError
+
+input UpdateInvidualOperatorCoreServicesInput {
+  coreOperatorServiceId: ID!
+  price: Int!
+  serviceOptionId: ID!
+}
+
+union UpdateInvidualOperatorCoreServicesResult = BooleanResult | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
+
+union UpdateInvidualOperatorExtraServicesResult = BooleanResult | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
 
 input UpdateLanguageOptionInput {
   mediaId: ID
