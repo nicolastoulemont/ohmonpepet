@@ -72,6 +72,29 @@ export const createReview = mutationField('createReview', {
 				}
 			})
 
+			if (saveAs === 'user') {
+				const operator = await prisma.booking
+					.findUnique({ where: { id: bookingId } })
+					.operator()
+
+				if (operator) {
+					const operatorReviews = await prisma.review.findMany({
+						where: { operatorId: operator.id }
+					})
+
+					const scores = operatorReviews.map((review) => review.score)
+					const newAverageScore =
+						(scores.reduce((acc, s) => acc + s, 0) + score) / (scores.length + 1)
+
+					await prisma.operator.update({
+						where: { id: operator.id },
+						data: {
+							averageScore: newAverageScore
+						}
+					})
+				}
+			}
+
 			return review
 		} catch (err) {
 			return UnableToProcessError

@@ -75,6 +75,7 @@ model Operator {
   stripeAccountId            String?
   calendarUpdate             DateTime?
   averageResponseTime        DateTime?
+  averageScore               Float?
   accountId                  String                 @unique
   account                    Account                @relation(fields: [accountId], references: [id])
   gender                     GenderOption?          @relation(fields: [genderOptionId], references: [id])
