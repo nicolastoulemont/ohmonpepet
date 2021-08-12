@@ -174,7 +174,12 @@ export const searchOperators = queryField('searchOperators', {
 							}
 						}
 					}),
-					// Availabilities input here is incomplete due to the lack of capacity in prisma to filter relations with hasEvery condition
+					...(input.score && {
+						averageScore: { gte: input.score }
+					}),
+					// Availabilities filter here is incomplete due to the lack of capacity in prisma to filter relations with hasEvery condition
+					// so we fall on the in instead and will perform an additional filter on the return operators
+					// this issue could be turned into a feature -> proposing at the end of the returned list some operators whose availabilities are uncertain ?
 					// We still include a SOME query to reduce the numbers of operators a bit
 					availabilities: {
 						some: {
@@ -202,7 +207,7 @@ export const searchOperators = queryField('searchOperators', {
 					})
 				},
 				include: {
-					availabilities: true
+					availabilities: { where: { date: { gte: subDays(new Date(), 1) } } } // Only dates after yesterday to reduce the length of the array to the only the need fields
 				}
 			})
 
