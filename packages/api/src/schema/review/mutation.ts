@@ -158,9 +158,33 @@ export const updateReview = mutationField('updateReview', {
 					...(saveAs === 'operator' && operatorId && { operatorId }),
 					...(saveAs === 'user' && { userId })
 				},
-				data: { ...input }
+				data: { ...input },
+				include: {
+					booking: { select: { id: true } },
+					operator: {
+						select: {
+							id: true,
+							reviews: {
+								where: { id: { not: id } }
+							}
+						}
+					}
+				}
 			})
 			if (!review) return NotFoundError
+
+			if (saveAs === 'user' && review.score !== input.score) {
+				const scores = review.operator?.reviews.map((review) => review.score) ?? []
+				const newAverageScore =
+					(scores.reduce((acc, s) => acc + s, 0) + input.score) / (scores.length + 1)
+
+				await prisma.operator.update({
+					where: { id: review.operator?.id },
+					data: {
+						averageScore: newAverageScore
+					}
+				})
+			}
 			return review
 		} catch (err) {
 			return UnableToProcessError
@@ -192,10 +216,32 @@ export const deleteReview = mutationField('deleteReview', {
 	async resolve(_, { id }, { user: { userId, operatorId } }) {
 		try {
 			const [review] = await prisma.review.findMany({
-				where: { id, AND: [{ OR: [{ userId }, { operatorId }] }] }
+				where: { id, AND: [{ OR: [{ userId }, { operatorId }] }] },
+				include: {
+					operator: {
+						select: {
+							id: true,
+							reviews: {
+								where: {
+									id: { not: id }
+								}
+							}
+						}
+					}
+				}
 			})
 
 			if (!review) return NotFoundError
+
+			const scores = review.operator?.reviews.map((review) => review.score) ?? []
+			const newAverageScore = scores.reduce((acc, s) => acc + s, 0) / scores.length
+
+			await prisma.operator.update({
+				where: { id: review.operator?.id },
+				data: {
+					averageScore: newAverageScore
+				}
+			})
 
 			await prisma.review.delete({ where: { id: review.id } })
 
