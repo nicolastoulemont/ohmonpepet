@@ -98,6 +98,7 @@ type BookingAd implements Node {
 
   """GUID for a resource"""
   id: String!
+  location: Location
   service: ServiceOption
   serviceMaxPrice: Float
   serviceOptionId: String!
@@ -607,6 +608,7 @@ type IndividualOperator implements Actor & Node & Operator {
   account: Account
   accountId: ID
   availabilities: [OperatorAvailability]
+  avatar: Media
   bids: [BookingAdBid]
   birthDate: Date
   calendarUpdate: DateTime
@@ -622,6 +624,7 @@ type IndividualOperator implements Actor & Node & Operator {
   """GUID for a resource"""
   id: String!
   languageOptionIds: [String]
+  location: Location
   mainMediaId: String
   medias: [Media]
   ownAnimalsSpecieOptionsIds: [String]
@@ -766,6 +769,22 @@ union LanguageOptionsResult = LanguageOptionsList | UnableToProcessError
 A field whose value is a valid decimal degrees latitude number (53.471): https://en.wikipedia.org/wiki/Latitude
 """
 scalar Latitude
+
+type Location implements Node {
+  address: String
+  bookingAd: BookingAd
+  country: String
+  country_code: String
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  latitude: Latitude!
+  longitude: Longitude!
+  operator: Operator
+  postcode: String
+  updatedAt: DateTime
+}
 
 """
 A field whose value is a valid decimal degrees longitude number (53.471): https://en.wikipedia.org/wiki/Longitude
@@ -1381,6 +1400,7 @@ union StartCronResult = BooleanResult | UserAuthenticationError | UserForbiddenE
 union StopCronResult = BooleanResult | UserAuthenticationError | UserForbiddenError
 
 type StorageInfos {
+  mediaId: ID!
   signedRequest: String
   url: String
 }

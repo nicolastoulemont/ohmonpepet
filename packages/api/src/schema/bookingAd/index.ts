@@ -19,6 +19,15 @@ export const BookingAd = objectType({
 			resolve: async ({ id }) =>
 				await prisma.bookingAd.findUnique({ where: { id } }).service()
 		})
+		t.field('location', {
+			type: 'Location',
+			resolve: async (b) =>
+				await prisma.bookingAd
+					.findUnique({
+						where: { id: b.id }
+					})
+					.location()
+		})
 		t.list.field('animals', {
 			type: 'SpecieOption',
 			resolve: async ({ animalsSpeciesIds }) =>

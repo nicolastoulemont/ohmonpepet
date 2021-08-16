@@ -11,6 +11,11 @@ export const IndividualOperator = objectType({
 	definition(t) {
 		t.implements('Operator')
 		t.date('birthDate')
+		t.field('avatar', {
+			type: 'Media',
+			resolve: async (i) =>
+				await prisma.media.findUnique({ where: { id: i.mainMediaId as string } })
+		})
 		t.field('account', {
 			type: 'Account',
 			resolve: async (i) =>
@@ -19,6 +24,15 @@ export const IndividualOperator = objectType({
 						where: { id: i.id }
 					})
 					.account()
+		})
+		t.field('location', {
+			type: 'Location',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.location()
 		})
 		t.field('hosting', {
 			type: 'HostingOption',

@@ -18,6 +18,7 @@ export const StorageInfos = objectType({
 	definition(t) {
 		t.string('signedRequest')
 		t.string('url')
+		t.nonNull.id('mediaId')
 	}
 })
 
@@ -71,24 +72,22 @@ export const createMedia = mutationField('createMedia', {
 		try {
 			const signedRequest = await getS3SignedUrl({ fileName, fileType })
 			const storeUrl = getS3StoreUrl(fileName)
-			try {
-				await prisma.media.create({
-					data: {
-						mediaType: fileType.includes('video') ? 'VIDEO' : 'IMAGE',
-						storeUrl,
-						storageProvider: 'AWS',
-						...(saveAs === 'staff' && staffId && { staffId }),
-						...(saveAs === 'operator' && operatorId && { operatorId }),
-						...(saveAs === 'user' && { userId })
-					}
-				})
-			} catch (error) {
-				return UnableToProcessError
-			}
+
+			const media = await prisma.media.create({
+				data: {
+					mediaType: fileType.includes('video') ? 'VIDEO' : 'IMAGE',
+					storeUrl,
+					storageProvider: 'AWS',
+					...(saveAs === 'staff' && staffId && { staffId }),
+					...(saveAs === 'operator' && operatorId && { operatorId }),
+					...(saveAs === 'user' && { userId })
+				}
+			})
 
 			return {
 				signedRequest,
-				url: storeUrl
+				url: storeUrl,
+				mediaId: media.id
 			}
 		} catch (error) {
 			return UnableToProcessError
@@ -167,8 +166,8 @@ export const deleteMedia = mutationField('deleteMedia', {
 					} else {
 						const { success } = await deleteS3Media(media.storeUrl)
 						if (success) {
-							await prisma.media.delete({
-								where: { id: mediaId }
+							await prisma.media.deleteMany({
+								where: { id: mediaId, operatorId }
 							})
 							return { success: true }
 						} else {
@@ -178,8 +177,8 @@ export const deleteMedia = mutationField('deleteMedia', {
 				} else {
 					const { success } = await deleteS3Media(media.storeUrl)
 					if (success) {
-						await prisma.media.delete({
-							where: { id: mediaId }
+						await prisma.media.deleteMany({
+							where: { id: mediaId, operatorId }
 						})
 						return { success: true }
 					} else {
@@ -190,8 +189,8 @@ export const deleteMedia = mutationField('deleteMedia', {
 				try {
 					const { success } = await deleteS3Media(media.storeUrl)
 					if (success) {
-						await prisma.media.delete({
-							where: { id: mediaId }
+						await prisma.media.deleteMany({
+							where: { id: mediaId, operatorId }
 						})
 						return { success: true }
 					} else {

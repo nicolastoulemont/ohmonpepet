@@ -630,6 +630,17 @@ export interface NexusGenObjects {
   LanguageOptionsList: { // root type
     languageOptions?: Array<NexusGenRootTypes['LanguageOption'] | null> | null; // [LanguageOption]
   }
+  Location: { // root type
+    address?: string | null; // String
+    country?: string | null; // String
+    country_code?: string | null; // String
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    latitude: NexusGenScalars['Latitude']; // Latitude!
+    longitude: NexusGenScalars['Longitude']; // Longitude!
+    postcode?: string | null; // String
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+  }
   MediasList: { // root type
     medias?: Array<NexusGenRootTypes['Media'] | null> | null; // [Media]
   }
@@ -764,6 +775,7 @@ export interface NexusGenObjects {
     staffs?: Array<NexusGenRootTypes['Staff'] | null> | null; // [Staff]
   }
   StorageInfos: { // root type
+    mediaId: string; // ID!
     signedRequest?: string | null; // String
     url?: string | null; // String
   }
@@ -831,7 +843,7 @@ export interface NexusGenInterfaces {
   BookingMessage: NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['UserBookingMessage'];
   Claim: NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['UserClaim'];
   Media: NexusGenRootTypes['DonationReceiptMedia'] | NexusGenRootTypes['LanguageOptionMedia'] | NexusGenRootTypes['MessageMedia'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['PartnerMedia'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['UserMedia'];
-  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['Booking'] | NexusGenRootTypes['BookingAd'] | NexusGenRootTypes['BookingAdBid'] | NexusGenRootTypes['Donation'] | NexusGenRootTypes['DonationReceipt'] | NexusGenRootTypes['DonationReceiptMedia'] | NexusGenRootTypes['GenderOption'] | NexusGenRootTypes['HostingOption'] | NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['IndividualOperatorCoreService'] | NexusGenRootTypes['IndividualOperatorExtraService'] | NexusGenRootTypes['LanguageOption'] | NexusGenRootTypes['LanguageOptionMedia'] | NexusGenRootTypes['MessageMedia'] | NexusGenRootTypes['OperatorAvailability'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['OperatorReview'] | NexusGenRootTypes['Partner'] | NexusGenRootTypes['PartnerMedia'] | NexusGenRootTypes['ServiceOption'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['SpecieOption'] | NexusGenRootTypes['Staff'] | NexusGenRootTypes['StripePayment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserBookingMessage'] | NexusGenRootTypes['UserClaim'] | NexusGenRootTypes['UserMedia'] | NexusGenRootTypes['UserReview'];
+  Node: NexusGenRootTypes['Account'] | NexusGenRootTypes['Booking'] | NexusGenRootTypes['BookingAd'] | NexusGenRootTypes['BookingAdBid'] | NexusGenRootTypes['Donation'] | NexusGenRootTypes['DonationReceipt'] | NexusGenRootTypes['DonationReceiptMedia'] | NexusGenRootTypes['GenderOption'] | NexusGenRootTypes['HostingOption'] | NexusGenRootTypes['IndividualOperator'] | NexusGenRootTypes['IndividualOperatorCoreService'] | NexusGenRootTypes['IndividualOperatorExtraService'] | NexusGenRootTypes['LanguageOption'] | NexusGenRootTypes['LanguageOptionMedia'] | NexusGenRootTypes['Location'] | NexusGenRootTypes['MessageMedia'] | NexusGenRootTypes['OperatorAvailability'] | NexusGenRootTypes['OperatorBookingMessage'] | NexusGenRootTypes['OperatorClaim'] | NexusGenRootTypes['OperatorMedia'] | NexusGenRootTypes['OperatorReview'] | NexusGenRootTypes['Partner'] | NexusGenRootTypes['PartnerMedia'] | NexusGenRootTypes['ServiceOption'] | NexusGenRootTypes['SharedMedia'] | NexusGenRootTypes['SpecieOption'] | NexusGenRootTypes['Staff'] | NexusGenRootTypes['StripePayment'] | NexusGenRootTypes['User'] | NexusGenRootTypes['UserBookingMessage'] | NexusGenRootTypes['UserClaim'] | NexusGenRootTypes['UserMedia'] | NexusGenRootTypes['UserReview'];
   Operator: NexusGenRootTypes['IndividualOperator'];
   Payment: NexusGenRootTypes['StripePayment'];
   Review: NexusGenRootTypes['OperatorReview'] | NexusGenRootTypes['UserReview'];
@@ -1019,6 +1031,7 @@ export interface NexusGenFieldTypes {
     description: string | null; // String
     endDate: NexusGenScalars['Date'] | null; // Date
     id: string; // String!
+    location: NexusGenRootTypes['Location'] | null; // Location
     service: NexusGenRootTypes['ServiceOption'] | null; // ServiceOption
     serviceMaxPrice: number | null; // Float
     serviceOptionId: string; // String!
@@ -1112,6 +1125,7 @@ export interface NexusGenFieldTypes {
     account: NexusGenRootTypes['Account'] | null; // Account
     accountId: string | null; // ID
     availabilities: Array<NexusGenRootTypes['OperatorAvailability'] | null> | null; // [OperatorAvailability]
+    avatar: NexusGenRootTypes['Media'] | null; // Media
     bids: Array<NexusGenRootTypes['BookingAdBid'] | null> | null; // [BookingAdBid]
     birthDate: NexusGenScalars['Date'] | null; // Date
     calendarUpdate: NexusGenScalars['DateTime'] | null; // DateTime
@@ -1125,6 +1139,7 @@ export interface NexusGenFieldTypes {
     hostingOptionId: string | null; // String
     id: string; // String!
     languageOptionIds: Array<string | null> | null; // [String]
+    location: NexusGenRootTypes['Location'] | null; // Location
     mainMediaId: string | null; // String
     medias: Array<NexusGenRootTypes['Media'] | null> | null; // [Media]
     ownAnimalsSpecieOptionsIds: Array<string | null> | null; // [String]
@@ -1204,6 +1219,19 @@ export interface NexusGenFieldTypes {
   }
   LanguageOptionsList: { // field return type
     languageOptions: Array<NexusGenRootTypes['LanguageOption'] | null> | null; // [LanguageOption]
+  }
+  Location: { // field return type
+    address: string | null; // String
+    bookingAd: NexusGenRootTypes['BookingAd'] | null; // BookingAd
+    country: string | null; // String
+    country_code: string | null; // String
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    latitude: NexusGenScalars['Latitude']; // Latitude!
+    longitude: NexusGenScalars['Longitude']; // Longitude!
+    operator: NexusGenRootTypes['Operator'] | null; // Operator
+    postcode: string | null; // String
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   MediasList: { // field return type
     medias: Array<NexusGenRootTypes['Media'] | null> | null; // [Media]
@@ -1476,6 +1504,7 @@ export interface NexusGenFieldTypes {
     staffs: Array<NexusGenRootTypes['Staff'] | null> | null; // [Staff]
   }
   StorageInfos: { // field return type
+    mediaId: string; // ID!
     signedRequest: string | null; // String
     url: string | null; // String
   }
@@ -1681,6 +1710,7 @@ export interface NexusGenFieldTypeNames {
     description: 'String'
     endDate: 'Date'
     id: 'String'
+    location: 'Location'
     service: 'ServiceOption'
     serviceMaxPrice: 'Float'
     serviceOptionId: 'String'
@@ -1774,6 +1804,7 @@ export interface NexusGenFieldTypeNames {
     account: 'Account'
     accountId: 'ID'
     availabilities: 'OperatorAvailability'
+    avatar: 'Media'
     bids: 'BookingAdBid'
     birthDate: 'Date'
     calendarUpdate: 'DateTime'
@@ -1787,6 +1818,7 @@ export interface NexusGenFieldTypeNames {
     hostingOptionId: 'String'
     id: 'String'
     languageOptionIds: 'String'
+    location: 'Location'
     mainMediaId: 'String'
     medias: 'Media'
     ownAnimalsSpecieOptionsIds: 'String'
@@ -1866,6 +1898,19 @@ export interface NexusGenFieldTypeNames {
   }
   LanguageOptionsList: { // field return type name
     languageOptions: 'LanguageOption'
+  }
+  Location: { // field return type name
+    address: 'String'
+    bookingAd: 'BookingAd'
+    country: 'String'
+    country_code: 'String'
+    createdAt: 'DateTime'
+    id: 'String'
+    latitude: 'Latitude'
+    longitude: 'Longitude'
+    operator: 'Operator'
+    postcode: 'String'
+    updatedAt: 'DateTime'
   }
   MediasList: { // field return type name
     medias: 'Media'
@@ -2138,6 +2183,7 @@ export interface NexusGenFieldTypeNames {
     staffs: 'Staff'
   }
   StorageInfos: { // field return type name
+    mediaId: 'ID'
     signedRequest: 'String'
     url: 'String'
   }
@@ -2728,7 +2774,7 @@ export interface NexusGenAbstractTypeMembers {
   BookingMessage: "OperatorBookingMessage" | "UserBookingMessage"
   Claim: "OperatorClaim" | "UserClaim"
   Media: "DonationReceiptMedia" | "LanguageOptionMedia" | "MessageMedia" | "OperatorMedia" | "PartnerMedia" | "SharedMedia" | "UserMedia"
-  Node: "Account" | "Booking" | "BookingAd" | "BookingAdBid" | "Donation" | "DonationReceipt" | "DonationReceiptMedia" | "GenderOption" | "HostingOption" | "IndividualOperator" | "IndividualOperatorCoreService" | "IndividualOperatorExtraService" | "LanguageOption" | "LanguageOptionMedia" | "MessageMedia" | "OperatorAvailability" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "OperatorReview" | "Partner" | "PartnerMedia" | "ServiceOption" | "SharedMedia" | "SpecieOption" | "Staff" | "StripePayment" | "User" | "UserBookingMessage" | "UserClaim" | "UserMedia" | "UserReview"
+  Node: "Account" | "Booking" | "BookingAd" | "BookingAdBid" | "Donation" | "DonationReceipt" | "DonationReceiptMedia" | "GenderOption" | "HostingOption" | "IndividualOperator" | "IndividualOperatorCoreService" | "IndividualOperatorExtraService" | "LanguageOption" | "LanguageOptionMedia" | "Location" | "MessageMedia" | "OperatorAvailability" | "OperatorBookingMessage" | "OperatorClaim" | "OperatorMedia" | "OperatorReview" | "Partner" | "PartnerMedia" | "ServiceOption" | "SharedMedia" | "SpecieOption" | "Staff" | "StripePayment" | "User" | "UserBookingMessage" | "UserClaim" | "UserMedia" | "UserReview"
   Operator: "IndividualOperator"
   Payment: "StripePayment"
   Review: "OperatorReview" | "UserReview"
@@ -2749,6 +2795,7 @@ export interface NexusGenTypeInterfaces {
   IndividualOperatorExtraService: "Node"
   LanguageOption: "Node"
   LanguageOptionMedia: "Media" | "Node"
+  Location: "Node"
   MessageMedia: "Media" | "Node"
   OperatorAvailability: "Node"
   OperatorBookingMessage: "BookingMessage" | "Node"
@@ -2788,7 +2835,7 @@ export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = keyof NexusGenUnions;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "AuthorizedPayment" | "Booking" | "BookingAd" | "BookingAdBid" | "BookingAdBids" | "BookingAds" | "BookingMessagesList" | "BookingsList" | "BooleanResult" | "CannotBookHimSelfError" | "ClaimsList" | "CronStatus" | "Donation" | "DonationReceipt" | "DonationReceiptMedia" | "DonationReceiptsList" | "DonationsList" | "ExistingBookingError" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "IndividualOperatorCoreService" | "IndividualOperatorExtraService" | "InvalidArgumentsError" | "InvalidOperatorError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "LanguageOption" | "LanguageOptionMedia" | "LanguageOptionsList" | "MediasList" | "MessageMedia" | "NotFoundError" | "NotSupportedExtraServiceError" | "OperatorAvailability" | "OperatorBookingMessage" | "OperatorCannotProcessPaymentsError" | "OperatorClaim" | "OperatorMedia" | "OperatorReview" | "Operators" | "Partner" | "PartnerMedia" | "PartnersList" | "PaymentProcessorError" | "PreExistingOperatorBidError" | "PreExistingUserAdError" | "ReviewsList" | "ServiceOption" | "ServiceOptionsList" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "Staff" | "StaffsList" | "StorageInfos" | "StripePayment" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserClaim" | "UserForbiddenError" | "UserMedia" | "UserReview" | "UsersList";
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "AuthorizedPayment" | "Booking" | "BookingAd" | "BookingAdBid" | "BookingAdBids" | "BookingAds" | "BookingMessagesList" | "BookingsList" | "BooleanResult" | "CannotBookHimSelfError" | "ClaimsList" | "CronStatus" | "Donation" | "DonationReceipt" | "DonationReceiptMedia" | "DonationReceiptsList" | "DonationsList" | "ExistingBookingError" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "IndividualOperatorCoreService" | "IndividualOperatorExtraService" | "InvalidArgumentsError" | "InvalidOperatorError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "LanguageOption" | "LanguageOptionMedia" | "LanguageOptionsList" | "Location" | "MediasList" | "MessageMedia" | "NotFoundError" | "NotSupportedExtraServiceError" | "OperatorAvailability" | "OperatorBookingMessage" | "OperatorCannotProcessPaymentsError" | "OperatorClaim" | "OperatorMedia" | "OperatorReview" | "Operators" | "Partner" | "PartnerMedia" | "PartnersList" | "PaymentProcessorError" | "PreExistingOperatorBidError" | "PreExistingUserAdError" | "ReviewsList" | "ServiceOption" | "ServiceOptionsList" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "Staff" | "StaffsList" | "StorageInfos" | "StripePayment" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserClaim" | "UserForbiddenError" | "UserMedia" | "UserReview" | "UsersList";
 
 export type NexusGenAbstractsUsingStrategyResolveType = never;
 
