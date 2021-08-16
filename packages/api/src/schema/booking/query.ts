@@ -1,18 +1,6 @@
-import {
-	queryField,
-	idArg,
-	arg,
-	nonNull,
-	stringArg,
-	booleanArg,
-	floatArg,
-	unionType,
-	inputObjectType,
-	objectType
-} from 'nexus'
+import { queryField, idArg, arg, nonNull, unionType, inputObjectType, objectType } from 'nexus'
 import { checkArgs, authorize, NotFoundError, UnableToProcessError } from '../../utils'
 import prisma from '../../lib/prisma'
-// import { withDates } from '../shared'
 
 export const BookingByIdResult = unionType({
 	name: 'BookingByIdResult',
@@ -35,22 +23,6 @@ export const bookingById = queryField('bookingById', {
 		}
 	}
 })
-
-// export const currentUserBookings = queryField('currentUserBookings', {
-// 	type: 'BookingsResponse',
-// 	authorization: (ctx) => authorizeUser(ctx, 'user'),
-// 	async resolve(_, __, ctx) {
-// 		try {
-// 			const bookings = await BookingModel.find({
-// 				$or: [{ ownerId: ctx.user.profileId }, { sitterId: ctx.user.profileId }]
-// 			}).sort({ updatedAt: 'descending' })
-
-// 			return { bookings }
-// 		} catch {
-// 			return NotFoundError
-// 		}
-// 	}
-// })
 
 export const CurrentUserBookingFilterInput = inputObjectType({
 	name: 'CurrentUserBookingFilterInput',

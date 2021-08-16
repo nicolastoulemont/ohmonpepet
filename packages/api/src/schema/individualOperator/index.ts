@@ -56,6 +56,15 @@ export const IndividualOperator = objectType({
 					})
 					.extraServices()
 		})
+		t.list.field('donations', {
+			type: 'Donation',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.donations()
+		})
 		t.list.field('medias', {
 			type: 'Media',
 			resolve: async (i) =>
@@ -82,6 +91,15 @@ export const IndividualOperator = objectType({
 						where: { id: i.id }
 					})
 					.availabilities()
+		})
+		t.list.field('bids', {
+			type: 'BookingAdBid',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.bookingAdBids()
 		})
 	}
 })

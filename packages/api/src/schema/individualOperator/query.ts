@@ -1,15 +1,14 @@
 import { queryField, idArg, arg, inputObjectType, nonNull, unionType, objectType } from 'nexus'
+import { subDays } from 'date-fns'
+import prisma from '../../lib/prisma'
 import {
 	checkArgs,
 	authorize,
 	NotFoundError,
 	getIntervalDaysAsDates,
-	getIntervalDaysAsStrings,
 	UnableToProcessError,
 	defineGeometricQuerySquare
 } from '../../utils'
-import { subDays, format } from 'date-fns'
-import prisma from '../../lib/prisma'
 
 export const OperatorByIdResult = unionType({
 	name: 'OperatorByIdResult',
@@ -180,7 +179,6 @@ export const searchOperators = queryField('searchOperators', {
 					// Availabilities filter here is incomplete due to the lack of capacity in prisma to filter relations with hasEvery condition
 					// so we fall on the in instead and will perform an additional filter on the return operators
 					// this issue could be turned into a feature -> proposing at the end of the returned list some operators whose availabilities are uncertain ?
-					// We still include a SOME query to reduce the numbers of operators a bit
 					availabilities: {
 						some: {
 							date: {
@@ -207,17 +205,14 @@ export const searchOperators = queryField('searchOperators', {
 					})
 				},
 				include: {
-					availabilities: { where: { date: { gte: subDays(new Date(), 1) } } } // Only dates after yesterday to reduce the length of the array to the only the need fields
+					availabilities: {
+						where: { date: { gte: subDays(new Date(), 1), in: allRequiredDates } }
+					} // We will then filter out the operator whose availabilies array length is different from the requiredDays
 				}
 			})
 
-			const allRequiredDays = getIntervalDaysAsStrings(input.startDate, input.endDate)
-			const availableOperatorForAllRequiredDates = operators.filter((operator) =>
-				allRequiredDays.every((date) =>
-					operator.availabilities
-						.map((availability) => format(new Date(availability.date), 'yyyy-MM-dd'))
-						.includes(date)
-				)
+			const availableOperatorForAllRequiredDates = operators.filter(
+				(operator) => operator.availabilities.length === allRequiredDates.length
 			)
 
 			return { operators: availableOperatorForAllRequiredDates }

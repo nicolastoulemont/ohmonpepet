@@ -222,7 +222,7 @@ export const deleteBookingMessage = mutationField('deleteBookingMessage', {
 	async resolve(_, { id }, { user: { userId, operatorId } }) {
 		try {
 			const [message] = await prisma.bookingMessage.findMany({
-				where: { id, AND: [{ OR: [{ userId }, { operatorId }] }] },
+				where: { id, OR: [{ userId }, { operatorId }] },
 				include: {
 					medias: true
 				}

@@ -216,7 +216,7 @@ export const deleteReview = mutationField('deleteReview', {
 	async resolve(_, { id }, { user: { userId, operatorId } }) {
 		try {
 			const [review] = await prisma.review.findMany({
-				where: { id, AND: [{ OR: [{ userId }, { operatorId }] }] },
+				where: { id, OR: [{ userId }, { operatorId }] },
 				include: {
 					operator: {
 						select: {

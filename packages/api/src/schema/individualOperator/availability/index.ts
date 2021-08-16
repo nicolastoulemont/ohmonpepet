@@ -81,7 +81,7 @@ export const DeleteOperatorAvailability = mutationField('deleteOperatorAvailabil
 	async resolve(_, { id }, { user: { operatorId } }) {
 		try {
 			const deleted = await prisma.operatorAvailability.deleteMany({
-				where: { id, AND: [{ operatorId }] }
+				where: { id, operatorId }
 			})
 
 			if (deleted.count === 0) return NotFoundError

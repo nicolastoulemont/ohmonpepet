@@ -24,19 +24,15 @@ export const HOURLY_UNSUCCESSFULL_PAYMENT_CREATION_EMAIL = cron.schedule(
 				underReview: false,
 				stripePayment: {
 					expectedPaymentIntentCreationDate: { lte: new Date() },
-					AND: [
+					OR: [
 						{
-							OR: [
-								{
-									status: PAYMENT_STATUS.FAILED_PAYMENT_INTENT_CREATION_AUTH_REQUIRED
-								},
-								{
-									status: PAYMENT_STATUS.FAILED_PAYMENT_INTENT_CREATION_INSUFFICIENT_FUNDS
-								},
-								{
-									status: PAYMENT_STATUS.FAILED_PAYMENT_INTENT_CREATION_UNKOWN_ERROR
-								}
-							]
+							status: PAYMENT_STATUS.FAILED_PAYMENT_INTENT_CREATION_AUTH_REQUIRED
+						},
+						{
+							status: PAYMENT_STATUS.FAILED_PAYMENT_INTENT_CREATION_INSUFFICIENT_FUNDS
+						},
+						{
+							status: PAYMENT_STATUS.FAILED_PAYMENT_INTENT_CREATION_UNKOWN_ERROR
 						}
 					]
 				}

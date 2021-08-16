@@ -55,6 +55,7 @@ model User {
   bookingMessages  BookingMessage[]
   claims           BookingClaim[]
   medias           Media[]
+  bookingAds       BookingAd[]
 }
 
 model Operator {
@@ -62,7 +63,7 @@ model Operator {
   createdAt                  DateTime               @default(now())
   updatedAt                  DateTime               @updatedAt
   isActive                   Boolean                @default(false)
-  birthDate                  DateTime?              @db.Date
+  birthDate                  DateTime               @db.Date
   description                String
   mainMediaId                String // The mediaId of the main displayed image
   acceptedSpecieOptionsIds   String[] // No relations, needed for filtering only
@@ -91,6 +92,7 @@ model Operator {
   extraServices              ExtraOperatorService?
   availabilities             OperatorAvailability[]
   donations                  Donation[]
+  bookingAdBids              BookingAdBid[]
 }
 
 // Actors related informations
@@ -148,17 +150,19 @@ model ExtraOperatorService {
 }
 
 model Location {
-  id           String   @id @default(cuid())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  address      String
-  country      String
-  country_code String
-  postcode     String
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  address      String?
+  country      String?
+  country_code String?
+  postcode     String?
   latitude     Float
   longitude    Float
-  operator     Operator @relation(fields: [operatorId], references: [id])
-  operatorId   String
+  operator     Operator?  @relation(fields: [operatorId], references: [id])
+  operatorId   String?
+  bookingAd    BookingAd? @relation(fields: [bookingAdId], references: [id])
+  bookingAdId  String?
 
   @@index(fields: [latitude, longitude], name: "operator_latitude_longitude_index")
 }
@@ -278,6 +282,33 @@ model BookingClaim {
   operatorId String?
   booking    Booking   @relation(fields: [bookingId], references: [id])
   bookingId  String
+}
+
+model BookingAd {
+  id                String         @id @default(cuid())
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  startDate         DateTime       @db.Date
+  endDate           DateTime       @db.Date
+  description       String?
+  user              User           @relation(fields: [userId], references: [id])
+  userId            String
+  service           ServiceOption  @relation(fields: [serviceOptionId], references: [id])
+  serviceOptionId   String
+  serviceMaxPrice   Float?
+  animalsSpeciesIds String[]
+  location          Location?
+  bids              BookingAdBid[]
+}
+
+model BookingAdBid {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  operator    Operator  @relation(fields: [operatorId], references: [id])
+  operatorId  String
+  bookingAd   BookingAd @relation(fields: [bookingAdId], references: [id])
+  bookingAdId String
 }
 
 enum PaymentStatus {
@@ -426,4 +457,5 @@ model ServiceOption {
   nameFr               String
   bookings             Booking[]
   coreOperatorServices CoreOperatorService[]
+  BookingAd            BookingAd[]
 }

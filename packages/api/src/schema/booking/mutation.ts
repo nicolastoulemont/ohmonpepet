@@ -1,31 +1,21 @@
-import {
-	inputObjectType,
-	arg,
-	mutationField,
-	idArg,
-	objectType,
-	nonNull,
-	stringArg,
-	unionType
-} from 'nexus'
+import { inputObjectType, arg, mutationField, idArg, objectType, nonNull, unionType } from 'nexus'
+import { PAYMENT_STATUS, STRIPE_TARGET_APIS } from './constants'
+import { CREATED_BOOKING, UPDATED_BOOKING } from '../../constants/pubsub'
+import { addDays, isAfter, subDays } from 'date-fns'
+import prisma from '../../lib/prisma'
 
 import {
 	authorize,
 	checkArgs,
 	NotFoundError,
-	getIntervalDays,
+	getIntervalDaysAsDates,
 	getValueFromPercentage,
 	priceInCents,
 	stripe,
 	useBookingPrice,
-	PartialInvalidArgumentsError,
-	UnableToProcessError,
-	UserForbiddenError
+	UnableToProcessError
 } from '../../utils'
-import prisma from '../../lib/prisma'
-import { addDays, isAfter, subDays } from 'date-fns'
-import { PAYMENT_STATUS, STRIPE_TARGET_APIS } from './constants'
-import { CREATED_BOOKING, UPDATED_BOOKING } from '../../constants/pubsub'
+
 import {
 	sendPetSitterSelectedEmail,
 	sendOwnerPetSitterAcceptedBookingEmail,
@@ -35,7 +25,6 @@ import {
 	sendOwnerPaymentAuthorizedEmail,
 	sendOwnerPaymentMethodSavedEmail
 } from '../../emails'
-import { truncate } from 'fs'
 
 export const CreateBookingInput = inputObjectType({
 	name: 'CreateBookingInput',
@@ -131,7 +120,7 @@ export const createBooking = mutationField('createBooking', {
 		{ user: { userId }, pubsub }
 	) {
 		try {
-			const requiredDays = getIntervalDays(startDate, endDate)
+			const requiredDays = getIntervalDaysAsDates(startDate, endDate)
 			const operator = await prisma.operator.findFirst({
 				where: {
 					id: operatorId,
@@ -151,7 +140,12 @@ export const createBooking = mutationField('createBooking', {
 						// Verify that the operator is available at the required days
 						{
 							availabilities: {
-								every: { date: { in: requiredDays } }
+								some: {
+									date: {
+										gte: subDays(new Date(), 1),
+										in: requiredDays
+									}
+								}
 							}
 						}
 					]
@@ -226,24 +220,6 @@ export const createBooking = mutationField('createBooking', {
 		}
 	}
 })
-
-// export const ChangeBookingInput = inputObjectType({
-// 	name: 'ChangeBookingInput',
-// 	definition(t) {
-// 		t.id('id')
-// 		t.id('ownerId')
-// 		t.id('sitterId')
-// 		t.string('startDate')
-// 		t.string('endDate')
-// 		t.string('service')
-// 		t.field('sitterOk', { type: 'BookingConfirmationInput' })
-// 		t.field('ownerOk', { type: 'BookingConfirmationInput' })
-// 		t.boolean('canceled')
-// 		t.field('cancellationDetails', { type: 'BookingCancellationDetailsInput' })
-// 		t.list.string('animalsIds')
-// 		t.list.field('selectedOptions', { type: 'BookingOptionInput' })
-// 	},
-// })
 
 export const ConfirmBookingResult = unionType({
 	name: 'ConfirmBookingResult',
@@ -683,7 +659,7 @@ export const updateBookingPaymentStatus = mutationField('updateBookingPaymentSta
 	async resolve(_, { input: { id, paymentMethodId } }, { user: { userId }, pubsub }) {
 		try {
 			const booking = await prisma.booking.findFirst({
-				where: { id, AND: [{ userId }] },
+				where: { id, userId },
 				include: {
 					stripePayment: true,
 					operator: {

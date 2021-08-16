@@ -93,7 +93,7 @@ export const deleteClaim = mutationField('deleteClaim', {
 	async resolve(_, { id }, { user: { userId, operatorId } }) {
 		try {
 			const [claim] = await prisma.bookingClaim.findMany({
-				where: { id, AND: [{ OR: [{ userId }, { operatorId }] }] }
+				where: { id, OR: [{ userId }, { operatorId }] }
 			})
 
 			if (!claim) return NotFoundError

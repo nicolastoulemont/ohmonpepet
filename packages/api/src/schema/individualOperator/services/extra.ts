@@ -158,7 +158,7 @@ export const DeleteExtraIndividualOperatorService = mutationField(
 		async resolve(_, { id }, { user: { operatorId } }) {
 			try {
 				const deleted = await prisma.extraOperatorService.deleteMany({
-					where: { id, AND: [{ operatorId }] }
+					where: { id, operatorId }
 				})
 
 				if (deleted.count === 0) return NotFoundError

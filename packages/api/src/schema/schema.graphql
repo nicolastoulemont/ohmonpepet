@@ -8,7 +8,7 @@ type Account implements Node {
 
   """GUID for a resource"""
   id: String!
-  operator: Operator
+  operator: IndividualOperator
   staff: Staff
   updatedAt: DateTime
   user: User
@@ -36,6 +36,8 @@ interface Actor implements Node {
   updatedAt: DateTime
 }
 
+union AdByIdResult = BookingAd | InvalidArgumentsError | NotFoundError
+
 """The result of the accounts query"""
 union AllAccountsResult = AccountsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
@@ -54,6 +56,8 @@ type AuthorizedPayment {
   hadRef: Boolean
   stripeTargetApi: String
 }
+
+union BidForBookingAdResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
 type Booking implements Node {
   animalsIds: [ID]
@@ -82,6 +86,42 @@ type Booking implements Node {
   underReview: Boolean
   updatedAt: DateTime
   user: User
+}
+
+type BookingAd implements Node {
+  animals: [SpecieOption]
+  animalsSpeciesIds: [String!]!
+  bids: [Operator]
+  createdAt: DateTime
+  description: String
+  endDate: Date
+
+  """GUID for a resource"""
+  id: String!
+  service: ServiceOption
+  serviceMaxPrice: Float
+  serviceOptionId: String!
+  startDate: Date
+  updatedAt: DateTime
+  user: User
+}
+
+type BookingAdBid implements Node {
+  bookingAd: BookingAd
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  operator: Operator
+  updatedAt: DateTime
+}
+
+type BookingAdBids {
+  bids: [BookingAdBid]
+}
+
+type BookingAds {
+  bookingAds: [BookingAd]
 }
 
 union BookingByIdResult = Booking | InvalidArgumentsError | NotFoundError
@@ -200,6 +240,19 @@ input CreateAccountInput {
 
 """The result of the createAccount mutation"""
 union CreateAccountResult = Account | InvalidArgumentsError | UnableToProcessError
+
+input CreateBookingAdInput {
+  animalsSpeciesIds: [String!]!
+  description: String
+  endDate: String!
+  latitude: Latitude!
+  longitude: Longitude!
+  serviceMaxPrice: Float
+  serviceOptionId: String!
+  startDate: String!
+}
+
+union CreateBookingAdResult = BookingAd | InvalidArgumentsError | PreExistingUserAdError | UnableToProcessError | UserAuthenticationError
 
 input CreateBookingClaimInput {
   bookingId: String!
@@ -358,6 +411,10 @@ union CurrentOperatorMediaResult = NotFoundError | OperatorMedia | SharedMedia |
 
 union CurrentOperatorResult = IndividualOperator | NotFoundError | UserAuthenticationError | UserForbiddenError
 
+union CurrentUserAdsResult = BookingAds | UnableToProcessError
+
+union CurrentUserBidsResult = BookingAdBids | UnableToProcessError
+
 input CurrentUserBookingFilterInput {
   endDate: Date
   includeFinished: Boolean
@@ -384,6 +441,8 @@ scalar DateTime
 
 """The result of the deleteAccount mutation"""
 union DeleteAccountResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError
+
+union DeleteBookingAdResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 """The result of the deleteBookingMessage mutation"""
 union DeleteBookingMessageResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
@@ -548,11 +607,13 @@ type IndividualOperator implements Actor & Node & Operator {
   account: Account
   accountId: ID
   availabilities: [OperatorAvailability]
+  bids: [BookingAdBid]
   birthDate: Date
   calendarUpdate: DateTime
   coreServices: [IndividualOperatorCoreService]
   createdAt: DateTime
   description: String
+  donations: [Donation]
   extraServices: Account
   gender: GenderOption
   hosting: HostingOption
@@ -762,10 +823,12 @@ union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | U
 
 type Mutation {
   authorizePayment(id: ID!): AuthorizePaymentResult
+  bidForBookingAd(id: ID!): BidForBookingAdResult
   cancelBooking(input: CancelBookingInput!): CancelBookingResult
   cancelOnGoingBooking(input: CancelOnGoingBookingInput!): CancelOnGoingBookingResult
   confirmBooking(input: ConfirmBookingInput!): ConfirmBookingResult
   createAccount(input: CreateAccountInput!): CreateAccountResult
+  createAd(input: CreateBookingAdInput!): CreateBookingAdResult
   createBooking(input: CreateBookingInput!): CreateBookingResult
   createBookingClaim(input: CreateBookingClaimInput!): CreateBookingClaimResult
   createBookingMessage(input: CreateBookingMessageInput!): CreateBookingMessageResult
@@ -786,6 +849,7 @@ type Mutation {
 
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
+  deleteBookingAd(id: ID!): DeleteBookingAdResult
   deleteBookingMessage(id: ID!): DeleteBookingMessageResult
   deleteClaim(id: ID!): DeleteClaimResult
   deleteCoreIndividualOperatorService(id: ID!): DeleteInvidualOperatorCoreServicesResult
@@ -807,6 +871,7 @@ type Mutation {
 
   """Access restricted to logged in user"""
   modifyPassword(newPassword: String!, password: String!): ModifyPasswordResult
+  removeBidForBookingAd(id: ID!): RemoveBidForBookingAdResult
   resetPassword(input: ResetPasswordInput!): ResetPasswordResult
   sendVerificationEmail(email: String!): SendVerificationEmailResult
   setAsRead(input: SetBookingMessagesAsReadInput!): SetBookingMessagesAsReadResult
@@ -816,6 +881,7 @@ type Mutation {
   signOut: SignOutResult
   startCron(cronName: String!): StartCronResult
   stopCron(cronName: String!): StopCronResult
+  updateBookingAd(id: ID!, input: UpdateBookingAdInput!): UpdateBookingAdResult
   updateBookingMessage(id: ID!, input: UpdateBookingMessageInput!, saveAs: String!): UpdateBookingMessageResult
   updateBookingPaymentStatus(input: UpdateBookingPaymentStatusInput!): UpdateBookingPaymentStatusResult
   updateDonationReceipt(input: UpdateDonationReceiptInput!): UpdateDonationReceiptResult
@@ -1019,11 +1085,20 @@ enum PaymentStatus {
 """Floats that will have a value greater than 0."""
 scalar PositiveFloat
 
+type PreExistingOperatorBidError {
+  preExistingOperatorBidError: String
+}
+
+type PreExistingUserAdError {
+  preExistingUserAdError: String
+}
+
 type Query {
   Partners: PartnersResult
 
   """Access restricted to admin users"""
   accountById(id: ID!): AccountByIdResult
+  adById(id: ID!): AdByIdResult
 
   """Access restricted to admin users"""
   allAccounts: AllAccountsResult
@@ -1051,10 +1126,12 @@ type Query {
   """Access restricted to logged in user"""
   currentAccount: CurrentAccountResult
   currentOperator: CurrentOperatorResult
+  currentOperatorBids: CurrentUserBidsResult
   currentOperatorDonations: CurrentOperatorDonationsResult
 
   """Access restricted to logged in user"""
   currentOperatorMedia: CurrentOperatorMediaResult
+  currentUserAds: CurrentUserAdsResult
 
   """Access restricted to logged in user"""
   currentUserMedia: CurrentUserMediaResult
@@ -1085,6 +1162,7 @@ type Query {
 
   """Access restricted to admin users"""
   reviews: ReviewsResult
+  searchAds(input: SearchAdsInput!): SearchAdsResult
   searchDonationReceipts(input: SearchDonationReceiptsInput!): SearchDonationReceiptsResult
   searchDonations(input: SearchDonationsInput!): SearchDonationsResult
   searchOperators(input: SearchOperatorsInput!): SearchOperatorsResult
@@ -1104,6 +1182,8 @@ type Query {
   """Access restricted to admin users"""
   userById(id: ID!): UserByIdResult
 }
+
+union RemoveBidForBookingAdResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input ResetPasswordInput {
   newPassword: String!
@@ -1139,6 +1219,16 @@ union ReviewsResult = ReviewsList | UnableToProcessError | UserAuthenticationErr
 
 """A field whose value must be either: user, operator, staff"""
 scalar SaveAsValue
+
+input SearchAdsInput {
+  acceptedAnimalsIds: [ID!]!
+  latitude: Latitude!
+  longitude: Longitude!
+  maxDistanceInKms: Float = 10
+  serviceOptionIds: [String!]
+}
+
+union SearchAdsResult = BookingAds | UnableToProcessError
 
 input SearchDonationReceiptsInput {
   endDate: Date
@@ -1326,6 +1416,19 @@ type UnableToProcessError {
   code: ErrorCode!
   message: ErrorMessage!
 }
+
+input UpdateBookingAdInput {
+  animalsSpeciesIds: [String!]!
+  description: String
+  endDate: String!
+  latitude: Latitude!
+  longitude: Longitude!
+  serviceMaxPrice: Float
+  serviceOptionId: String!
+  startDate: String!
+}
+
+union UpdateBookingAdResult = BookingAd | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 input UpdateBookingMessageInput {
   content: String!
