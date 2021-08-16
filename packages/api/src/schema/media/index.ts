@@ -21,7 +21,8 @@ export const media = interfaceType({
 
 export const userMedia = objectType({
 	name: 'UserMedia',
-	isTypeOf: (data) => Boolean((data as any).userId && !(data as any).operatorId),
+	isTypeOf: (data) =>
+		Boolean((data as any).storeUrl && (data as any).userId && !(data as any).operatorId),
 	definition(t) {
 		t.implements('Media')
 		t.id('userId')
@@ -34,7 +35,8 @@ export const userMedia = objectType({
 
 export const operatorMedia = objectType({
 	name: 'OperatorMedia',
-	isTypeOf: (data) => Boolean((data as any).operatorId && !(data as any).userId),
+	isTypeOf: (data) =>
+		Boolean((data as any).storeUrl && (data as any).operatorId && !(data as any).userId),
 	definition(t) {
 		t.implements('Media')
 		t.id('operatorId')
@@ -47,7 +49,8 @@ export const operatorMedia = objectType({
 
 export const sharedMedia = objectType({
 	name: 'SharedMedia',
-	isTypeOf: (data) => Boolean((data as any).operatorId && (data as any).userId),
+	isTypeOf: (data) =>
+		Boolean((data as any).storeUrl && (data as any).operatorId && (data as any).userId),
 	definition(t) {
 		t.implements('Media')
 		t.id('operatorId')
@@ -65,7 +68,7 @@ export const sharedMedia = objectType({
 
 export const messageMedia = objectType({
 	name: 'MessageMedia',
-	isTypeOf: (data) => Boolean((data as any).bookingMessageId),
+	isTypeOf: (data) => Boolean((data as any).storeUrl && (data as any).bookingMessageId),
 	definition(t) {
 		t.implements('Media')
 		t.id('bookingMessageId')
@@ -79,7 +82,7 @@ export const messageMedia = objectType({
 
 export const donationReceiptMedia = objectType({
 	name: 'DonationReceiptMedia',
-	isTypeOf: (data) => Boolean((data as any).donationReceiptId),
+	isTypeOf: (data) => Boolean((data as any).storeUrl && (data as any).donationReceiptId),
 	definition(t) {
 		t.implements('Media')
 		t.id('donationReceiptId')
@@ -93,7 +96,7 @@ export const donationReceiptMedia = objectType({
 
 export const LanguageOptionMedia = objectType({
 	name: 'LanguageOptionMedia',
-	isTypeOf: (data) => Boolean((data as any).languageOptionId),
+	isTypeOf: (data) => Boolean((data as any).storeUrl && (data as any).languageOptionId),
 	definition(t) {
 		t.implements('Media')
 		t.id('languageOptionId')
@@ -107,7 +110,7 @@ export const LanguageOptionMedia = objectType({
 
 export const PartnerMedia = objectType({
 	name: 'PartnerMedia',
-	isTypeOf: (data) => Boolean((data as any).partnerId),
+	isTypeOf: (data) => Boolean((data as any).storeUrl && (data as any).partnerId),
 	definition(t) {
 		t.implements('Media')
 		t.id('partnerId')

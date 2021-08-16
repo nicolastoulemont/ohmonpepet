@@ -65,7 +65,7 @@ model Operator {
   isActive                   Boolean                @default(false)
   birthDate                  DateTime               @db.Date
   description                String
-  mainMediaId                String // The mediaId of the main displayed image
+  avatarMediaId              String // The mediaId of the main displayed image
   acceptedSpecieOptionsIds   String[] // No relations, needed for filtering only
   ownAnimalsSpecieOptionsIds String[] // No relations, needed for filtering only
   languageOptionIds          String[] // No relations, needed for filtering only

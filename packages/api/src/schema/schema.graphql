@@ -49,6 +49,10 @@ union AllStaffsResult = StaffsList | UnableToProcessError | UserAuthenticationEr
 """The result of the allUsers query"""
 union AllUsersResult = UnableToProcessError | UserAuthenticationError | UserForbiddenError | UsersList
 
+type AlreadyOperatorAvatarError {
+  alreadyOperatorAvatarError: String!
+}
+
 union AuthorizePaymentResult = AuthorizedPayment | InvalidOperatorError | NotFoundError | OperatorCannotProcessPaymentsError | UnableToProcessError | UserAuthenticationError
 
 type AuthorizedPayment {
@@ -308,12 +312,12 @@ union CreateHostingOptionResult = HostingOption | InvalidArgumentsError | Unable
 
 input CreateIndividualOperatorInput {
   acceptedSpecieOptionsIds: [ID!]!
+  avatarMediaId: ID!
   birthDate: Date!
   description: String!
   genderOptionId: String!
   hostingOptionId: String!
   languageOptionIds: [ID!]!
-  mainMediaId: ID!
   ownAnimalsSpecieOptionsIds: [ID!]!
   partnerId: String
   partnerPercentage: Int
@@ -609,6 +613,7 @@ type IndividualOperator implements Actor & Node & Operator {
   accountId: ID
   availabilities: [OperatorAvailability]
   avatar: Media
+  avatarMediaId: String
   bids: [BookingAdBid]
   birthDate: Date
   calendarUpdate: DateTime
@@ -625,7 +630,6 @@ type IndividualOperator implements Actor & Node & Operator {
   id: String!
   languageOptionIds: [String]
   location: Location
-  mainMediaId: String
   medias: [Media]
   ownAnimalsSpecieOptionsIds: [String]
   partner: Partner
@@ -894,6 +898,7 @@ type Mutation {
   resetPassword(input: ResetPasswordInput!): ResetPasswordResult
   sendVerificationEmail(email: String!): SendVerificationEmailResult
   setAsRead(input: SetBookingMessagesAsReadInput!): SetBookingMessagesAsReadResult
+  setPictureAsMainProfilePicture(id: ID!): SetMediaAsOperatorAvatarResult
   signIn(input: EmailAndPasswordInput!): SignInResult
 
   """Access restricted to logged in user"""
@@ -940,6 +945,7 @@ Represent the required fields of commercial operators on the plateform.
 interface Operator implements Actor & Node {
   acceptedSpecieOptionsIds: [String]
   accountId: ID
+  avatarMediaId: String
   calendarUpdate: DateTime
   createdAt: DateTime
   description: String
@@ -948,7 +954,6 @@ interface Operator implements Actor & Node {
   """GUID for a resource"""
   id: String!
   languageOptionIds: [String]
-  mainMediaId: String
   ownAnimalsSpecieOptionsIds: [String]
   partnerId: String
   partnerPercentage: Int
@@ -1333,6 +1338,8 @@ input SetBookingMessagesAsReadInput {
 """The result of the setBookingMessageAsRead mutation"""
 union SetBookingMessagesAsReadResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
+union SetMediaAsOperatorAvatarResult = AlreadyOperatorAvatarError | BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
 type SharedMedia implements Media & Node {
   createdAt: DateTime
 
@@ -1490,12 +1497,12 @@ union UpdateHostingOptionResult = HostingOption | InvalidArgumentsError | NotFou
 
 input UpdateIndividualOperatorInput {
   acceptedSpecieOptionsIds: [ID]
+  avatarMediaId: ID
   birthDate: Date
   description: String
   genderOptionId: String
   hostingOptionId: String
   languageOptionIds: [ID]
-  mainMediaId: ID
   ownAnimalsSpecieOptionsIds: [ID]
   partnerId: String
   partnerPercentage: Int

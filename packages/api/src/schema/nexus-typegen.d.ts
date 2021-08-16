@@ -178,12 +178,12 @@ export interface NexusGenInputs {
   }
   CreateIndividualOperatorInput: { // input type
     acceptedSpecieOptionsIds: string[]; // [ID!]!
+    avatarMediaId: string; // ID!
     birthDate: NexusGenScalars['Date']; // Date!
     description: string; // String!
     genderOptionId: string; // String!
     hostingOptionId: string; // String!
     languageOptionIds: string[]; // [ID!]!
-    mainMediaId: string; // ID!
     ownAnimalsSpecieOptionsIds: string[]; // [ID!]!
     partnerId?: string | null; // String
     partnerPercentage?: number | null; // Int
@@ -354,12 +354,12 @@ export interface NexusGenInputs {
   }
   UpdateIndividualOperatorInput: { // input type
     acceptedSpecieOptionsIds?: Array<string | null> | null; // [ID]
+    avatarMediaId?: string | null; // ID
     birthDate?: NexusGenScalars['Date'] | null; // Date
     description?: string | null; // String
     genderOptionId?: string | null; // String
     hostingOptionId?: string | null; // String
     languageOptionIds?: Array<string | null> | null; // [ID]
-    mainMediaId?: string | null; // ID
     ownAnimalsSpecieOptionsIds?: Array<string | null> | null; // [ID]
     partnerId?: string | null; // String
     partnerPercentage?: number | null; // Int
@@ -436,6 +436,9 @@ export interface NexusGenObjects {
   }
   AccountsList: { // root type
     accounts?: Array<NexusGenRootTypes['Account'] | null> | null; // [Account]
+  }
+  AlreadyOperatorAvatarError: { // root type
+    alreadyOperatorAvatarError: string; // String!
   }
   AuthorizedPayment: { // root type
     clientSecret?: string | null; // String
@@ -552,6 +555,7 @@ export interface NexusGenObjects {
   IndividualOperator: { // root type
     acceptedSpecieOptionsIds?: Array<string | null> | null; // [String]
     accountId?: string | null; // ID
+    avatarMediaId?: string | null; // String
     birthDate?: NexusGenScalars['Date'] | null; // Date
     calendarUpdate?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -559,7 +563,6 @@ export interface NexusGenObjects {
     hostingOptionId?: string | null; // String
     id: string; // String!
     languageOptionIds?: Array<string | null> | null; // [String]
-    mainMediaId?: string | null; // String
     ownAnimalsSpecieOptionsIds?: Array<string | null> | null; // [String]
     partnerId?: string | null; // String
     partnerPercentage?: number | null; // Int
@@ -949,6 +952,7 @@ export interface NexusGenUnions {
   ServiceOptionByIdResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['ServiceOption'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   ServiceOptionsResult: NexusGenRootTypes['ServiceOptionsList'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   SetBookingMessagesAsReadResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'];
+  SetMediaAsOperatorAvatarResult: NexusGenRootTypes['AlreadyOperatorAvatarError'] | NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
   SignInResult: NexusGenRootTypes['Account'] | NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['UnableToProcessError'];
   SignOutResult: NexusGenRootTypes['BooleanResult'] | NexusGenRootTypes['UserAuthenticationError'];
   SpecieOptionByIdResult: NexusGenRootTypes['InvalidArgumentsError'] | NexusGenRootTypes['NotFoundError'] | NexusGenRootTypes['SpecieOption'] | NexusGenRootTypes['UserAuthenticationError'] | NexusGenRootTypes['UserForbiddenError'];
@@ -991,6 +995,9 @@ export interface NexusGenFieldTypes {
   }
   AccountsList: { // field return type
     accounts: Array<NexusGenRootTypes['Account'] | null> | null; // [Account]
+  }
+  AlreadyOperatorAvatarError: { // field return type
+    alreadyOperatorAvatarError: string; // String!
   }
   AuthorizedPayment: { // field return type
     clientSecret: string | null; // String
@@ -1126,6 +1133,7 @@ export interface NexusGenFieldTypes {
     accountId: string | null; // ID
     availabilities: Array<NexusGenRootTypes['OperatorAvailability'] | null> | null; // [OperatorAvailability]
     avatar: NexusGenRootTypes['Media'] | null; // Media
+    avatarMediaId: string | null; // String
     bids: Array<NexusGenRootTypes['BookingAdBid'] | null> | null; // [BookingAdBid]
     birthDate: NexusGenScalars['Date'] | null; // Date
     calendarUpdate: NexusGenScalars['DateTime'] | null; // DateTime
@@ -1140,7 +1148,6 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     languageOptionIds: Array<string | null> | null; // [String]
     location: NexusGenRootTypes['Location'] | null; // Location
-    mainMediaId: string | null; // String
     medias: Array<NexusGenRootTypes['Media'] | null> | null; // [Media]
     ownAnimalsSpecieOptionsIds: Array<string | null> | null; // [String]
     partner: NexusGenRootTypes['Partner'] | null; // Partner
@@ -1293,6 +1300,7 @@ export interface NexusGenFieldTypes {
     resetPassword: NexusGenRootTypes['ResetPasswordResult'] | null; // ResetPasswordResult
     sendVerificationEmail: NexusGenRootTypes['SendVerificationEmailResult'] | null; // SendVerificationEmailResult
     setAsRead: NexusGenRootTypes['SetBookingMessagesAsReadResult'] | null; // SetBookingMessagesAsReadResult
+    setPictureAsMainProfilePicture: NexusGenRootTypes['SetMediaAsOperatorAvatarResult'] | null; // SetMediaAsOperatorAvatarResult
     signIn: NexusGenRootTypes['SignInResult'] | null; // SignInResult
     signOut: NexusGenRootTypes['SignOutResult'] | null; // SignOutResult
     startCron: NexusGenRootTypes['StartCronResult'] | null; // StartCronResult
@@ -1625,13 +1633,13 @@ export interface NexusGenFieldTypes {
   Operator: { // field return type
     acceptedSpecieOptionsIds: Array<string | null> | null; // [String]
     accountId: string | null; // ID
+    avatarMediaId: string | null; // String
     calendarUpdate: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     description: string | null; // String
     hostingOptionId: string | null; // String
     id: string; // String!
     languageOptionIds: Array<string | null> | null; // [String]
-    mainMediaId: string | null; // String
     ownAnimalsSpecieOptionsIds: Array<string | null> | null; // [String]
     partnerId: string | null; // String
     partnerPercentage: number | null; // Int
@@ -1670,6 +1678,9 @@ export interface NexusGenFieldTypeNames {
   }
   AccountsList: { // field return type name
     accounts: 'Account'
+  }
+  AlreadyOperatorAvatarError: { // field return type name
+    alreadyOperatorAvatarError: 'String'
   }
   AuthorizedPayment: { // field return type name
     clientSecret: 'String'
@@ -1805,6 +1816,7 @@ export interface NexusGenFieldTypeNames {
     accountId: 'ID'
     availabilities: 'OperatorAvailability'
     avatar: 'Media'
+    avatarMediaId: 'String'
     bids: 'BookingAdBid'
     birthDate: 'Date'
     calendarUpdate: 'DateTime'
@@ -1819,7 +1831,6 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     languageOptionIds: 'String'
     location: 'Location'
-    mainMediaId: 'String'
     medias: 'Media'
     ownAnimalsSpecieOptionsIds: 'String'
     partner: 'Partner'
@@ -1972,6 +1983,7 @@ export interface NexusGenFieldTypeNames {
     resetPassword: 'ResetPasswordResult'
     sendVerificationEmail: 'SendVerificationEmailResult'
     setAsRead: 'SetBookingMessagesAsReadResult'
+    setPictureAsMainProfilePicture: 'SetMediaAsOperatorAvatarResult'
     signIn: 'SignInResult'
     signOut: 'SignOutResult'
     startCron: 'StartCronResult'
@@ -2304,13 +2316,13 @@ export interface NexusGenFieldTypeNames {
   Operator: { // field return type name
     acceptedSpecieOptionsIds: 'String'
     accountId: 'ID'
+    avatarMediaId: 'String'
     calendarUpdate: 'DateTime'
     createdAt: 'DateTime'
     description: 'String'
     hostingOptionId: 'String'
     id: 'String'
     languageOptionIds: 'String'
-    mainMediaId: 'String'
     ownAnimalsSpecieOptionsIds: 'String'
     partnerId: 'String'
     partnerPercentage: 'Int'
@@ -2479,6 +2491,9 @@ export interface NexusGenArgTypes {
     }
     setAsRead: { // args
       input: NexusGenInputs['SetBookingMessagesAsReadInput']; // SetBookingMessagesAsReadInput!
+    }
+    setPictureAsMainProfilePicture: { // args
+      id: string; // ID!
     }
     signIn: { // args
       input: NexusGenInputs['EmailAndPasswordInput']; // EmailAndPasswordInput!
@@ -2747,6 +2762,7 @@ export interface NexusGenAbstractTypeMembers {
   ServiceOptionByIdResult: "InvalidArgumentsError" | "NotFoundError" | "ServiceOption" | "UserAuthenticationError" | "UserForbiddenError"
   ServiceOptionsResult: "ServiceOptionsList" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   SetBookingMessagesAsReadResult: "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError"
+  SetMediaAsOperatorAvatarResult: "AlreadyOperatorAvatarError" | "BooleanResult" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError" | "UserAuthenticationError" | "UserForbiddenError"
   SignInResult: "Account" | "InvalidArgumentsError" | "NotFoundError" | "UnableToProcessError"
   SignOutResult: "BooleanResult" | "UserAuthenticationError"
   SpecieOptionByIdResult: "InvalidArgumentsError" | "NotFoundError" | "SpecieOption" | "UserAuthenticationError" | "UserForbiddenError"
@@ -2835,7 +2851,7 @@ export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = keyof NexusGenUnions;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "AuthorizedPayment" | "Booking" | "BookingAd" | "BookingAdBid" | "BookingAdBids" | "BookingAds" | "BookingMessagesList" | "BookingsList" | "BooleanResult" | "CannotBookHimSelfError" | "ClaimsList" | "CronStatus" | "Donation" | "DonationReceipt" | "DonationReceiptMedia" | "DonationReceiptsList" | "DonationsList" | "ExistingBookingError" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "IndividualOperatorCoreService" | "IndividualOperatorExtraService" | "InvalidArgumentsError" | "InvalidOperatorError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "LanguageOption" | "LanguageOptionMedia" | "LanguageOptionsList" | "Location" | "MediasList" | "MessageMedia" | "NotFoundError" | "NotSupportedExtraServiceError" | "OperatorAvailability" | "OperatorBookingMessage" | "OperatorCannotProcessPaymentsError" | "OperatorClaim" | "OperatorMedia" | "OperatorReview" | "Operators" | "Partner" | "PartnerMedia" | "PartnersList" | "PaymentProcessorError" | "PreExistingOperatorBidError" | "PreExistingUserAdError" | "ReviewsList" | "ServiceOption" | "ServiceOptionsList" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "Staff" | "StaffsList" | "StorageInfos" | "StripePayment" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserClaim" | "UserForbiddenError" | "UserMedia" | "UserReview" | "UsersList";
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = "Account" | "AccountsList" | "AlreadyOperatorAvatarError" | "AuthorizedPayment" | "Booking" | "BookingAd" | "BookingAdBid" | "BookingAdBids" | "BookingAds" | "BookingMessagesList" | "BookingsList" | "BooleanResult" | "CannotBookHimSelfError" | "ClaimsList" | "CronStatus" | "Donation" | "DonationReceipt" | "DonationReceiptMedia" | "DonationReceiptsList" | "DonationsList" | "ExistingBookingError" | "GenderOption" | "GenderOptionsList" | "HostingOption" | "HostingOptionsList" | "IndividualOperator" | "IndividualOperatorCoreService" | "IndividualOperatorExtraService" | "InvalidArgumentsError" | "InvalidOperatorError" | "IsActiveOperatorMainMediaError" | "IsActiveOperatorWithNoReplacementMediaError" | "LanguageOption" | "LanguageOptionMedia" | "LanguageOptionsList" | "Location" | "MediasList" | "MessageMedia" | "NotFoundError" | "NotSupportedExtraServiceError" | "OperatorAvailability" | "OperatorBookingMessage" | "OperatorCannotProcessPaymentsError" | "OperatorClaim" | "OperatorMedia" | "OperatorReview" | "Operators" | "Partner" | "PartnerMedia" | "PartnersList" | "PaymentProcessorError" | "PreExistingOperatorBidError" | "PreExistingUserAdError" | "ReviewsList" | "ServiceOption" | "ServiceOptionsList" | "SharedMedia" | "SpecieOption" | "SpecieOptionsList" | "Staff" | "StaffsList" | "StorageInfos" | "StripePayment" | "UnableToProcessError" | "User" | "UserAuthenticationError" | "UserBookingMessage" | "UserClaim" | "UserForbiddenError" | "UserMedia" | "UserReview" | "UsersList";
 
 export type NexusGenAbstractsUsingStrategyResolveType = never;
 

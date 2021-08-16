@@ -95,6 +95,71 @@ export const createMedia = mutationField('createMedia', {
 	}
 })
 
+export const AlreadyOperatorAvatarError = objectType({
+	name: 'AlreadyOperatorAvatarError',
+	isTypeOf: (data) => Boolean((data as any).alreadyOperatorAvatarError),
+	definition(t) {
+		t.nonNull.string('alreadyOperatorAvatarError')
+	}
+})
+
+export const SetMediaAsOperatorAvatarResult = unionType({
+	name: 'SetMediaAsOperatorAvatarResult',
+	definition(t) {
+		t.members(
+			'BooleanResult',
+			'AlreadyOperatorAvatarError',
+			'NotFoundError',
+			'UserAuthenticationError',
+			'UserForbiddenError',
+			'InvalidArgumentsError',
+			'UnableToProcessError'
+		)
+	}
+})
+
+export const setPictureAsMainProfilePicture = mutationField('setPictureAsMainProfilePicture', {
+	type: 'SetMediaAsOperatorAvatarResult',
+	args: {
+		id: nonNull(idArg())
+	},
+	authorization: (ctx) => authorize(ctx, 'operator'),
+	validation: (args) => checkArgs(args, ['id']),
+	async resolve(_, { id }, { user: { operatorId } }) {
+		try {
+			const media = await prisma.media.findFirst({
+				where: { id, operatorId },
+				include: { operator: true }
+			})
+			if (!media) return NotFoundError
+			if (media.id === media.operator?.avatarMediaId)
+				return { alreadyOperatorAvatarError: 'Provided id is already the operator avatar' }
+
+			// Update media if needed
+			if (!media?.operator?.id) {
+				await prisma.media.update({
+					where: { id },
+					data: {
+						operatorId
+					}
+				})
+			}
+
+			await prisma.operator.update({
+				where: { id: operatorId as string },
+				data: {
+					avatarMediaId: media.id
+				}
+			})
+
+			return { success: true }
+		} catch (error) {
+			console.error(error)
+			return UnableToProcessError
+		}
+	}
+})
+
 export const IsActiveOperatorWithNoReplacementMediaError = objectType({
 	name: 'IsActiveOperatorWithNoReplacementMediaError',
 	isTypeOf: (data) => Boolean((data as any).activeOperatorWithNoReplacementMediaError),
@@ -152,7 +217,7 @@ export const deleteMedia = mutationField('deleteMedia', {
 						where: { operatorId: media.operatorId }
 					})
 					const hasNoReplacementPictures = operatorMedias.length === 1 // Only has this one media
-					const isOperatorMainPicture = operator.mainMediaId === mediaId
+					const isOperatorMainPicture = operator.avatarMediaId === mediaId
 					if (hasNoReplacementPictures) {
 						return {
 							activeOperatorWithNoReplacementMediaError:

@@ -14,7 +14,7 @@ export const createIndividualOperatorInput = inputObjectType({
 	definition(t) {
 		t.nonNull.date('birthDate')
 		t.nonNull.string('description')
-		t.nonNull.id('mainMediaId')
+		t.nonNull.id('avatarMediaId')
 		t.nonNull.list.nonNull.id('acceptedSpecieOptionsIds')
 		t.nonNull.list.nonNull.id('languageOptionIds')
 		t.nonNull.list.nonNull.id('ownAnimalsSpecieOptionsIds')
@@ -81,7 +81,7 @@ export const updateIndividualOperatorInput = inputObjectType({
 	definition(t) {
 		t.date('birthDate')
 		t.string('description')
-		t.id('mainMediaId')
+		t.id('avatarMediaId')
 		t.list.id('acceptedSpecieOptionsIds')
 		t.list.id('languageOptionIds')
 		t.list.id('ownAnimalsSpecieOptionsIds')

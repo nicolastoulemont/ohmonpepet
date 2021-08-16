@@ -6,7 +6,7 @@ export const Operator = interfaceType({
 	definition(t) {
 		t.implements('Actor')
 		t.string('description')
-		t.string('mainMediaId')
+		t.string('avatarMediaId')
 		t.list.string('acceptedSpecieOptionsIds')
 		t.list.string('ownAnimalsSpecieOptionsIds')
 		t.list.string('languageOptionIds')

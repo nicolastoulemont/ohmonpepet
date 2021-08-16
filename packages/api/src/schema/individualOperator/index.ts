@@ -14,7 +14,7 @@ export const IndividualOperator = objectType({
 		t.field('avatar', {
 			type: 'Media',
 			resolve: async (i) =>
-				await prisma.media.findUnique({ where: { id: i.mainMediaId as string } })
+				await prisma.media.findUnique({ where: { id: i.avatarMediaId as string } })
 		})
 		t.field('account', {
 			type: 'Account',
