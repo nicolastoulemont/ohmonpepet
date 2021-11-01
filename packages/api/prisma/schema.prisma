@@ -38,21 +38,23 @@ model Staff {
   createdPartners      Partner[]
   medias               Media[]
   donationsReceipts    DonationsReceipt[]
+  messages             Message[]
 }
 
 // Actors
 model User {
-  id               String           @id @default(cuid())
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  account          Account          @relation(fields: [accountId], references: [id])
+  id               String         @id @default(cuid())
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  account          Account        @relation(fields: [accountId], references: [id])
   accountId        String
   firstName        String
   lastName         String?
   stripeCustomerId String?
+  avatarMediaId    String?
   reviews          Review[]
   bookings         Booking[]
-  bookingMessages  BookingMessage[]
+  message          Message[]
   claims           BookingClaim[]
   medias           Media[]
   bookingAds       BookingAd[]
@@ -63,14 +65,15 @@ model Operator {
   createdAt                  DateTime               @default(now())
   updatedAt                  DateTime               @updatedAt
   isActive                   Boolean                @default(false)
-  birthDate                  DateTime               @db.Date
-  description                String
-  avatarMediaId              String // The mediaId of the main displayed image
+  isComplete                 Boolean                @default(false)
+  birthDate                  DateTime?              @db.Date
+  description                String?
+  avatarMediaId              String? // The mediaId of the main displayed image
   acceptedSpecieOptionsIds   String[] // No relations, needed for filtering only
   ownAnimalsSpecieOptionsIds String[] // No relations, needed for filtering only
   languageOptionIds          String[] // No relations, needed for filtering only
   genderOptionId             String? // Needed for filtering, with relation because its possible
-  hostingOptionId            String // Needed for filtering, with relation because its possible
+  hostingOptionId            String? // Needed for filtering, with relation because its possible
   partnerId                  String?
   partnerPercentage          Int?
   stripeAccountId            String?
@@ -86,7 +89,7 @@ model Operator {
   medias                     Media[]
   reviews                    Review[]
   bookings                   Booking[]
-  bookingMessages            BookingMessage[]
+  messages                   Message[]
   claims                     BookingClaim[]
   coreServices               CoreOperatorService[]
   extraServices              ExtraOperatorService?
@@ -157,6 +160,7 @@ model Location {
   country      String?
   country_code String?
   postcode     String?
+  city         String?
   latitude     Float
   longitude    Float
   operator     Operator?  @relation(fields: [operatorId], references: [id])
@@ -214,11 +218,11 @@ model DonationsReceipt {
 
 // Bookings related infos
 model Booking {
-  id                         String           @id @default(cuid())
-  createdAt                  DateTime         @default(now())
-  updatedAt                  DateTime         @updatedAt
-  startDate                  DateTime         @db.Date
-  endDate                    DateTime         @db.Date
+  id                         String          @id @default(cuid())
+  createdAt                  DateTime        @default(now())
+  updatedAt                  DateTime        @updatedAt
+  startDate                  DateTime        @db.Date
+  endDate                    DateTime        @db.Date
   // Price related fields
   selectedOptions            Json[] // The option's name and price at the moment of booking's creation
   priceWithOutApplicationFee Float
@@ -227,19 +231,19 @@ model Booking {
   operatorConfirmationDate   DateTime?
   ownerConfirmationDate      DateTime?
   // Cancelation related fields
-  canceled                   Boolean?         @default(false)
+  canceled                   Boolean?        @default(false)
   canceledBy                 String?
   canceledReason             String?
-  paid                       Boolean          @default(false)
-  underReview                Boolean          @default(false)
-  operator                   Operator         @relation(fields: [operatorId], references: [id])
+  paid                       Boolean         @default(false)
+  underReview                Boolean         @default(false)
+  operator                   Operator        @relation(fields: [operatorId], references: [id])
   operatorId                 String
-  user                       User             @relation(fields: [userId], references: [id])
+  user                       User            @relation(fields: [userId], references: [id])
   userId                     String
-  service                    ServiceOption    @relation(fields: [serviceOptionId], references: [id])
+  service                    ServiceOption   @relation(fields: [serviceOptionId], references: [id])
   serviceOptionId            String
   reviews                    Review[]
-  messages                   BookingMessage[]
+  messages                   Message[]
   claims                     BookingClaim[]
   stripePayment              StripePayment?
   donation                   Donation?
@@ -256,31 +260,16 @@ model BookingAnimal {
   specie         SpecieOption @relation(fields: [specieOptionId], references: [id])
 }
 
-model BookingMessage {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  content    String
-  readAt     DateTime?
-  booking    Booking   @relation(fields: [bookingId], references: [id])
-  bookingId  String
-  user       User?     @relation(fields: [userId], references: [id])
-  userId     String?
-  operator   Operator? @relation(fields: [operatorId], references: [id])
-  operatorId String?
-  medias     Media[]
-}
-
 model BookingClaim {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   reason     String
-  user       User?     @relation(fields: [userId], references: [id])
-  userId     String?
-  operator   Operator? @relation(fields: [operatorId], references: [id])
-  operatorId String?
-  booking    Booking   @relation(fields: [bookingId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  operator   Operator @relation(fields: [operatorId], references: [id])
+  operatorId String
+  booking    Booking  @relation(fields: [bookingId], references: [id])
   bookingId  String
 }
 
@@ -367,6 +356,23 @@ model Review {
 
 // Transversal
 
+model Message {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  content    String
+  readAt     DateTime?
+  booking    Booking?  @relation(fields: [bookingId], references: [id])
+  bookingId  String?
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     String?
+  operator   Operator? @relation(fields: [operatorId], references: [id])
+  operatorId String?
+  medias     Media[]
+  staff      Staff?    @relation(fields: [staffId], references: [id])
+  staffId    String?
+}
+
 enum MediaType {
   IMAGE
   VIDEO
@@ -390,8 +396,8 @@ model Media {
   operator          Operator?         @relation(fields: [operatorId], references: [id])
   operatorId        String?
   // Booking specific media (picture or video sent to the owner by the chat for example)
-  bookingMessage    BookingMessage?   @relation(fields: [bookingMessageId], references: [id])
-  bookingMessageId  String?
+  message           Message?          @relation(fields: [messageId], references: [id])
+  messageId         String?
   staffId           String?
   staff             Staff?            @relation(fields: [staffId], references: [id])
   languageOptionId  String?

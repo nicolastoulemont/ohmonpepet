@@ -1,0 +1,20 @@
+{
+	"fr": {
+		"title": "Statistiques",
+		"donationHeading": "Donations",
+		"donated": "Montant versé grace à vous :",
+		"toBeDonated": "Montant à verser",
+		"noDonationsYet": "Votre activité n'a pas encore permis d'effectuer de donation.",
+		"bookings": "Réservations",
+		"selected": "Vous avez été sélectionné{{gender}} pour {{number}} réservations pour garder {{colon}} "
+	},
+	"en": {
+		"title": "Metrics",
+		"donationHeading": "Donations",
+		"donated": "Amount donated in your name:",
+		"toBeDonated": "Amount to donate",
+		"noDonationsYet": "Your activity has yet been able to donate money.",
+		"bookings": "Bookings",
+		"selected": "You have been selected for {{number}} of bookings to host{{colon}} "
+	}
+}

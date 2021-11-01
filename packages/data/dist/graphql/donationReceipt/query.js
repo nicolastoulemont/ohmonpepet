@@ -1,0 +1,9 @@
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+import gql from 'graphql-tag';
+import { UNABLE_TO_PROCESS_FIELDS, INVALID_ARGUMENTS_FIELDS } from '../errors';
+export var SEARCH_RECEIPTS = gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n\t", "\n\t", "\n\tquery SearchDonationReceipts($input: SearchDonationReceiptsInput!) {\n\t\tsearchDonationReceipts(input: $input) {\n\t\t\t... on DonationReceiptsList {\n\t\t\t\tdonationReceipts {\n\t\t\t\t\tid\n\t\t\t\t\tamountDonated\n\t\t\t\t\tcreatedAt\n\t\t\t\t\tupdatedAt\n\t\t\t\t\tfiles {\n\t\t\t\t\t\tstoreUrl\n\t\t\t\t\t}\n\t\t\t\t\tpartner {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tmedias {\n\t\t\t\t\t\t\tstoreUrl\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tdonations {\n\t\t\t\t\t\tid\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\t... on UnableToProcessError {\n\t\t\t\t...UnableToProcessFields\n\t\t\t}\n\t\t\t... on InvalidArgumentsError {\n\t\t\t\t...InvalidArgumentsFields\n\t\t\t}\n\t\t}\n\t}\n"], ["\n\t", "\n\t", "\n\tquery SearchDonationReceipts($input: SearchDonationReceiptsInput!) {\n\t\tsearchDonationReceipts(input: $input) {\n\t\t\t... on DonationReceiptsList {\n\t\t\t\tdonationReceipts {\n\t\t\t\t\tid\n\t\t\t\t\tamountDonated\n\t\t\t\t\tcreatedAt\n\t\t\t\t\tupdatedAt\n\t\t\t\t\tfiles {\n\t\t\t\t\t\tstoreUrl\n\t\t\t\t\t}\n\t\t\t\t\tpartner {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tmedias {\n\t\t\t\t\t\t\tstoreUrl\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tdonations {\n\t\t\t\t\t\tid\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\t... on UnableToProcessError {\n\t\t\t\t...UnableToProcessFields\n\t\t\t}\n\t\t\t... on InvalidArgumentsError {\n\t\t\t\t...InvalidArgumentsFields\n\t\t\t}\n\t\t}\n\t}\n"])), UNABLE_TO_PROCESS_FIELDS, INVALID_ARGUMENTS_FIELDS);
+var templateObject_1;
+//# sourceMappingURL=query.js.map

@@ -41,7 +41,7 @@ export const PartnersResult = unionType({
 	}
 })
 
-export const Partners = queryField('Partners', {
+export const Partners = queryField('partners', {
 	type: 'PartnersResult',
 	async resolve() {
 		try {

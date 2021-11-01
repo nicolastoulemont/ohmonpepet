@@ -5,13 +5,7 @@ import prisma from '../../lib/prisma'
 export const ClaimByIdResult = unionType({
 	name: 'ClaimByIdResult',
 	definition(t) {
-		t.members(
-			'UserClaim',
-			'OperatorClaim',
-			'NotFoundError',
-			'UserAuthenticationError',
-			'UserForbiddenError'
-		)
+		t.members('Claim', 'NotFoundError', 'UserAuthenticationError', 'UserForbiddenError')
 	}
 })
 

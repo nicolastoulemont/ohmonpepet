@@ -1,0 +1,28 @@
+{
+	"fr": {
+		"title": "Informations personnelles",
+		"firstNameLabel": "Prénom",
+		"lastNameLabel": "Nom",
+		"ownAddressLabel": "Votre adresse",
+		"phoneNumberLabel": "Numéro de téléphone",
+		"birthDateLabel": "Date de naissance",
+		"genderLabel": "Civilité",
+		"genderPlaceholder": "Sélectionner une civilité",
+		"languagesLabel": "Langues",
+		"profilePicture": "Photo de profile",
+		"personalBtn": "Suite"
+	},
+	"en": {
+		"title": "Personal Informations",
+		"firstNameLabel": "First name",
+		"lastNameLabel": "Last name",
+		"ownAddressLabel": "Your address",
+		"phoneNumberLabel": "Phone number",
+		"birthDateLabel": "Birth date",
+		"genderLabel": "Civilité",
+		"genderPlaceholder": "Sélectionner une civilité",
+		"languagesLabel": "Languages",
+		"profilePicture": "Profile picture",
+		"personalBtn": "Next"
+	}
+}

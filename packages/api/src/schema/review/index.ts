@@ -27,8 +27,7 @@ export const userReview = objectType({
 		t.id('userId')
 		t.field('user', {
 			type: 'User',
-			resolve: async (m) =>
-				await prisma.bookingMessage.findUnique({ where: { id: m.id } }).user()
+			resolve: async (m) => await prisma.message.findUnique({ where: { id: m.id } }).user()
 		})
 	}
 })
@@ -42,7 +41,7 @@ export const operatorReview = objectType({
 		t.field('operator', {
 			type: 'Operator',
 			resolve: async (m) =>
-				await prisma.bookingMessage.findUnique({ where: { id: m.id } }).operator()
+				await prisma.message.findUnique({ where: { id: m.id } }).operator()
 		})
 	}
 })

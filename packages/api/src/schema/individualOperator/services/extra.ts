@@ -8,7 +8,7 @@ export const IndividualOperatorExtraService = objectType({
 	definition(t) {
 		t.implements('Node')
 		t.boolean('atHomeExclusivity')
-		t.int('atHomeExlusivityExtraPrice')
+		t.int('atHomeExclusivityExtraPrice')
 		t.boolean('atHomeContinuously')
 		t.int('atHomeContinuouslyExtraPrice')
 		t.boolean('atHomeOnlyBringPet')
@@ -37,7 +37,7 @@ export const invidualOperatorExtraServicesInput = inputObjectType({
 	name: 'InvidualOperatorExtraServicesInput',
 	definition(t) {
 		t.boolean('atHomeExclusivity')
-		t.int('atHomeExlusivityExtraPrice')
+		t.int('atHomeExclusivityExtraPrice')
 		t.boolean('atHomeContinuously')
 		t.int('atHomeContinuouslyExtraPrice')
 		t.boolean('atHomeOnlyBringPet')

@@ -1,0 +1,14 @@
+{
+	"fr": {
+		"title": "Confiance et sécurité",
+		"imageAlt": "Confiance",
+		"subTitle": "En cas de soucis, vous pouvez nous contacter à",
+		"email": "contact@ohmonpepet.com"
+	},
+	"en": {
+		"title": "Trust and security",
+		"imageAlt": "Trust",
+		"subTitle": "If you encounter any issue, you can join us at",
+		"email": "contact@ohmonpepet.com"
+	}
+}

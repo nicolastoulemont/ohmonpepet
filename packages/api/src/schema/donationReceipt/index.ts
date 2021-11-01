@@ -1,3 +1,4 @@
+import prisma from '../../lib/prisma'
 import { objectType } from 'nexus'
 
 export * from './mutation'
@@ -9,5 +10,20 @@ export const donationReceipt = objectType({
 	definition(t) {
 		t.implements('Node')
 		t.positiveFloat('amountDonated')
+		t.field('partner', {
+			type: 'Partner',
+			resolve: async (d) =>
+				await prisma.donationsReceipt.findUnique({ where: { id: d.id } }).partner()
+		})
+		t.list.field('donations', {
+			type: 'Donation',
+			resolve: async (d) =>
+				await prisma.donationsReceipt.findUnique({ where: { id: d.id } }).donations()
+		})
+		t.list.field('files', {
+			type: 'Media',
+			resolve: async (d) =>
+				await prisma.donationsReceipt.findUnique({ where: { id: d.id } }).files()
+		})
 	}
 })

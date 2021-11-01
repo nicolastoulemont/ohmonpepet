@@ -1,0 +1,36 @@
+{
+	"fr": {
+		"dashboardTitle": "Espace admin",
+		"paymentsTitle": "Espace paiements",
+		"onTrackPayments": "Paiements avec payment intents",
+		"PaymentsWithErrors": "Paiements avec setup intents",
+		"PaymentsWithEmailErrors": "Paiements avec erreurs d'envoi de mail",
+		"users": "Utilisateurs par jour",
+		"bookings": "Réservations par jour",
+		"petsitters": "Petsitters par jour",
+		"captureDate": "Date de transfert des fonds : ",
+		"updatedDate": "Modifié le : ",
+		"startCron": "Start bot",
+		"stopCron": "Stop bot",
+		"paymentIntentBot": "Bot de capture de paiement",
+		"setupIntentBot": "Bot de création de paiement",
+		"emailBot": "Bot d'envoi des emails automatiques"
+	},
+	"en": {
+		"dashboardTitle": "Admin space",
+		"paymentsTitle": "Espace paiements",
+		"onTrackPayments": "Payments with payments intents",
+		"PaymentsWithErrors": "Payments with setup intents",
+		"PaymentsWithEmailErrors": "Payments with mail errors",
+		"users": "Users per day",
+		"bookings": "Bookings per day",
+		"petsitters": "Petsitters per day",
+		"captureDate": "Funds transfert date: ",
+		"updatedDate": "Updated on : ",
+		"startCron": "Start bot",
+		"stopCron": "Stop bot",
+		"paymentIntentBot": "Payment capture bot",
+		"setupIntentBot": "Payment creation bot",
+		"emailBot": "Automatic email bot"
+	}
+}

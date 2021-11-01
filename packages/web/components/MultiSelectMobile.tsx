@@ -1,0 +1,266 @@
+import React, { useState, useEffect, useRef } from 'react'
+import { panelBgColor, bgColor, shadowSm, borderRadius } from 'theme/colors'
+import { CheckIcon } from '@chakra-ui/icons'
+import { keyValidation } from 'utils/keyboard'
+import { motion } from 'framer-motion'
+import { useKeyBoardListNavigation } from 'utils/hooks/useKeyBoardListNavigation'
+import { useClickAway } from 'react-use'
+import {
+	Input,
+	Box,
+	Flex,
+	Text,
+	useColorMode,
+	Tag,
+	TagCloseButton,
+	TagLabel,
+	FormHelperText,
+	Image,
+	Icon,
+	chakra
+} from '@chakra-ui/react'
+
+const MotionBox = chakra(motion.div)
+
+interface Option {
+	key: string
+	value: string | number
+	text: string
+	iconUrl?: string
+}
+
+interface MultiSelectMobileProps {
+	options: Array<Option>
+	state: any
+	setState: React.Dispatch<
+		React.SetStateAction<{
+			[key: string]: any
+		}>
+	>
+	errors: { [key: string]: string }
+	setErrors?: React.Dispatch<
+		| React.SetStateAction<{
+				[key: string]: any
+		  }>
+		| undefined
+	>
+	name: string
+	placeholder: string
+	type: string
+	withIcon?: boolean
+	multi?: boolean
+	showHelper?: boolean
+	helperText?: string
+}
+
+export function MultiSelectMobile({
+	options,
+	state,
+	setState,
+	setErrors,
+	errors,
+	name,
+	placeholder,
+	type,
+	withIcon = false,
+	multi = true,
+	showHelper = true,
+	helperText
+}: MultiSelectMobileProps) {
+	const [internalChoices, setInternalChoices] = useState<Array<any>>([])
+	const [internalOptions, setInternalOptions] = useState<Array<Option>>([])
+	const [internalOptionsLookup, setInternalOptionsLookup] = useState<{
+		[key: string]: Option
+	}>({})
+	const [showOptions, setShowOptions] = useState(false)
+	const [textValue, setTextValue] = useState('')
+	const internalTagsContainerRef = useRef(null)
+	const { listContainerRef, inputRef } = useKeyBoardListNavigation({
+		listDisplayController: setShowOptions,
+		optionsList: internalOptions,
+		optionSelectorKey: 'value'
+	})
+	const containerRef = useRef<HTMLDivElement>(null)
+	useClickAway(containerRef, () => setShowOptions(false))
+
+	const { colorMode } = useColorMode()
+
+	// Map options to internal and create lookup object
+	useEffect(() => {
+		options && setInternalOptions(options)
+		options &&
+			setInternalOptionsLookup(
+				options.reduce((acc, option) => {
+					acc[option.value] = option
+					return acc
+				}, {})
+			)
+	}, [options])
+
+	// Map provided selected values to internal
+	useEffect(() => {
+		if (state && state !== internalChoices) {
+			setInternalChoices(state)
+		}
+	}, [state])
+
+	useEffect(() => {
+		if (internalOptions.length === 0 && showOptions) {
+			setShowOptions(false)
+		}
+	}, [internalOptions])
+
+	function handleLocalChange(event: React.ChangeEvent<any>) {
+		setTextValue(event.target.value)
+		if (event.target.value === '') {
+			setInternalOptions(options)
+		} else {
+			const matchingValues = options.filter((option) =>
+				option.text.toLowerCase().includes(event.target.value.toLowerCase())
+			)
+			if (matchingValues.length > 0 && !showOptions) {
+				setShowOptions(true)
+			}
+			setInternalOptions(matchingValues)
+		}
+	}
+
+	function handleLocalOptionClick(option: Option) {
+		if (!internalChoices.includes(option.value)) {
+			setInternalChoices(multi ? [...internalChoices, option.value] : [option.value])
+			setState((state) => ({
+				...state,
+				[name]: multi ? [...internalChoices, option.value] : [option.value]
+			}))
+			textValue !== '' && setTextValue('')
+			setErrors && setErrors((errors) => ({ ...errors, [name]: undefined }))
+			!multi && setShowOptions(false)
+		} else {
+			const otherChoices = internalChoices.filter((choice) => choice !== option.value)
+			setInternalChoices(otherChoices)
+			setState((state) => ({ ...state, [name]: otherChoices }))
+			setErrors && setErrors((errors) => ({ ...errors, [name]: undefined }))
+			!multi && setShowOptions(false)
+		}
+	}
+
+	function handleRemoveClick(choice) {
+		const newValues = internalChoices.filter((internalChoice) => internalChoice !== choice)
+		setInternalChoices(newValues)
+		setState((state) => ({ ...state, [name]: newValues }))
+		setErrors && setErrors((errors) => ({ ...errors, [name]: undefined }))
+	}
+
+	return (
+		<Box zIndex={3} position='relative' boxSizing='border-box' width='100%'>
+			{internalChoices.length > 0 && (
+				<Flex
+					position='absolute'
+					left='5px'
+					top='7px'
+					ref={internalTagsContainerRef}
+					maxWidth='100%'
+					overflowX='hidden'
+				>
+					{internalChoices.map((choice) => (
+						<Tag
+							zIndex={2}
+							size='sm'
+							mr={1}
+							key={choice}
+							px={2}
+							py='0.2rem'
+							colorScheme='green'
+						>
+							<TagLabel>{internalOptionsLookup[choice]?.text}</TagLabel>
+							<TagCloseButton onClick={() => handleRemoveClick(choice)} />
+						</Tag>
+					))}
+				</Flex>
+			)}
+			<Input
+				type={type}
+				name={name}
+				id={name}
+				ref={inputRef}
+				value={textValue}
+				aria-describedby={name}
+				autoFocus={true}
+				placeholder={internalChoices.length > 0 ? null : placeholder}
+				variant='outline'
+				onChange={handleLocalChange}
+				isInvalid={!!errors[name]}
+				onFocus={() => !showOptions && setShowOptions(true)}
+				zIndex={1}
+				pl={
+					internalTagsContainerRef.current && internalChoices.length > 0
+						? internalTagsContainerRef.current.clientWidth + 5
+						: 3
+				}
+			/>
+			{errors[name] && !showOptions && showHelper && (
+				<FormHelperText>{errors[name]}</FormHelperText>
+			)}
+			{helperText && !showOptions && <FormHelperText>{helperText}</FormHelperText>}
+			{showOptions && (
+				<Flex
+					align='left'
+					justify='center'
+					direction='column'
+					height='100%'
+					width='100%'
+					zIndex='inherit'
+					position='relative'
+					ref={listContainerRef}
+				>
+					{internalOptions.map((option) => (
+						<MotionBox
+							layout
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							key={option.key}
+							id={String(option.value)}
+							onClick={() => handleLocalOptionClick(option)}
+							_hover={{
+								cursor: 'pointer',
+								backgroundColor: bgColor[colorMode]
+							}}
+							_focus={{
+								backgroundColor: bgColor[colorMode]
+							}}
+							width='100%'
+							backgroundColor={panelBgColor[colorMode]}
+							boxShadow={shadowSm}
+							my={1}
+							p={{ base: 3, sm: 6 }}
+							borderRadius={borderRadius}
+							zIndex='inherit'
+							position='relative'
+							display='flex'
+							alignItems='center'
+							justifyContent='left'
+							tabIndex={0}
+							role='button'
+							onKeyDown={(event) =>
+								keyValidation(event) && handleLocalOptionClick(option)
+							}
+						>
+							{withIcon && <Image src={option.iconUrl} width='20px' mr={2} />}
+							<Text>{option.text}</Text>
+							{internalChoices.includes(option.value) && (
+								<Icon
+									as={CheckIcon as any}
+									color='green.500'
+									pos='absolute'
+									top='12px'
+									right='8%'
+									boxSize='22px'
+								/>
+							)}
+						</MotionBox>
+					))}
+				</Flex>
+			)}
+		</Box>
+	)
+}

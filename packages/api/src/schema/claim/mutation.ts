@@ -12,8 +12,7 @@ export const createBookingClaimResult = unionType({
 	name: 'CreateBookingClaimResult',
 	definition(t) {
 		t.members(
-			'UserClaim',
-			'OperatorClaim',
+			'Claim',
 			'InvalidArgumentsError',
 			'UserAuthenticationError',
 			'UnableToProcessError'
@@ -26,26 +25,30 @@ export const CreateBookingClaimInput = inputObjectType({
 	definition(t) {
 		t.nonNull.string('bookingId')
 		t.nonNull.string('reason')
-		t.nonNull.saveAs('saveAs')
+		t.nonNull.id('userId')
+		t.nonNull.id('operatorId')
 	}
 })
 
 export const createBookingClaim = mutationField('createBookingClaim', {
 	type: 'CreateBookingClaimResult',
-	args: { input: nonNull(arg({ type: CreateBookingClaimInput })) },
+	args: { input: nonNull(arg({ type: 'CreateBookingClaimInput' })) },
 	authorization: (ctx) => authorize(ctx, 'user'),
-	validation: (args) => checkArgs(args, ['reason', 'bookingId', 'saveAs:saveAs']),
-	async resolve(_, { input: { bookingId, reason, saveAs } }, { user: { userId, operatorId } }) {
+	validation: (args) => checkArgs(args, ['reason', 'bookingId', 'userId', 'operatorId']),
+	async resolve(_, { input: { bookingId, reason, userId, operatorId } }) {
 		try {
-			if (saveAs === 'operator' && !operatorId) {
+			const user = await prisma.user.findUnique({ where: { id: userId } })
+			if (!user) {
 				return {
 					...PartialInvalidArgumentsError,
-					invalidArguments: [
-						{
-							key: 'saveAs',
-							message: 'Cannot save as operator, please create an operator profile'
-						}
-					]
+					invalidArguments: [{ key: 'userId', message: 'Invalid userId' }]
+				}
+			}
+			const operator = await prisma.operator.findUnique({ where: { id: operatorId } })
+			if (!operator) {
+				return {
+					...PartialInvalidArgumentsError,
+					invalidArguments: [{ key: 'operator', message: 'Invalid operatorId' }]
 				}
 			}
 
@@ -53,8 +56,8 @@ export const createBookingClaim = mutationField('createBookingClaim', {
 				data: {
 					bookingId,
 					reason,
-					...(saveAs === 'operator' && operatorId && { operatorId }),
-					...(saveAs === 'user' && { userId })
+					operatorId,
+					userId
 				}
 			})
 
@@ -62,7 +65,7 @@ export const createBookingClaim = mutationField('createBookingClaim', {
 				where: { id: bookingId },
 				data: { underReview: true }
 			})
-			return { claim }
+			return claim
 		} catch (error) {
 			return UnableToProcessError
 		}

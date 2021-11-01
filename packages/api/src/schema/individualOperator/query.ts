@@ -148,6 +148,7 @@ export const searchOperators = queryField('searchOperators', {
 						}
 					},
 					isActive: true,
+					isComplete: true,
 					...(input.acceptedSpecieOptionsIds && {
 						acceptedSpecieOptionsIds: { hasEvery: input.acceptedSpecieOptionsIds }
 					}),

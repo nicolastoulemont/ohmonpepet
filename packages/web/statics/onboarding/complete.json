@@ -1,0 +1,16 @@
+{
+	"fr": {
+		"title": "Encore un effort, votre profil petsitter est presque complet !",
+		"subTitle": "Pour finaliser votre profile, vous devez renseignez vos informations de paiement auprès de notre partenaire de gestion de paiements : Stripe",
+		"messageOne": "Vous recevrez vos paiements sur le compte que vous y renseignerez.",
+		"messageTwo": "Une fois votre compte Stripe finalisé, votre profile petsitter sera considéré comme actif et visible pour nos utilisateurs.",
+		"completeBtn": "Renseigner vos informations avec Stripe"
+	},
+	"en": {
+		"title": "One more effort, your petsitter profile is almost complete!",
+		"subTitle": "In order to finalise your profile, you need to fill in your payment information with our payment management partner: Stripe",
+		"messageOne": "You will receive your payments on the account you fill in.",
+		"messageTwo": "Once your Stripe account is finalised, your petsitter profile will be considered active and visible by our users.",
+		"completeBtn": "Fill in your information with Stripe"
+	}
+}

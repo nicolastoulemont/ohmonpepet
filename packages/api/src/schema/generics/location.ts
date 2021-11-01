@@ -12,6 +12,7 @@ export const Location = objectType({
 		t.string('country')
 		t.string('country_code')
 		t.string('postcode')
+		t.string('city')
 		t.field('operator', {
 			type: 'Operator',
 			resolve: async (l) =>

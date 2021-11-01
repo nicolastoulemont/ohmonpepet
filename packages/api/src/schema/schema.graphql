@@ -49,10 +49,6 @@ union AllStaffsResult = StaffsList | UnableToProcessError | UserAuthenticationEr
 """The result of the allUsers query"""
 union AllUsersResult = UnableToProcessError | UserAuthenticationError | UserForbiddenError | UsersList
 
-type AlreadyOperatorAvatarError {
-  alreadyOperatorAvatarError: String!
-}
-
 union AuthorizePaymentResult = AuthorizedPayment | InvalidOperatorError | NotFoundError | OperatorCannotProcessPaymentsError | UnableToProcessError | UserAuthenticationError
 
 type AuthorizedPayment {
@@ -61,11 +57,12 @@ type AuthorizedPayment {
   stripeTargetApi: String
 }
 
-union BidForBookingAdResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
+union BidForBookingAdResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type Booking implements Node {
+  animals: [BookingAnimal]
   animalsIds: [ID]
-  applictionFeeAmount: PositiveFloat
+  applicationFeeAmount: PositiveFloat
   canceled: Boolean
   canceledBy: String
   canceledReason: String
@@ -76,14 +73,14 @@ type Booking implements Node {
   """GUID for a resource"""
   id: String!
   messages: [BookingMessage]
-  operator: Operator
+  operator: IndividualOperator
   operatorConfirmationDate: DateTime
   ownerConfirmationDate: DateTime
   paid: Boolean
-  payment: BookingPayment
+  payment: StripePayment
   priceWithOutApplicationFee: PositiveFloat
   reviews: [Review]
-  selectedOptions: [JSON]
+  selectedOptions: JSON
   service: ServiceOption
   startDate: Date
   status: BookingStatus
@@ -95,7 +92,7 @@ type Booking implements Node {
 type BookingAd implements Node {
   animals: [SpecieOption]
   animalsSpeciesIds: [String!]!
-  bids: [Operator]
+  bidders: [IndividualOperator]
   createdAt: DateTime
   description: String
   endDate: Date
@@ -129,10 +126,22 @@ type BookingAds {
   bookingAds: [BookingAd]
 }
 
+type BookingAnimal implements Node {
+  bookingId: ID!
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  specie: SpecieOption
+  specieOptionId: ID!
+  updatedAt: DateTime
+}
+
 union BookingByIdResult = Booking | InvalidArgumentsError | NotFoundError
 
-"""The minimum required fields for message types"""
-interface BookingMessage implements Node {
+interface BookingMessage implements Message & Node {
+  booking: Booking
+  bookingId: ID!
   content: String!
   createdAt: DateTime
 
@@ -147,14 +156,6 @@ interface BookingMessage implements Node {
 union BookingMessageByIdResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | UserAuthenticationError | UserBookingMessage | UserForbiddenError
 
 union BookingMessageSubscriptionResult = OperatorBookingMessage | UserAuthenticationError | UserBookingMessage | UserForbiddenError
-
-"""List of booking messages"""
-type BookingMessagesList {
-  bookingMessages: [BookingMessage]
-}
-
-"""The result of the bookingMessages query"""
-union BookingMessagesResult = BookingMessagesList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 union BookingPayment = StripePayment
 
@@ -210,17 +211,24 @@ type CannotBookHimSelfError {
   cannotBookHimSelfError: String
 }
 
-interface Claim implements Node {
+type ChargesNotEnabledProcessorAccountError {
+  chargesNotEnabledProcessorAccountError: String
+}
+
+type Claim implements Node {
+  booking: Booking
   bookingId: ID!
   createdAt: DateTime
 
   """GUID for a resource"""
   id: String!
+  operator: IndividualOperator
   reason: String!
   updatedAt: DateTime
+  user: User
 }
 
-union ClaimByIdResult = NotFoundError | OperatorClaim | UserAuthenticationError | UserClaim | UserForbiddenError
+union ClaimByIdResult = Claim | NotFoundError | UserAuthenticationError | UserForbiddenError
 
 """List of booking messages"""
 type ClaimsList {
@@ -237,9 +245,14 @@ input ConfirmBookingInput {
 
 union ConfirmBookingResult = Booking | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
+type ConnectOperatorToProccessorResult {
+  redirectUrl: String
+}
+
 input CreateAccountInput {
   email: EmailAddress!
   firstName: String!
+  originUrl: String
   password: String!
 }
 
@@ -261,11 +274,12 @@ union CreateBookingAdResult = BookingAd | InvalidArgumentsError | PreExistingUse
 
 input CreateBookingClaimInput {
   bookingId: String!
+  operatorId: ID!
   reason: String!
-  saveAs: SaveAsValue!
+  userId: ID!
 }
 
-union CreateBookingClaimResult = InvalidArgumentsError | OperatorClaim | UnableToProcessError | UserAuthenticationError | UserClaim
+union CreateBookingClaimResult = Claim | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
 
 input CreateBookingInput {
   animalsIds: [String!]!
@@ -277,14 +291,6 @@ input CreateBookingInput {
   startDate: String!
 }
 
-input CreateBookingMessageInput {
-  bookingId: String!
-  content: String!
-  saveAs: String!
-}
-
-union CreateBookingMessageResult = InvalidArgumentsError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
-
 union CreateBookingResult = Booking | CannotBookHimSelfError | ExistingBookingError | InvalidArgumentsError | NotFoundError | NotSupportedExtraServiceError | UnableToProcessError | UserAuthenticationError
 
 input CreateDonationReceiptInput {
@@ -294,7 +300,7 @@ input CreateDonationReceiptInput {
   partnerId: ID!
 }
 
-union CreateDonationReceiptResult = DonationReceipt | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union CreateDonationReceiptResult = DonationReceipt | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input CreateGenderOptionInput {
   nameEn: String!
@@ -312,11 +318,11 @@ union CreateHostingOptionResult = HostingOption | InvalidArgumentsError | Unable
 
 input CreateIndividualOperatorInput {
   acceptedSpecieOptionsIds: [ID!]!
-  avatarMediaId: ID!
-  birthDate: Date!
-  description: String!
-  genderOptionId: String!
-  hostingOptionId: String!
+  avatarMediaId: ID
+  birthDate: Date
+  description: String
+  genderOptionId: String
+  hostingOptionId: String
   languageOptionIds: [ID!]!
   ownAnimalsSpecieOptionsIds: [ID!]!
   partnerId: String
@@ -325,7 +331,7 @@ input CreateIndividualOperatorInput {
 }
 
 """The result of the createIndividualOperator mutation"""
-union CreateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | UnableToProcessError
+union CreateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
 
 input CreateInvidualOperatorCoreServicesInput {
   price: Int!
@@ -350,10 +356,18 @@ input CreateMediaInput {
   saveAs: String!
 }
 
-union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+union CreateMediaResult = InvalidArgumentsError | StorageInfos | UnableToProcessError | UserAuthenticationError
+
+input CreateMessageInput {
+  bookingId: String!
+  content: String!
+  saveAs: SaveAsValue!
+}
+
+union CreateMessageResult = InvalidArgumentsError | OperatorBookingMessage | StaffBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
 
 input CreateOperatorAvailabilityInput {
-  date: Date!
+  dates: [Date!]!
 }
 
 union CreateOperatorAvailabilityResult = BooleanResult | InvalidArgumentsError | UnableToProcessError | UserAuthenticationError
@@ -407,7 +421,7 @@ type CronStatus {
 union CronSubscriptionsResult = BooleanResult | UserAuthenticationError | UserForbiddenError
 
 """The result of the currentAccount query"""
-union CurrentAccountResult = Account | NotFoundError | UserAuthenticationError | UserForbiddenError
+union CurrentAccountResult = Account | NotFoundError | UserAuthenticationError
 
 union CurrentOperatorDonationsResult = DonationsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
@@ -416,7 +430,11 @@ union CurrentOperatorMediaResult = NotFoundError | OperatorMedia | SharedMedia |
 
 union CurrentOperatorResult = IndividualOperator | NotFoundError | UserAuthenticationError | UserForbiddenError
 
+union CurrentStaffResult = NotFoundError | Staff | UserAuthenticationError | UserForbiddenError
+
 union CurrentUserAdsResult = BookingAds | UnableToProcessError
+
+union CurrentUserAndOperatorBookingsResult = BookingsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 union CurrentUserBidsResult = BookingAdBids | UnableToProcessError
 
@@ -445,12 +463,9 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 """The result of the deleteAccount mutation"""
-union DeleteAccountResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError
+union DeleteAccountResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 union DeleteBookingAdResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
-
-"""The result of the deleteBookingMessage mutation"""
-union DeleteBookingMessageResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 """The result of the deleteClaim mutation"""
 union DeleteClaimResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
@@ -470,6 +485,9 @@ union DeleteLanguageOptionResult = BooleanResult | InvalidArgumentsError | NotFo
 """The result of the deleteMedia mutation"""
 union DeleteMediaResult = BooleanResult | InvalidArgumentsError | IsActiveOperatorMainMediaError | IsActiveOperatorWithNoReplacementMediaError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
+"""The result of the deleteMessage mutation"""
+union DeleteMessageResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
+
 union DeleteOperatorAvailabilityResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 union DeletePartnerResult = BooleanResult | UserAuthenticationError | UserForbiddenError
@@ -481,12 +499,21 @@ union DeleteServiceOptionResult = BooleanResult | InvalidArgumentsError | NotFou
 
 union DeleteSpecieOptionResult = BooleanResult | InvalidArgumentsError | NotFoundError | UserAuthenticationError | UserForbiddenError
 
+type DetailsNotSubmittedProcessorAccountError {
+  detailsNotSubmittedProcessorAccountError: String
+}
+
 type Donation implements Node {
   amountToDonate: PositiveFloat
+  booking: Booking
   createdAt: DateTime
+  donationDate: DateTime
 
   """GUID for a resource"""
   id: String!
+  operator: IndividualOperator
+  partner: Partner
+  partnerId: ID!
   updatedAt: DateTime
 }
 
@@ -495,9 +522,12 @@ union DonationByIdResult = Donation | InvalidArgumentsError | NotFoundError
 type DonationReceipt implements Node {
   amountDonated: PositiveFloat
   createdAt: DateTime
+  donations: [Donation]
+  files: [Media]
 
   """GUID for a resource"""
   id: String!
+  partner: Partner
   updatedAt: DateTime
 }
 
@@ -614,6 +644,8 @@ type IndividualOperator implements Actor & Node & Operator {
   availabilities: [OperatorAvailability]
   avatar: Media
   avatarMediaId: String
+  averageResponseTime: DateTime
+  averageScore: Float
   bids: [BookingAdBid]
   birthDate: Date
   calendarUpdate: DateTime
@@ -621,13 +653,15 @@ type IndividualOperator implements Actor & Node & Operator {
   createdAt: DateTime
   description: String
   donations: [Donation]
-  extraServices: Account
+  extraServices: IndividualOperatorExtraService
   gender: GenderOption
+  genderOptionId: ID
   hosting: HostingOption
   hostingOptionId: String
 
   """GUID for a resource"""
   id: String!
+  isActive: Boolean
   languageOptionIds: [String]
   location: Location
   medias: [Media]
@@ -635,6 +669,7 @@ type IndividualOperator implements Actor & Node & Operator {
   partner: Partner
   partnerId: String
   partnerPercentage: Int
+  reviews: [Review]
   stripeAccountId: String
   updatedAt: DateTime
 }
@@ -659,7 +694,7 @@ type IndividualOperatorExtraService implements Node {
   atHomeContinuously: Boolean
   atHomeContinuouslyExtraPrice: Int
   atHomeExclusivity: Boolean
-  atHomeExlusivityExtraPrice: Int
+  atHomeExclusivityExtraPrice: Int
   atHomeOnlyBringPet: Boolean
   atHomeOnlyBringPetExtraPrice: Int
   atOwnerHomeCurtains: Boolean
@@ -677,9 +712,6 @@ type IndividualOperatorExtraService implements Node {
   operator: IndividualOperator
   updatedAt: DateTime
 }
-
-"""Return an individual operator or related errors"""
-union IndividualOperatorResult = IndividualOperator | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type InvalidArgument {
   key: String!
@@ -704,7 +736,7 @@ input InvidualOperatorExtraServicesInput {
   atHomeContinuously: Boolean
   atHomeContinuouslyExtraPrice: Int
   atHomeExclusivity: Boolean
-  atHomeExlusivityExtraPrice: Int
+  atHomeExclusivityExtraPrice: Int
   atHomeOnlyBringPet: Boolean
   atHomeOnlyBringPetExtraPrice: Int
   atOwnerHomeCurtains: Boolean
@@ -777,6 +809,7 @@ scalar Latitude
 type Location implements Node {
   address: String
   bookingAd: BookingAd
+  city: String
   country: String
   country_code: String
   createdAt: DateTime
@@ -788,6 +821,24 @@ type Location implements Node {
   operator: Operator
   postcode: String
   updatedAt: DateTime
+}
+
+type LocationSearchInfos {
+  city: String
+  country: String
+  country_code: String
+  formattedLocationString: String
+  id: String
+  latitude: Latitude
+  locale_names: String
+  longitude: Longitude
+  postcode: String
+}
+
+union LocationSearchResult = InvalidArgumentsError | LocationsList | UnableToProcessError
+
+type LocationsList {
+  locations: [LocationSearchInfos]
 }
 
 """
@@ -826,23 +877,50 @@ type MediasList {
 """The result of the medias query"""
 union MediasResult = MediasList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
+"""The minimum required fields for message types"""
+interface Message implements Node {
+  content: String!
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  medias: [Media]
+  readAt: DateTime
+  updatedAt: DateTime
+}
+
 type MessageMedia implements Media & Node {
-  bookingMessageId: ID
   createdAt: DateTime
 
   """GUID for a resource"""
   id: String!
   mediaType: MediaType
-  message: BookingMessage
+  message: Message
+  messageId: ID
   storeUrl: URL!
   updatedAt: DateTime
+}
+
+"""The result of the bookingMessages query"""
+union MessagesByBookingIdResult = InvalidArgumentsError | MessagesList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+"""List of booking messages"""
+type MessagesList {
+  messages: [Message]
+}
+
+"""The result of the bookingMessages query"""
+union MessagesResult = MessagesList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+type MissingProcessorAccountError {
+  missingProcessorAccountError: String
 }
 
 """The result of the modifyEmail mutation"""
 union ModifyEmailResult = Account | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 """The result of the modifyPassword mutation"""
-union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | UserAuthenticationError
+union ModifyPasswordResult = Account | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 type Mutation {
   authorizePayment(id: ID!): AuthorizePaymentResult
@@ -850,11 +928,11 @@ type Mutation {
   cancelBooking(input: CancelBookingInput!): CancelBookingResult
   cancelOnGoingBooking(input: CancelOnGoingBookingInput!): CancelOnGoingBookingResult
   confirmBooking(input: ConfirmBookingInput!): ConfirmBookingResult
+  connectUserToProcessor: ConnectOperatorToProccessorResult
   createAccount(input: CreateAccountInput!): CreateAccountResult
-  createAd(input: CreateBookingAdInput!): CreateBookingAdResult
   createBooking(input: CreateBookingInput!): CreateBookingResult
+  createBookingAd(input: CreateBookingAdInput!): CreateBookingAdResult
   createBookingClaim(input: CreateBookingClaimInput!): CreateBookingClaimResult
-  createBookingMessage(input: CreateBookingMessageInput!): CreateBookingMessageResult
   createDonationReceipt(input: CreateDonationReceiptInput!): CreateDonationReceiptResult
   createGenderOption(input: CreateGenderOptionInput!): CreateGenderOptionResult
   createHostingOption(input: CreateHostingOptionInput!): CreateHostingOptionResult
@@ -863,6 +941,7 @@ type Mutation {
   createInvidualOperatorExtraServices(input: InvidualOperatorExtraServicesInput!): CreateInvidualOperatorExtraServicesResult
   createLanguageOption(input: CreateLanguageOptionInput!): CreateLanguageOptionResult
   createMedia(input: CreateMediaInput!): CreateMediaResult
+  createMessage(input: CreateMessageInput!): CreateMessageResult
   createOperatorAvailability(input: CreateOperatorAvailabilityInput!): CreateOperatorAvailabilityResult
   createPartner(input: CreatePartnerInput!): CreatePartnerResult
   createReview(input: CreateReviewInput!): CreateReviewResult
@@ -873,7 +952,6 @@ type Mutation {
   """Access restricted to logged in user"""
   deleteAccount(confirmPassword: String!): DeleteAccountResult
   deleteBookingAd(id: ID!): DeleteBookingAdResult
-  deleteBookingMessage(id: ID!): DeleteBookingMessageResult
   deleteClaim(id: ID!): DeleteClaimResult
   deleteCoreIndividualOperatorService(id: ID!): DeleteInvidualOperatorCoreServicesResult
   deleteDonationReceipt(id: ID!): DeleteDonationReceiptResult
@@ -881,8 +959,9 @@ type Mutation {
   deleteGenderOption(id: ID!): DeleteGenderOptionResult
   deleteHostingOption(id: ID!): DeleteHostingOptionResult
   deleteLanguageOption(id: ID!): DeleteLanguageOptionResult
-  deleteMedia(mediaId: ID!): DeleteMediaResult
-  deleteOperatorAvailability(id: ID!): DeleteOperatorAvailabilityResult
+  deleteMedia(id: ID!): DeleteMediaResult
+  deleteMessage(id: ID!): DeleteMessageResult
+  deleteOperatorAvailability(ids: [ID!]!): DeleteOperatorAvailabilityResult
   deletePartner(id: ID!): DeletePartnerResult
   deleteReview(id: ID!): DeleteReviewResult
   deleteServiceOption(id: ID!): DeleteServiceOptionResult
@@ -897,8 +976,8 @@ type Mutation {
   removeBidForBookingAd(id: ID!): RemoveBidForBookingAdResult
   resetPassword(input: ResetPasswordInput!): ResetPasswordResult
   sendVerificationEmail(email: String!): SendVerificationEmailResult
-  setAsRead(input: SetBookingMessagesAsReadInput!): SetBookingMessagesAsReadResult
-  setPictureAsMainProfilePicture(id: ID!): SetMediaAsOperatorAvatarResult
+  setAsRead(input: SetMessagesAsReadInput!): SetMessagesAsReadResult
+  setMediaAsAvatar(id: ID!): SetMediaAsAvatarResult
   signIn(input: EmailAndPasswordInput!): SignInResult
 
   """Access restricted to logged in user"""
@@ -906,20 +985,21 @@ type Mutation {
   startCron(cronName: String!): StartCronResult
   stopCron(cronName: String!): StopCronResult
   updateBookingAd(id: ID!, input: UpdateBookingAdInput!): UpdateBookingAdResult
-  updateBookingMessage(id: ID!, input: UpdateBookingMessageInput!, saveAs: String!): UpdateBookingMessageResult
   updateBookingPaymentStatus(input: UpdateBookingPaymentStatusInput!): UpdateBookingPaymentStatusResult
   updateDonationReceipt(input: UpdateDonationReceiptInput!): UpdateDonationReceiptResult
   updateGenderOption(id: ID!, input: UpdateGenderOptionInput!): UpdateGenderOptionResult
   updateHostingOption(id: ID!, input: UpdateHostingOptionInput!): UpdateHostingOptionResult
-  updateIndividualOperator(input: UpdateIndividualOperatorInput!): IndividualOperatorResult
+  updateIndividualOperator(input: UpdateIndividualOperatorInput!): UpdateIndividualOperatorResult
   updateInvidualOperatorCoreServices(input: UpdateInvidualOperatorCoreServicesInput!): UpdateInvidualOperatorCoreServicesResult
   updateInvidualOperatorExtraServices(id: ID!, input: InvidualOperatorExtraServicesInput!): UpdateInvidualOperatorExtraServicesResult
   updateLanguageOption(id: ID!, input: UpdateLanguageOptionInput!): UpdateLanguageOptionResult
+  updateMessage(id: ID!, input: UpdateMessageInput!): UpdateMessageResult
   updatePartner(id: ID!, input: UpdatePartnerInput!): UpdatePartnerResult
   updateReview(id: ID!, input: UpdateReviewInput!, saveAs: String!): UpdateReviewResult
   updateServiceOption(id: ID!, input: UpdateServiceOptionInput!): UpdateServiceOptionResult
   updateSpecieOption(id: ID!, input: UpdateSpecieOptionInput!): UpdateSpecieOptionResult
   verifyUser(input: VerifyUserInput!): VerifyUserResult
+  verifyUserProcessorConnectionCompletion: VerifyUserProcessorConnectionCompletionResult
 }
 
 interface Node {
@@ -953,6 +1033,7 @@ interface Operator implements Actor & Node {
 
   """GUID for a resource"""
   id: String!
+  isActive: Boolean
   languageOptionIds: [String]
   ownAnimalsSpecieOptionsIds: [String]
   partnerId: String
@@ -971,15 +1052,17 @@ type OperatorAvailability implements Node {
   updatedAt: DateTime
 }
 
-type OperatorBookingMessage implements BookingMessage & Node {
+type OperatorBookingMessage implements BookingMessage & Message & Node {
+  booking: Booking
+  bookingId: ID!
   content: String!
   createdAt: DateTime
 
   """GUID for a resource"""
   id: String!
   medias: [Media]
-  operator: Operator
-  operatorId: ID
+  operator: IndividualOperator
+  operatorId: ID!
   readAt: DateTime
   updatedAt: DateTime
 }
@@ -988,18 +1071,6 @@ union OperatorByIdResult = IndividualOperator | NotFoundError
 
 type OperatorCannotProcessPaymentsError {
   operatorCannotProcessPaymentsError: String
-}
-
-type OperatorClaim implements Claim & Node {
-  bookingId: ID!
-  createdAt: DateTime
-
-  """GUID for a resource"""
-  id: String!
-  operator: Operator
-  operatorId: ID
-  reason: String!
-  updatedAt: DateTime
 }
 
 type OperatorMedia implements Media & Node {
@@ -1118,8 +1189,6 @@ type PreExistingUserAdError {
 }
 
 type Query {
-  Partners: PartnersResult
-
   """Access restricted to admin users"""
   accountById(id: ID!): AccountByIdResult
   adById(id: ID!): AdByIdResult
@@ -1137,9 +1206,6 @@ type Query {
 
   """Access restricted to admin users"""
   bookingMessageById(id: ID!): BookingMessageByIdResult
-
-  """Access restricted to admin users"""
-  bookingMessages: BookingMessagesResult
   bookings: BookingsResult
   bookingsWithPaymentStatus(input: BookingWithPaymentStatusInput!): BookingWithPaymentStatusResult
   claimById(id: ID!): ClaimByIdResult
@@ -1155,7 +1221,9 @@ type Query {
 
   """Access restricted to logged in user"""
   currentOperatorMedia: CurrentOperatorMediaResult
+  currentStaff: CurrentStaffResult
   currentUserAds: CurrentUserAdsResult
+  currentUserAndOperatorBookings: CurrentUserAndOperatorBookingsResult
 
   """Access restricted to logged in user"""
   currentUserMedia: CurrentUserMediaResult
@@ -1171,14 +1239,20 @@ type Query {
   hostingsOptions: HostingOptionsResult
   languageOptionById(id: ID!): LanguageOptionByIdResult
   languagesOptions: LanguageOptionsResult
+  locationSearch(locale: String!, query: String!): LocationSearchResult
 
   """Access restricted to admin users"""
   mediaById(id: ID!): MediaByIdResult
 
   """Access restricted to admin users"""
   medias: MediasResult
+
+  """Access restricted to admin users"""
+  messages: MessagesResult
+  messagesByBookingId(id: ID!): MessagesByBookingIdResult
   operatorById(id: ID!): OperatorByIdResult
   partnerById(id: ID!): PartnerByIdResult
+  partners: PartnersResult
   receiptById(id: ID!): DonationReceiptByIdResult
 
   """Access restricted to admin users"""
@@ -1330,15 +1404,15 @@ type ServiceOptionsList {
 """The result of the servicesOptions query"""
 union ServiceOptionsResult = ServiceOptionsList | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
-input SetBookingMessagesAsReadInput {
+union SetMediaAsAvatarResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+input SetMessagesAsReadInput {
   ids: [ID!]!
   readAt: Date
 }
 
-"""The result of the setBookingMessageAsRead mutation"""
-union SetBookingMessagesAsReadResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
-
-union SetMediaAsOperatorAvatarResult = AlreadyOperatorAvatarError | BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+"""The result of the setMessageAsRead mutation"""
+union SetMessagesAsReadResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
 type SharedMedia implements Media & Node {
   createdAt: DateTime
@@ -1358,7 +1432,7 @@ type SharedMedia implements Media & Node {
 union SignInResult = Account | InvalidArgumentsError | NotFoundError | UnableToProcessError
 
 """The result of the signOut mutation"""
-union SignOutResult = BooleanResult | UserAuthenticationError
+union SignOutResult = BooleanResult | UnableToProcessError | UserAuthenticationError
 
 """A field whose value must be either: USER, OPERATOR"""
 scalar SourceValue
@@ -1394,6 +1468,21 @@ type Staff implements Node {
   updatedAt: DateTime
 }
 
+type StaffBookingMessage implements BookingMessage & Message & Node {
+  booking: Booking
+  bookingId: ID!
+  content: String!
+  createdAt: DateTime
+
+  """GUID for a resource"""
+  id: String!
+  medias: [Media]
+  readAt: DateTime
+  staff: Staff
+  staffId: ID!
+  updatedAt: DateTime
+}
+
 """The result of the StaffById query"""
 union StaffByIdResult = InvalidArgumentsError | NotFoundError | Staff | UserAuthenticationError | UserForbiddenError
 
@@ -1417,6 +1506,7 @@ type StripePayment implements Node & Payment {
   bookingId: ID
   createdAt: DateTime
   errorCode: String
+  expectedPaymentIntentCaptureDate: DateTime
 
   """GUID for a resource"""
   id: String!
@@ -1457,13 +1547,6 @@ input UpdateBookingAdInput {
 
 union UpdateBookingAdResult = BookingAd | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError
 
-input UpdateBookingMessageInput {
-  content: String!
-  readAt: Date
-}
-
-union UpdateBookingMessageResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
-
 input UpdateBookingPaymentStatusInput {
   id: ID!
   paymentMethodId: String
@@ -1496,21 +1579,21 @@ input UpdateHostingOptionInput {
 union UpdateHostingOptionResult = HostingOption | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateIndividualOperatorInput {
-  acceptedSpecieOptionsIds: [ID]
+  acceptedSpecieOptionsIds: [ID!]!
   avatarMediaId: ID
   birthDate: Date
   description: String
   genderOptionId: String
   hostingOptionId: String
-  languageOptionIds: [ID]
-  ownAnimalsSpecieOptionsIds: [ID]
+  languageOptionIds: [ID!]!
+  ownAnimalsSpecieOptionsIds: [ID!]!
   partnerId: String
   partnerPercentage: Int
   stripeAccountId: ID
 }
 
 """The result of the updateIndividualOperator mutation"""
-union UpdateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | NotFoundError | UnableToProcessError
+union UpdateIndividualOperatorResult = IndividualOperator | InvalidArgumentsError | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 input UpdateInvidualOperatorCoreServicesInput {
   coreOperatorServiceId: ID!
@@ -1529,6 +1612,14 @@ input UpdateLanguageOptionInput {
 }
 
 union UpdateLanguageOptionResult = InvalidArgumentsError | LanguageOption | NotFoundError | UnableToProcessError | UserAuthenticationError | UserForbiddenError
+
+input UpdateMessageInput {
+  content: String!
+  readAt: Date
+  saveAs: SaveAsValue
+}
+
+union UpdateMessageResult = InvalidArgumentsError | NotFoundError | OperatorBookingMessage | StaffBookingMessage | UnableToProcessError | UserAuthenticationError | UserBookingMessage
 
 input UpdatePartnerInput {
   description: String!
@@ -1562,7 +1653,10 @@ input UpdateSpecieOptionInput {
 union UpdateSpecieOptionResult = InvalidArgumentsError | NotFoundError | SpecieOption | UnableToProcessError | UserAuthenticationError | UserForbiddenError
 
 type User implements Actor & Node {
+  account: Account
   accountId: ID
+  avatar: Media
+  avatarMediaId: String
   createdAt: DateTime
   firstName: String!
 
@@ -1577,7 +1671,9 @@ type UserAuthenticationError {
   message: ErrorMessage!
 }
 
-type UserBookingMessage implements BookingMessage & Node {
+type UserBookingMessage implements BookingMessage & Message & Node {
+  booking: Booking
+  bookingId: ID!
   content: String!
   createdAt: DateTime
 
@@ -1587,23 +1683,11 @@ type UserBookingMessage implements BookingMessage & Node {
   readAt: DateTime
   updatedAt: DateTime
   user: User
-  userId: ID
+  userId: ID!
 }
 
 """The result of the userById query"""
 union UserByIdResult = InvalidArgumentsError | NotFoundError | User | UserAuthenticationError | UserForbiddenError
-
-type UserClaim implements Claim & Node {
-  bookingId: ID!
-  createdAt: DateTime
-
-  """GUID for a resource"""
-  id: String!
-  reason: String!
-  updatedAt: DateTime
-  user: User
-  userId: ID
-}
 
 type UserForbiddenError {
   code: ErrorCode!
@@ -1645,6 +1729,8 @@ type UsersList {
 input VerifyUserInput {
   token: JWT!
 }
+
+union VerifyUserProcessorConnectionCompletionResult = BooleanResult | ChargesNotEnabledProcessorAccountError | DetailsNotSubmittedProcessorAccountError | MissingProcessorAccountError | NotFoundError | UnableToProcessError
 
 """The result of the verifyUser mutation"""
 union VerifyUserResult = BooleanResult | InvalidArgumentsError | NotFoundError | UnableToProcessError

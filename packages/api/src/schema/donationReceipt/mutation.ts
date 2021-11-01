@@ -19,7 +19,8 @@ export const CreateDonationReceiptResult = unionType({
 			'DonationReceipt',
 			'UserAuthenticationError',
 			'UserForbiddenError',
-			'UnableToProcessError'
+			'UnableToProcessError',
+			'InvalidArgumentsError'
 		)
 	}
 })

@@ -1,6 +1,7 @@
 import { objectType } from 'nexus'
 export * from './query'
 export * from './mutation'
+export * from './subscription'
 
 export const Staff = objectType({
 	name: 'Staff',

@@ -1,18 +1,18 @@
 import gql from 'graphql-tag'
-
-export const GET_GENDERS = gql`
-	query GetGenders {
-		genders {
-			genders {
-				id
-				name {
-					fr
-					en
+import { UNABLE_TO_PROCESS_FIELDS } from '../errors'
+export const GET_GENDERS_OPTIONS = gql`
+	${UNABLE_TO_PROCESS_FIELDS}
+	query GetGendersOptions {
+		gendersOptions {
+			... on GenderOptionsList {
+				genderOptions {
+					id
+					nameFr
+					nameEn
 				}
 			}
-			errors {
-				key
-				message
+			... on UnableToProcessError {
+				...UnableToProcessFields
 			}
 		}
 	}

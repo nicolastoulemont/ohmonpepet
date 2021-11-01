@@ -1,0 +1,24 @@
+{
+	"fr": {
+		"titleOne": "Etape 1",
+		"subTitleOne": "Renseignez vos informations",
+		"messageOne": "Vous n'avez qu'à remplir l'endroit où vous recherchez un pet sitter, vos dates et l'espèce de votre animal.",
+		"titleTwo": "Etape 2",
+		"subTitleTwo": "Choisissez un pet sitter",
+		"messageTwo": "Trouver le pet sitter le plus proche de vous ou bien le mieux référencé.",
+		"titleThree": "Etape 3",
+		"subTitleThree": "Faîtes une demande de réservation",
+		"messageThree": "Le profil du pet sitter vous donnera les informations nécessaires pour faire votre choix."
+	},
+	"en": {
+		"titleOne": "Step 1",
+		"subTitleOne": "Fill in your informations",
+		"messageOne": "All you have to do is fill in the place where you are looking for a pet sitter, your dates and the specie of your pet.",
+		"titleTwo": "Step 2",
+		"subTitleTwo": "Choose a pet sitter",
+		"messageTwo": "Find the pet sitter closest to you or best referenced.",
+		"titleThree": "Step 3",
+		"subTitleThree": "Make a booking request",
+		"messageThree": "The pet sitter's profile will give you the informations you need to make your choice."
+	}
+}

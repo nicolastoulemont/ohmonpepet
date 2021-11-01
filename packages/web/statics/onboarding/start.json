@@ -1,0 +1,18 @@
+{
+	"fr": {
+		"title": "Devenir petsitter",
+		"notConnectedTitle": "Vous n'êtes pas connecté",
+		"notConnectedSignup": "Vous n'avez pas de compte ?",
+		"notConnectedSignupBtn": "Créer un compte !",
+		"notConnectedSignin": "Vous avez déjà un compte ?",
+		"notConnectedSigninBtn": "Se connecter !"
+	},
+	"en": {
+		"title": "Becoming a petsitter",
+		"notConnectedTitle": "You are not connected",
+		"notConnectedSignup": "You don't have an account?",
+		"notConnectedSignupBtn": "Create an account!",
+		"notConnectedSignin": "You already have an account?",
+		"notConnectedSigninBtn": "Sign In!"
+	}
+}

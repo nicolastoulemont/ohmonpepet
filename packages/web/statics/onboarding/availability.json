@@ -1,0 +1,18 @@
+{
+	"fr": {
+		"title": "Disponibilités",
+		"back": "Retour",
+		"availabilityLabel": "Indiquez vos disponibilités",
+		"availabilityHelper": "Votre profil n'apparaitra pas dans les recherches si vous n'êtes pas disponible",
+		"availabilityBtn": "Valider",
+		"availabilityError": "Vous devez sélectionner au moins une journée de disponibilité."
+	},
+	"en": {
+		"title": "Availability",
+		"back": "Go Back",
+		"availabilityLabel": "Select your availibilities",
+		"availabilityHelper": "Your profile won't appear in searches if not available",
+		"availabilityBtn": "Confirm",
+		"availabilityError": "You must select at least one day of availability"
+	}
+}

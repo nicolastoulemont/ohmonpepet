@@ -6,7 +6,7 @@ export const currentAccountResult = unionType({
 	name: 'CurrentAccountResult',
 	description: 'The result of the currentAccount query',
 	definition(t) {
-		t.members('Account', 'UserAuthenticationError', 'UserForbiddenError', 'NotFoundError')
+		t.members('Account', 'UserAuthenticationError', 'NotFoundError')
 	}
 })
 

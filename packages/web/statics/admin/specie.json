@@ -1,0 +1,28 @@
+{
+	"fr": {
+		"title": "Espace Espèces",
+		"specieListTitle": "Liste des espèces",
+		"specieListItemDesc": "Traduction : ",
+		"addSpecieTitle": "Ajouter une espèce",
+		"addSpecieLabelFr": "Nom français",
+		"addSpecieLabelEn": "Nom anglais",
+		"addSpecieBtn": "Sauvegarder",
+		"closeModalBtn": "Fermer",
+		"editModalTitle": "Changer l'espèce",
+		"deleteModalTitle": "Supprimer l'espèce",
+		"deleteModalMessage": "Si des utilisateurs ont choisit cette espèce, cette action n'est pas recommandée"
+	},
+	"en": {
+		"title": "Species Panel",
+		"specieListTitle": "Species list",
+		"specieListItemDesc": "Translation: ",
+		"addSpecieTitle": "Add a specie",
+		"addSpecieLabelFr": "French name",
+		"addSpecieLabelEn": "English name",
+		"addSpecieBtn": "Save",
+		"closeModalBtn": "Close",
+		"editModalTitle": "Change specie",
+		"deleteModalTitle": "Delete specie",
+		"deleteModalMessage": "If users have selected this specie, this action is not recommended"
+	}
+}

@@ -37,7 +37,7 @@ export const CreateBookingAdResult = unionType({
 	}
 })
 
-export const createAd = mutationField('createAd', {
+export const createBookingAd = mutationField('createBookingAd', {
 	type: 'CreateBookingAdResult',
 	args: {
 		input: nonNull(
@@ -230,7 +230,8 @@ export const BidForBookingAdResult = unionType({
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'InvalidArgumentsError',
-			'NotFoundError'
+			'NotFoundError',
+			'UnableToProcessError'
 		)
 	}
 })
@@ -262,7 +263,8 @@ export const bidForBookingAd = mutationField('bidForBookingAd', {
 				return { success: true }
 			}
 		} catch (err) {
-			return { success: false }
+			console.error(err)
+			return UnableToProcessError
 		}
 	}
 })
@@ -298,6 +300,7 @@ export const removeBidForBookingAd = mutationField('removeBidForBookingAd', {
 
 			return { success: true }
 		} catch (err) {
+			console.error(err)
 			return UnableToProcessError
 		}
 	}

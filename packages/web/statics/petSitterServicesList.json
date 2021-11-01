@@ -1,0 +1,29 @@
+{
+	"fr": {
+		"flexibleCancelation": "{{name}} vous permet d'annuler gratuitement votre réservation",
+		"acceptShortNotice": "{{name}} accepte des réservations en urgence (sous 48h)",
+		"professionalPetSitter": "{{name}} est un{{genderOne}} pet sitter professionnel{{genderTwo}}",
+		"abilityToProvideMedicalCare": "{{name}} est capable de donner des soins basiques à votre animal",
+		"atHomeContinuously": "{{name}} peut être présent{{gender}} en continu durant la journée",
+		"atHomeExclusivity": "{{name}} peut accepter l'animal / les animaux d'un seul propriétaire à la fois",
+		"atHomeOnlyBringPet": "{{name}} a tout le nécessaire pour s'occuper de votre animal chez {{gender}}",
+		"atHomeComeGetPet": "{{name}} peut venir chercher votre animal chez vous",
+		"atOwnerHomeMail": "{{name}} peut récupérer votre courrier / colis",
+		"atOwnerHomePlantsCare": "{{name}} peut s'occuper de vos plantes en votre absence",
+		"atOwnerHomeCurtains": "{{name}} peut ouvrir et fermer vos volets et aérer votre logement"
+	},
+	"en": {
+		"flexibleCancelation": "{{name}} allows you to cancel your reservation free of charge",
+		"acceptShortNotice": "{{name}} accepts emergency bookings (within 48 hours)",
+		"professionalPetSitter": "{{name}} is a professional pet sitter",
+		"abilityToProvideMedicalCare": "{{name}} is able to give basic care to your pet.",
+		"atHomeContinuously": "{{name}} can be continuously at home during the day",
+		"atHomeExclusivity": "{{name}} can accept only one owner pet(s) at the time",
+		"atHomeOnlyBringPet": "{{name}} has all your pet will need at {{gender}} place",
+		"atHomeComeGetPet": "{{name}} can pick up your pet at your home",
+		"atOwnerHomeFeatures": "At your place",
+		"atOwnerHomeMail": "{{name}} can pick up your mail/package",
+		"atOwnerHomePlantsCare": "{{name}} can take care of your plants in your absence",
+		"atOwnerHomeCurtains": "{{name}} can open and close your shutters and ventilate your home"
+	}
+}

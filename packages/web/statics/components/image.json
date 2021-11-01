@@ -1,0 +1,36 @@
+{
+	"fr": {
+		"zoom": "Zoom",
+		"shape": "Forme",
+		"rotate": "Rotation",
+		"saveImg": "Sauvegarder",
+		"saved": "Validée",
+		"delete": "Supprimer",
+		"drag": "Glisser-déposer une photo ici, ou cliquer pour sélectionner une photo",
+		"selectMobile": "Cliquer pour sélectionner une photo",
+		"chooseAsProfilePicture": "Choisir comme photo de profile",
+		"fileTooLargeTitle": "La photo est trop lourde",
+		"fileTooLargeDesc": "La taille maximale par photo est de 5mo.",
+		"tooManyFilesTitle": "Trop de photos",
+		"tooManyFilesDesc": "Vous ne pouvez ajouter qu'une seule photo à la fois.",
+		"fileTypeInvalidTitle": "Le format du ficher n'est pas accepté",
+		"fileTypeInvalidDesc": "Les formats acceptés sont : .png, .jpg, .jpeg, .webp, .avif"
+	},
+	"en": {
+		"zoom": "Zoom",
+		"shape": "Shape",
+		"rotate": "Rotate",
+		"saveImg": "Save",
+		"saved": "Validated",
+		"delete": "Delete",
+		"drag": "Drag 'n' drop a picture here, or click to select a picture",
+		"selectMobile": "Click here to select a picture",
+		"chooseAsProfilePicture": "Choose as profile picture",
+		"fileTooLargeTitle": "The picture is too heavy",
+		"fileTooLargeDesc": "The maximum size per picture is 5mo.",
+		"tooManyFilesTitle": "Too many pictures",
+		"tooManyFilesDesc": "You only add one picture add the time",
+		"fileTypeInvalidTitle": "The file format is not accepted",
+		"fileTypeInvalidDesc": "The allowed format are: .png, .jpg, .jpeg, .webp, .avif"
+	}
+}

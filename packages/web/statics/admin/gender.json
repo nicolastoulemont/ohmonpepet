@@ -1,0 +1,28 @@
+{
+	"fr": {
+		"title": "Espace Genres",
+		"genderListTitle": "Liste des genres",
+		"genderListItemDesc": "Traduction : ",
+		"addGenderTitle": "Ajouter un genre",
+		"addGenderLabelFr": "Nom français",
+		"addGenderLabelEn": "Nom anglais",
+		"addGenderBtn": "Sauvegarder",
+		"closeModalBtn": "Fermer",
+		"editModalTitle": "Changer le genre",
+		"deleteModalTitle": "Supprimer le genre",
+		"deleteModalMessage": "Si des utilisateurs ont choisit ce genre, cette action n'est pas recommandée"
+	},
+	"en": {
+		"title": "Genders Panel",
+		"genderListTitle": "Gender list",
+		"genderListItemDesc": "Translation: ",
+		"addGenderTitle": "Add a gender",
+		"addGenderLabelFr": "French name",
+		"addGenderLabelEn": "English name",
+		"addGenderBtn": "Save",
+		"closeModalBtn": "Close",
+		"editModalTitle": "Change gender",
+		"deleteModalTitle": "Delete gender",
+		"deleteModalMessage": "If users have selected this gender, this action is not recommended"
+	}
+}

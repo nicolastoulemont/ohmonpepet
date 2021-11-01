@@ -1,0 +1,10 @@
+{
+	"fr": {
+		"title": "Désolé... Cette page n'existe pas",
+		"linkBack": "Retourner à la page d'acceuil"
+	},
+	"en": {
+		"title": "Sorry... This page doesn't exist",
+		"linkBack": "Go to home page"
+	}
+}

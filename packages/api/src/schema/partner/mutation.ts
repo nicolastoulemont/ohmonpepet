@@ -142,7 +142,7 @@ export const updatePartner = mutationField('updatePartner', {
 
 			return partner
 		} catch (err) {
-			return NotFoundError
+			return UnableToProcessError
 		}
 	}
 })

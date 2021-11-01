@@ -1,0 +1,36 @@
+{
+	"fr": {
+		"title": "Ohmonpepet est fier de proposer aux petsitters de la plateforme la possibilité de reverser une partie de leurs revenus à {{name}}",
+		"description": "Description",
+		"website": "Website",
+		"noReceiptsYet": "Ce partenaire n'a pas encore reçu de donations.",
+		"donationDate": "Donation du {{date}}",
+		"amountDonated": "Montant donné : ",
+		"amountDonatedShort": "Montant : ",
+		"numberOfDonations": "Nombre de donations : {{number}}",
+		"numberOfDonationsShort": "Nb. de donations : {{number}}",
+		"tablePetSitter": "Petsitter",
+		"tableAmountToDonate": "Montant à donner (€)",
+		"tableAmountToDonateShort": "Montant",
+		"tableDonationDate": "Date de la donation",
+		"tableDonationDateShort": "Date",
+		"tableCaption": "Liste des contributions des petsitters"
+	},
+	"en": {
+		"title": "Ohmonpepet is proud to offer the platform's petsitters the opportunity to donate part of their income to {{name}}",
+		"description": "Description",
+		"website": "Website",
+		"noReceiptsYet": "This partner has not yet received donations.",
+		"donationDate": "Donation of the {{date}}",
+		"amountDonated": "Amount donated: ",
+		"amountDonatedShort": "Amount: ",
+		"numberOfDonations": "Number of donations : {{number}}",
+		"numberOfDonationsShort": "Nb. of donations : {{number}}",
+		"tablePetSitter": "Petsitter",
+		"tableAmountToDonate": "Amount to donate (€)",
+		"tableAmountToDonateShort": "Amount",
+		"tableDonationDate": "Donation's date",
+		"tableDonationDateShort": "Date",
+		"tableCaption": "List of the petsitter contributions"
+	}
+}

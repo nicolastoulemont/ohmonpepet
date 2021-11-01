@@ -1,0 +1,26 @@
+{
+	"fr": {
+		"title": "Dons à une association (optionnel)",
+		"back": "Retour",
+		"partnerContributionTitle": "Au sein d'Ohmonpepet nous pensons qu'il est important de soutenir des causes qui nous tiennent à coeur.",
+		"partnerContributionExplanationOne": "Nous vous permettons donc de donner un pourcentage de vos revenus issus de votre activité sur Ohmonpepet à une association de votre choix parmis celles pré-sélectionnées. Ce pourcentage sera soustrait à vos revenus lors du paiement de chaque réservation et sera versé à votre partenaire au début du mois suivant le paiement de la réservation.",
+		"partnerContributionExplanationTwo": "Vous pouvez à tout moment choisir de ne plus donner un pourcentage de vos revenus, en revanche, ce changement ne sera valable pour que les transactions à venir.",
+		"partnerListLabel": "Choisissez une association",
+		"partnerListPlaceholder": "Aucune association",
+		"partnerPercentageLabel": "Pourcentage",
+		"saveProfile": "Valider",
+		"skip": "Passer"
+	},
+	"en": {
+		"title": "Donation to a partner (optional)",
+		"back": "Go Back",
+		"partnerContributionTitle": "At Ohmonpepet we believe it is important to support charities that are close to our hearts.",
+		"partnerContributionExplanationOne": "We therefore allow you to donate a percentage of your income from your activity on Ohmonpepet to an association of your choice among those pre-selected. This percentage will be subtracted from your income when each reservation is paid for and will paid to your partner at the start of the month following the booking payment.. ",
+		"partnerContributionExplanationTwo": "You can choose at any time to no longer give a percentage of your revenue, however, this change will only be valid for future transactions.",
+		"partnerListLabel": "Choose an association",
+		"partnerListPlaceholder": "No association",
+		"partnerPercentageLabel": "Percentage",
+		"saveProfile": "Save",
+		"skip": "Skip"
+	}
+}

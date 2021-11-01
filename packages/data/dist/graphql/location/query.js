@@ -1,0 +1,9 @@
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+import gql from 'graphql-tag';
+import { UNABLE_TO_PROCESS_FIELDS, INVALID_ARGUMENTS_FIELDS } from '../errors';
+export var LOCATION_SEARCH = gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n\t", "\n\t", "\n\tquery LocationSearch($query: String!, $locale: String!) {\n\t\tlocationSearch(query: $query, locale: $locale) {\n\t\t\t... on LocationsList {\n\t\t\t\tlocations {\n\t\t\t\t\tid\n\t\t\t\t\tformattedLocationString\n\t\t\t\t\tlocale_names\n\t\t\t\t\tpostcode\n\t\t\t\t\tcity\n\t\t\t\t\tcountry\n\t\t\t\t\tcountry_code\n\t\t\t\t\tlatitude\n\t\t\t\t\tlongitude\n\t\t\t\t}\n\t\t\t}\n\t\t\t... on UnableToProcessError {\n\t\t\t\t...UnableToProcessFields\n\t\t\t}\n\t\t\t... on InvalidArgumentsError {\n\t\t\t\t...InvalidArgumentsFields\n\t\t\t}\n\t\t}\n\t}\n"], ["\n\t", "\n\t", "\n\tquery LocationSearch($query: String!, $locale: String!) {\n\t\tlocationSearch(query: $query, locale: $locale) {\n\t\t\t... on LocationsList {\n\t\t\t\tlocations {\n\t\t\t\t\tid\n\t\t\t\t\tformattedLocationString\n\t\t\t\t\tlocale_names\n\t\t\t\t\tpostcode\n\t\t\t\t\tcity\n\t\t\t\t\tcountry\n\t\t\t\t\tcountry_code\n\t\t\t\t\tlatitude\n\t\t\t\t\tlongitude\n\t\t\t\t}\n\t\t\t}\n\t\t\t... on UnableToProcessError {\n\t\t\t\t...UnableToProcessFields\n\t\t\t}\n\t\t\t... on InvalidArgumentsError {\n\t\t\t\t...InvalidArgumentsFields\n\t\t\t}\n\t\t}\n\t}\n"])), UNABLE_TO_PROCESS_FIELDS, INVALID_ARGUMENTS_FIELDS);
+var templateObject_1;
+//# sourceMappingURL=query.js.map

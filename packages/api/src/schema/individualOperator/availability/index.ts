@@ -1,6 +1,16 @@
-import { inputObjectType, mutationField, nonNull, unionType, arg, idArg, objectType } from 'nexus'
+import {
+	inputObjectType,
+	mutationField,
+	nonNull,
+	unionType,
+	arg,
+	idArg,
+	objectType,
+	list
+} from 'nexus'
 import { authorize, checkArgs, NotFoundError, UnableToProcessError } from '../../../utils'
 import prisma from '../../../lib/prisma'
+import { subDays } from 'date-fns'
 
 export const OperatorAvailability = objectType({
 	name: 'OperatorAvailability',
@@ -19,7 +29,7 @@ export const OperatorAvailability = objectType({
 export const createOperatorAvailabilityInput = inputObjectType({
 	name: 'CreateOperatorAvailabilityInput',
 	definition(t) {
-		t.nonNull.date('date')
+		t.nonNull.list.nonNull.date('dates')
 	}
 })
 
@@ -41,15 +51,31 @@ export const createOperatorAvailability = mutationField('createOperatorAvailabil
 		input: nonNull(arg({ type: 'CreateOperatorAvailabilityInput' }))
 	},
 	authorization: (ctx) => authorize(ctx, 'operator'),
-	validation: (args) => checkArgs(args, ['date']),
-	async resolve(_, { input: { date } }, { user: { operatorId } }) {
+	validation: (args) => checkArgs(args, ['dates']),
+	async resolve(_, { input: { dates } }, { user: { operatorId } }) {
 		try {
-			await prisma.operatorAvailability.create({
-				data: {
-					operatorId: operatorId as string,
-					date
-				}
+			const existingOperatorUpComingAvailabilities =
+				await prisma.operatorAvailability.findMany({
+					where: {
+						date: { gte: subDays(new Date(), 1) },
+						operatorId
+					},
+					select: {
+						date: true
+					}
+				})
+
+			const existingOperatorUpComingDates = existingOperatorUpComingAvailabilities.map(
+				(a) => a.date
+			)
+			const guarantedNewDates = dates
+				.filter((date) => !existingOperatorUpComingDates.includes(date))
+				.map((date) => ({ date, operatorId: operatorId as string }))
+
+			await prisma.operatorAvailability.createMany({
+				data: guarantedNewDates
 			})
+
 			return { success: true }
 		} catch (error) {
 			console.error(error)
@@ -74,14 +100,14 @@ export const DeleteOperatorAvailabilityResult = unionType({
 export const DeleteOperatorAvailability = mutationField('deleteOperatorAvailability', {
 	type: 'DeleteOperatorAvailabilityResult',
 	args: {
-		id: nonNull(idArg())
+		ids: nonNull(list(nonNull(idArg())))
 	},
 	authorization: (ctx) => authorize(ctx, 'operator'),
-	validation: (args) => checkArgs(args, ['id']),
-	async resolve(_, { id }, { user: { operatorId } }) {
+	validation: (args) => checkArgs(args, ['ids']),
+	async resolve(_, { ids }, { user: { operatorId } }) {
 		try {
 			const deleted = await prisma.operatorAvailability.deleteMany({
-				where: { id, operatorId }
+				where: { id: { in: ids }, operatorId }
 			})
 
 			if (deleted.count === 0) return NotFoundError

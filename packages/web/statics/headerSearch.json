@@ -1,0 +1,17 @@
+{
+	"fr": {
+		"animalsField": "Vos animaux à faire garder",
+		"animalsFieldPlaceholder": "Choisissez les animaux",
+		"datesFieldLabel": "Arrivée / départ",
+		"datesFieldPlaceholder": "Ajouter des dates",
+		"searchBtn": "Rechercher"
+	},
+	"en": {
+		"ownAddressLabel": "Your address",
+		"animalsField": "Your pet(s)",
+		"animalsFieldPlaceholder": "Choose the pets",
+		"datesFieldLabel": "Check in / Check out",
+		"datesFieldPlaceholder": "Add dates",
+		"searchBtn": "Search"
+	}
+}

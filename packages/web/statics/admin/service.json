@@ -1,0 +1,34 @@
+{
+	"fr": {
+		"title": "Espace Services",
+		"serviceListTitle": "Liste des services",
+		"serviceListItemDesc": "Traduction : ",
+		"addServiceTitle": "Ajouter un service",
+		"addServiceLabelFr": "Nom français",
+		"addServiceLabelEn": "Nom anglais",
+		"addServiceLabelAlternateFr": "Nom français alternatif",
+		"addServiceLabelAlternateEn": "Nom anglais alternatif",
+		"addServiceQueryKey": "Clé de recherche",
+		"addServiceBtn": "Sauvegarder",
+		"closeModalBtn": "Fermer",
+		"editModalTitle": "Changer le service",
+		"deleteModalTitle": "Supprimer le service",
+		"deleteModalMessage": "Si des utilisateurs ont choisit ce service, cette action n'est pas recommandée"
+	},
+	"en": {
+		"title": "Services Panel",
+		"serviceListTitle": "Services list",
+		"serviceListItemDesc": "Translation: ",
+		"addServiceTitle": "Add a service",
+		"addServiceLabelFr": "French name",
+		"addServiceLabelEn": "English name",
+		"addServiceLabelAlternateFr": "Alternate french name",
+		"addServiceLabelAlternateEn": "Alternate english name",
+		"addServiceQueryKey": "Search query key",
+		"addServiceBtn": "Save",
+		"closeModalBtn": "Close",
+		"editModalTitle": "Change service",
+		"deleteModalTitle": "Delete service",
+		"deleteModalMessage": "If users have selected this service, this action is not recommended"
+	}
+}

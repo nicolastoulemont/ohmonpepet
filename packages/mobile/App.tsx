@@ -10,9 +10,7 @@
 
 import React from 'react';
 import foo from '@ohmonpepet/shared';
-import { Provider } from 'urql';
-import { mobileClient, useAllUsersQuery } from '@ohmonpepet/data';
-import { isType } from 'gql-typeguards';
+import { useMobileApollo, ApolloProvider } from '@ohmonpepet/data';
 import {
   SafeAreaView,
   ScrollView,
@@ -59,8 +57,6 @@ const Section: React.FC<{
 };
 
 const AppView = () => {
-  const [{ data }] = useAllUsersQuery();
-
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -80,10 +76,6 @@ const AppView = () => {
           }}>
           <Section title="Step One">
             <Text style={styles.highlight}> {foo}</Text>
-            {isType(data?.allUsers, 'UsersList') &&
-              data?.allUsers?.users?.map(user => (
-                <Text key={user.id}>{user.username}</Text>
-              ))}
           </Section>
           <Section title="See Your Changes">
             <ReloadInstructions />
@@ -102,10 +94,12 @@ const AppView = () => {
 };
 
 const App = () => {
+  const apolloClient = useMobileApollo({});
+
   return (
-    <Provider value={mobileClient}>
+    <ApolloProvider client={apolloClient}>
       <AppView />
-    </Provider>
+    </ApolloProvider>
   );
 };
 

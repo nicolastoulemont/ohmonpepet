@@ -1,0 +1,14 @@
+{
+	"fr": {
+		"atPetSitter": "Garde chez le pet sitter (journée)",
+		"atPetSitterHour": "Garde chez le pet sitter (heure)",
+		"atYourPlace": "Garde chez vous (journée)",
+		"atYourPlaceHour": "Garde chez vous (heure)"
+	},
+	"en": {
+		"atPetSitter": "At the pet sitter's (day)",
+		"atPetSitterHour": "At the pet sitter's (hourly)",
+		"atYourPlace": "At your place (day)",
+		"atYourPlaceHour": "At your place (hourly)"
+	}
+}

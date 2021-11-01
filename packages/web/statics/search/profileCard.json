@@ -1,0 +1,16 @@
+{
+	"fr": {
+		"accept": "Accepte : ",
+		"day": "/ jour",
+		"hour": "/ heure",
+		"giveTo": "{{name}} permet de reverser {{percentage}}% de ses gains à ",
+		"givenTo": "reversé à "
+	},
+	"en": {
+		"accept": "Accept: ",
+		"day": "/ day",
+		"hour": "/ hour",
+		"giveTo": "{{name}} allow to give {{percentage}}% of its gains to ",
+		"givenTo": "given to "
+	}
+}

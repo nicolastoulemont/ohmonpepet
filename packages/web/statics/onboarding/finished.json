@@ -1,0 +1,26 @@
+{
+	"fr": {
+		"loading": "Vérification de vos informations de paiement",
+		"titleSuccess": "Bravo ! Votre profil petsitter est complet !",
+		"titleNotConnected": "Vous n'êtes pas connecté",
+		"subTitleSuccess": "Votre profil va être rendu visible pour les utilisateurs dans les prochaines minutes.",
+		"titleError": "Votre compte n'est pas complet.",
+		"subTitleErrorCharges": "Vous devez autoriser les paiements vers votre compte",
+		"subTitleErrorDetails": "Il manque des informations pour que votre profile soit complet",
+		"completeBtn": "Voir votre profile",
+		"completeProcessorBtn": "Complétez votre compte",
+		"toSigninBtn": "Se connecter"
+	},
+	"en": {
+		"loading": "Verification of your payment information",
+		"titleSuccess": "Well done ! Your pet sitter profile is complete!",
+		"titleNotConnected": "You are not connected",
+		"subTitleSuccess": "Your profile will be made visible to users in the next few minutes.",
+		"titleError": "Your account is not complete.",
+		"subTitleErrorCharges": "You must authorize payments to your account",
+		"subTitleErrorDetails": "Some information is missing for your profile to be complete",
+		"completeBtn": "See your profile",
+		"completeProcessorBtn": "Complete your account",
+		"toSigninBtn": "Sign in"
+	}
+}

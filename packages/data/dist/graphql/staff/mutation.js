@@ -1,0 +1,10 @@
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+import gql from 'graphql-tag';
+import { USER_AUTH_FIELDS, USER_FORBIDDEN_FIELDS } from '../errors';
+export var START_CRON = gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n\t", "\n\t", "\n\tmutation StartCron($cronName: String!) {\n\t\tstartCron(cronName: $cronName) {\n\t\t\t... on BooleanResult {\n\t\t\t\tsuccess\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t}\n\t}\n"], ["\n\t", "\n\t", "\n\tmutation StartCron($cronName: String!) {\n\t\tstartCron(cronName: $cronName) {\n\t\t\t... on BooleanResult {\n\t\t\t\tsuccess\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t}\n\t}\n"])), USER_AUTH_FIELDS, USER_FORBIDDEN_FIELDS);
+export var STOP_CRON = gql(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n\t", "\n\t", "\n\tmutation StopCron($cronName: String!) {\n\t\tstopCron(cronName: $cronName) {\n\t\t\t... on BooleanResult {\n\t\t\t\tsuccess\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t}\n\t}\n"], ["\n\t", "\n\t", "\n\tmutation StopCron($cronName: String!) {\n\t\tstopCron(cronName: $cronName) {\n\t\t\t... on BooleanResult {\n\t\t\t\tsuccess\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t}\n\t}\n"])), USER_AUTH_FIELDS, USER_FORBIDDEN_FIELDS);
+var templateObject_1, templateObject_2;
+//# sourceMappingURL=mutation.js.map

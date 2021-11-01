@@ -16,5 +16,5 @@ export interface UserSessionData {
 	userId: string
 	operatorId?: string
 	staffId?: string
-	access: 'user' | 'staff'
+	access: 'user' | 'operator' | 'staff'
 }

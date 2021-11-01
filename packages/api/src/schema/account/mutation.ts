@@ -37,16 +37,17 @@ export const CreateAccountInput = inputObjectType({
 		t.nonNull.email('email')
 		t.nonNull.string('password')
 		t.nonNull.string('firstName')
+		t.string('originUrl')
 	}
 })
 
 export const createAccount = mutationField('createAccount', {
 	type: 'CreateAccountResult',
 	args: {
-		input: nonNull(arg({ type: CreateAccountInput }))
+		input: nonNull(arg({ type: 'CreateAccountInput' }))
 	},
 	validation: (args) => checkArgs(args, ['email:mail', 'password:pwd', 'firstName']),
-	async resolve(_, { input: { password, email, firstName } }) {
+	async resolve(_, { input: { password, email, firstName, originUrl } }) {
 		const existingAccount = await prisma.account.findUnique({
 			where: { email }
 		})
@@ -75,7 +76,7 @@ export const createAccount = mutationField('createAccount', {
 		})
 
 		try {
-			// await sendVerificationEmail(account, 'fr')
+			// await sendVerificationEmail(account, 'fr', originUrl)
 			return account
 		} catch (error) {
 			return UnableToProcessError
@@ -165,48 +166,56 @@ export const signInResult = unionType({
 export const signIn = mutationField('signIn', {
 	type: 'SignInResult',
 	args: {
-		input: nonNull(arg({ type: EmailAndPasswordInput }))
+		input: nonNull(arg({ type: 'EmailAndPasswordInput' }))
 	},
 	validation: (args) => checkArgs(args, ['email:mail', 'password:pwd']),
 	async resolve(_, { input: { email, password } }, ctx) {
-		const account = await prisma.account.findUnique({
-			where: { email },
-			select: {
-				id: true,
-				email: true,
-				password: true,
-				user: {
-					select: { id: true }
-				},
-				operator: {
-					select: { id: true }
-				},
-				staff: {
-					select: { id: true }
+		try {
+			const account = await prisma.account.findUnique({
+				where: { email },
+				select: {
+					id: true,
+					email: true,
+					password: true,
+					user: {
+						select: { id: true }
+					},
+					operator: {
+						select: { id: true }
+					},
+					staff: {
+						select: { id: true }
+					}
 				}
+			})
+
+			if (!account) return NotFoundError
+
+			if (!account?.user?.id) return UnableToProcessError
+
+			const validPassword = await bcrypt.compare(password, account.password)
+			if (!validPassword)
+				return {
+					...PartialInvalidArgumentsError,
+					invalidArguments: [{ key: 'password', message: 'Invalid password' }]
+				}
+
+			ctx.req.session.user = {
+				accountId: account.id,
+				...(account.user && { userId: account.user.id }),
+				...(account.operator && { operatorId: account.operator.id }),
+				...(account.staff && { staffId: account.staff.id }),
+				access: Boolean(account.staff)
+					? 'staff'
+					: Boolean(account.operator)
+					? 'operator'
+					: 'user'
 			}
-		})
 
-		if (!account) return NotFoundError
-
-		if (!account?.user?.id) return UnableToProcessError
-
-		const validPassword = await bcrypt.compare(password, account.password)
-		if (!validPassword)
-			return {
-				...PartialInvalidArgumentsError,
-				invalidArguments: [{ key: 'password', message: 'Invalid password' }]
-			}
-
-		ctx.req.session.user = {
-			accountId: account.id,
-			...(account.user && { userId: account.user.id }),
-			...(account.operator && { operatorId: account.operator.id }),
-			...(account.staff && { staffId: account.staff.id }),
-			access: Boolean(account.staff) ? 'staff' : 'user'
+			return account
+		} catch (error) {
+			return UnableToProcessError
 		}
-
-		return account
 	}
 })
 
@@ -214,7 +223,7 @@ export const signOutResult = unionType({
 	name: 'SignOutResult',
 	description: 'The result of the signOut mutation',
 	definition(t) {
-		t.members('BooleanResult', 'UserAuthenticationError')
+		t.members('BooleanResult', 'UserAuthenticationError', 'UnableToProcessError')
 	}
 })
 
@@ -223,18 +232,22 @@ export const signOut = mutationField('signOut', {
 	description: 'Access restricted to logged in user',
 	authorization: (ctx) => authorize(ctx, 'user'),
 	async resolve(_, __, ctx) {
-		return new Promise((resolve) =>
-			ctx.req.session.destroy((err) => {
-				ctx.res.clearCookie(COOKIE_NAME)
-				if (err) {
-					console.log(err)
-					resolve({ success: false })
-					return
-				}
+		try {
+			return new Promise((resolve) =>
+				ctx.req.session.destroy((err) => {
+					ctx.res.clearCookie(COOKIE_NAME)
+					if (err) {
+						console.log(err)
+						resolve({ success: false })
+						return
+					}
 
-				resolve({ success: true })
-			})
-		)
+					resolve({ success: true })
+				})
+			)
+		} catch (error) {
+			return UnableToProcessError
+		}
 	}
 })
 
@@ -287,7 +300,13 @@ export const modifyPasswordResult = unionType({
 	name: 'ModifyPasswordResult',
 	description: 'The result of the modifyPassword mutation',
 	definition(t) {
-		t.members('Account', 'NotFoundError', 'InvalidArgumentsError', 'UserAuthenticationError')
+		t.members(
+			'Account',
+			'NotFoundError',
+			'InvalidArgumentsError',
+			'UserAuthenticationError',
+			'UnableToProcessError'
+		)
 	}
 })
 
@@ -301,26 +320,30 @@ export const modifyPassword = mutationField('modifyPassword', {
 	authorization: (ctx) => authorize(ctx, 'user'),
 	validation: (args) => checkArgs(args, ['password:pwd', 'newPassword:pwd']),
 	async resolve(_, { password, newPassword }, { user }) {
-		const account = await prisma.account.findUnique({
-			where: { id: user.accountId }
-		})
-		if (!account) return NotFoundError
+		try {
+			const account = await prisma.account.findUnique({
+				where: { id: user.accountId }
+			})
+			if (!account) return NotFoundError
 
-		const validPassword = await bcrypt.compare(password, account.password)
-		if (!validPassword)
-			return {
-				...PartialInvalidArgumentsError,
-				invalidArguments: [{ key: 'password', message: 'Invalid password' }]
-			}
+			const validPassword = await bcrypt.compare(password, account.password)
+			if (!validPassword)
+				return {
+					...PartialInvalidArgumentsError,
+					invalidArguments: [{ key: 'password', message: 'Invalid password' }]
+				}
 
-		const hash = await bcrypt.hash(newPassword, 12)
-		const updatedAccount = await prisma.account.update({
-			where: { id: user.accountId },
-			data: { password: hash }
-		})
-		if (!updatedAccount) return UnableToProcessError
+			const hash = await bcrypt.hash(newPassword, 12)
+			const updatedAccount = await prisma.account.update({
+				where: { id: user.accountId },
+				data: { password: hash }
+			})
+			if (!updatedAccount) return UnableToProcessError
 
-		return updatedAccount
+			return updatedAccount
+		} catch (error) {
+			return UnableToProcessError
+		}
 	}
 })
 
@@ -332,7 +355,8 @@ export const deleteAccountResult = unionType({
 			'BooleanResult',
 			'UserAuthenticationError',
 			'NotFoundError',
-			'InvalidArgumentsError'
+			'InvalidArgumentsError',
+			'UnableToProcessError'
 		)
 	}
 })
@@ -423,7 +447,7 @@ export const ResetPasswordInput = inputObjectType({
 export const resetPassword = mutationField('resetPassword', {
 	type: 'ResetPasswordResult',
 	args: {
-		input: nonNull(arg({ type: ResetPasswordInput }))
+		input: nonNull(arg({ type: 'ResetPasswordInput' }))
 	},
 	validation: (args) => checkArgs(args, ['newPassword:pwd', 'token']),
 	async resolve(_, { input }) {
@@ -452,7 +476,7 @@ export const resetPassword = mutationField('resetPassword', {
 
 			return { success: true }
 		} catch (error) {
-			return { success: false }
+			return UnableToProcessError
 		}
 	}
 })

@@ -1,0 +1,1 @@
+{"version":3,"file":"query.js","sourceRoot":"","sources":["../../../src/graphql/donationReceipt/query.ts"],"names":[],"mappings":";;;;AAAA,OAAO,GAAG,MAAM,aAAa,CAAA;AAC7B,OAAO,EAAE,wBAAwB,EAAE,wBAAwB,EAAE,MAAM,WAAW,CAAA;AAC9E,MAAM,CAAC,IAAM,eAAe,GAAG,GAAG,2vBAAA,MAC/B,EAAwB,MACxB,EAAwB,wqBA+B1B,KAhCE,wBAAwB,EACxB,wBAAwB,CA+B1B,CAAA"}

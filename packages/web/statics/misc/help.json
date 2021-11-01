@@ -1,0 +1,14 @@
+{
+	"fr": {
+		"title": "Centre d'aide",
+		"imageAlt": "Service client",
+		"subTitle": "En cas de soucis, vous pouvez nous contacter à",
+		"email": "contact@ohmonpepet.com"
+	},
+	"en": {
+		"title": "Helper center",
+		"imageAlt": "Customer service",
+		"subTitle": "If you encounter any issue, you can join us at",
+		"email": "contact@ohmonpepet.com"
+	}
+}

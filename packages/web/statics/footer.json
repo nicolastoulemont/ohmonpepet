@@ -1,0 +1,42 @@
+{
+	"fr": {
+		"sectionOneTitle": "A propos",
+		"sectionTwoTitle": "Nous suivre",
+		"sectionThreeTitle": "Cadre réglementaire",
+		"sectionFourTitle": "Assistance",
+		"us": "Qui sommes-nous ?",
+		"company-infos": "Informations sur l'entreprise",
+		"contact": "Contact",
+		"blog": "Blog",
+		"cancelationOptions": "Options d'annulation",
+		"helpCenter": "Centre d'aide",
+		"trust": "Confiance et sécurité",
+		"confidentialityPolicy": "Politique de confidentialité",
+		"cgs": "CGS",
+		"legalMention": "Mentions légales",
+		"copyright": "© Ohmonpepet {{date}}. Tous droits réservés",
+		"iconsOne": "Icônes par ",
+		"iconsTwo": "de",
+		"iconsThree": "www.flaticon.com"
+	},
+	"en": {
+		"sectionOneTitle": "About",
+		"sectionTwoTitle": "Follow Us",
+		"sectionThreeTitle": "Regulatory framework",
+		"sectionFourTitle": "Assistance",
+		"us": "Who we are",
+		"company-infos": "Informations about the company",
+		"contact": "Contact",
+		"blog": "Blog",
+		"cancelationOptions": "Cancelation options",
+		"helpCenter": "Help center",
+		"trust": "Trust and security",
+		"confidentialityPolicy": "Confidentiality policy",
+		"cgs": "CGS",
+		"legalMention": "Information and Consent Notice",
+		"copyright": "© Ohmonpepet {{date}}. All rights reserved",
+		"iconsOne": "Icons made by ",
+		"iconsTwo": "from",
+		"iconsThree": "www.flaticon.com"
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"fr": {
+		"title": "Espace Hébergements",
+		"hostingListTitle": "Liste des hébergements",
+		"hostingListItemDesc": "Traduction : ",
+		"addHostingTitle": "Ajouter un hébergement",
+		"addHostingLabelFr": "Nom français",
+		"addHostingLabelEn": "Nom anglais",
+		"addHostingBtn": "Sauvegarder",
+		"closeModalBtn": "Fermer",
+		"editModalTitle": "Changer l'hébergement",
+		"deleteModalTitle": "Supprimer l'hébergement",
+		"deleteModalMessage": "Si des utilisateurs ont choisit cet hébergement, cette action n'est pas recommandée"
+	},
+	"en": {
+		"title": "Hosting Panel",
+		"hostingListTitle": "Hosting list",
+		"hostingListItemDesc": "Translation: ",
+		"addHostingTitle": "Add an hosting",
+		"addHostingLabelFr": "French name",
+		"addHostingLabelEn": "English name",
+		"addHostingBtn": "Save",
+		"closeModalBtn": "Close",
+		"editModalTitle": "Change hosting",
+		"deleteModalTitle": "Delete hosting",
+		"deleteModalMessage": "If users have selected this hosting, this action is not recommended"
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"fr": {
+		"title": "Une de vos réservation a été modifiée",
+		"subTitle": "{{name}} a modifié votre réservation du {{start}} au {{end}}",
+		"seeMore": "Voir"
+	},
+	"en": {
+		"title": "One of your bookings has been modified",
+		"subTitle": "{{name}} has changed your booking from {{start}} to {{end}}",
+		"seeMore": "See"
+	}
+}

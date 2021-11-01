@@ -1,0 +1,12 @@
+{
+	"fr": {
+		"subTitle": "Vous avez été sélectionné pour une réservation du {{start}} au {{end}}",
+		"amount": "Pour un montant de {{price}} €",
+		"seeMore": "Voir"
+	},
+	"en": {
+		"subTitle": "You have selected for a booking from {{start}} to {{end}}",
+		"amount": "For a price of {{price}} €",
+		"seeMore": "See"
+	}
+}

@@ -11,6 +11,9 @@ export const IndividualOperator = objectType({
 	definition(t) {
 		t.implements('Operator')
 		t.date('birthDate')
+		t.id('genderOptionId')
+		t.datetime('averageResponseTime')
+		t.float('averageScore')
 		t.field('avatar', {
 			type: 'Media',
 			resolve: async (i) =>
@@ -62,7 +65,7 @@ export const IndividualOperator = objectType({
 					.partner()
 		})
 		t.field('extraServices', {
-			type: 'Account',
+			type: 'IndividualOperatorExtraService',
 			resolve: async (i) =>
 				await prisma.operator
 					.findUnique({
@@ -78,6 +81,15 @@ export const IndividualOperator = objectType({
 						where: { id: i.id }
 					})
 					.donations()
+		})
+		t.list.field('reviews', {
+			type: 'Review',
+			resolve: async (i) =>
+				await prisma.operator
+					.findUnique({
+						where: { id: i.id }
+					})
+					.reviews()
 		})
 		t.list.field('medias', {
 			type: 'Media',
@@ -115,20 +127,5 @@ export const IndividualOperator = objectType({
 					})
 					.bookingAdBids()
 		})
-	}
-})
-
-export const IndividualOperatorResult = unionType({
-	name: 'IndividualOperatorResult',
-	description: 'Return an individual operator or related errors',
-	definition(t) {
-		t.members(
-			'IndividualOperator',
-			'UserAuthenticationError',
-			'UserForbiddenError',
-			'InvalidArgumentsError',
-			'NotFoundError',
-			'UnableToProcessError'
-		)
 	}
 })

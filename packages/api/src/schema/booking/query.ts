@@ -90,6 +90,7 @@ export const currentUserOwnerBookings = queryField('currentUserOwnerBookings', {
 		}
 	}
 })
+
 export const currentUserOperatorBookings = queryField('currentUserOperatorBookings', {
 	type: 'CurrentUserBookingsResult',
 	args: {
@@ -122,6 +123,34 @@ export const currentUserOperatorBookings = queryField('currentUserOperatorBookin
 	}
 })
 
+export const CurrentUserAndOperatorBookingsResult = unionType({
+	name: 'CurrentUserAndOperatorBookingsResult',
+	definition(t) {
+		t.members(
+			'BookingsList',
+			'UserAuthenticationError',
+			'UserForbiddenError',
+			'UnableToProcessError'
+		)
+	}
+})
+
+export const currentUserAndOperatorBookings = queryField('currentUserAndOperatorBookings', {
+	type: 'CurrentUserAndOperatorBookingsResult',
+	authorization: (ctx) => authorize(ctx, 'user'),
+	async resolve(_, __, { user: { userId, operatorId } }) {
+		try {
+			return {
+				bookings: await prisma.booking.findMany({
+					where: { OR: [{ userId }, { operatorId }] }
+				})
+			}
+		} catch {
+			return UnableToProcessError
+		}
+	}
+})
+
 export const BookingsResult = unionType({
 	name: 'BookingsResult',
 	definition(t) {
@@ -141,7 +170,7 @@ export const bookings = queryField('bookings', {
 		try {
 			return { bookings: await prisma.booking.findMany() }
 		} catch {
-			return NotFoundError
+			return UnableToProcessError
 		}
 	}
 })

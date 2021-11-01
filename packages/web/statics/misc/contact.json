@@ -1,0 +1,16 @@
+{
+	"fr": {
+		"title": "Nous contacter",
+		"generalQuestion": "Pour toute question générale liée à l'utilisation de la plateforme : ",
+		"generalQuestionEmail": "contact@ohmonpepet.com",
+		"dataQuestion": "Pour toute question liée à vos données : ",
+		"dataQuestionEmail": "privacy@ohmonpepet.com"
+	},
+	"en": {
+		"title": "Contact Us",
+		"generalQuestion": "For any general question related to the use of the platform: ",
+		"generalQuestionEmail": "contact@ohmonpepet.com",
+		"dataQuestion": "For any question related to your data: ",
+		"dataQuestionEmail": "privacy@ohmonpepet.com"
+	}
+}

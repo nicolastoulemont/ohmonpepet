@@ -7,6 +7,7 @@ export const Operator = interfaceType({
 		t.implements('Actor')
 		t.string('description')
 		t.string('avatarMediaId')
+		t.boolean('isActive')
 		t.list.string('acceptedSpecieOptionsIds')
 		t.list.string('ownAnimalsSpecieOptionsIds')
 		t.list.string('languageOptionIds')

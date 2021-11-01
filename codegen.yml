@@ -5,19 +5,23 @@ watch:
   - "packages/data/src/graphql/**/*.ts"
   - "packages/api/src/schema/schema.graphql"
 generates:
-  packages/data/src/introspection/schema.json:
-    plugins:
-      - urql-introspection
-    config:
-      module: commonjs
   packages/data/src/gql-gen/index.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
-      - "typescript-urql"
+      - "typescript-react-apollo"
     config:
       nonOptionalTypename: true
       withHooks: true
       scalars:
+        JSON: string
         DateTime: Date
+        Date: Date
         EmailAddress: string
+        JWT: string
+        Latitude: number
+        Longitutde: number
+        URL: string
+        SaveAsValue: string
+        SourceValue: string
+        PositiveFloat: number

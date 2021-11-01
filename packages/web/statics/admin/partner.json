@@ -1,0 +1,30 @@
+{
+	"fr": {
+		"title": "Espace Partenariats",
+		"partnerListTitle": "Liste des partenariats",
+		"addPartnerTitle": "Ajouter un partenariat",
+		"addPartnerName": "Nom",
+		"addPartnerWebsite": "Website",
+		"addPartnerLogo": "Logo url",
+		"addPartnerDescription": "Description",
+		"addPartnerBtn": "Sauvegarder",
+		"closeModalBtn": "Fermer",
+		"editModalTitle": "Changer le partenariat",
+		"deleteModalTitle": "Supprimer le partenariat",
+		"deleteModalMessage": "Si des utilisateurs ont choisit ce partenariat, cette action n'est pas recommandée"
+	},
+	"en": {
+		"title": "Partners Panel",
+		"partnerListTitle": "Partners list",
+		"addPartnerTitle": "Add a partner",
+		"addPartnerName": "Name",
+		"addPartnerWebsite": "Website",
+		"addPartnerLogo": "Logo url",
+		"addPartnerDescription": "Description",
+		"addPartnerBtn": "Save",
+		"closeModalBtn": "Close",
+		"editModalTitle": "Change partner",
+		"deleteModalTitle": "Delete partner",
+		"deleteModalMessage": "If users have selected this partner, this action is not recommended"
+	}
+}

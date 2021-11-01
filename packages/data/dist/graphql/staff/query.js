@@ -1,0 +1,10 @@
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+import gql from 'graphql-tag';
+import { NOT_FOUND_FIELDS, USER_AUTH_FIELDS, USER_FORBIDDEN_FIELDS } from '../errors';
+export var CURRENT_STAFF_USER = gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n\t", "\n\t", "\n\t", "\n\tquery CurrentStaff {\n\t\tcurrentStaff {\n\t\t\t... on Staff {\n\t\t\t\tid\n\t\t\t\temail\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t\t... on NotFoundError {\n\t\t\t\t...NotFoundFields\n\t\t\t}\n\t\t}\n\t}\n"], ["\n\t", "\n\t", "\n\t", "\n\tquery CurrentStaff {\n\t\tcurrentStaff {\n\t\t\t... on Staff {\n\t\t\t\tid\n\t\t\t\temail\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t\t... on NotFoundError {\n\t\t\t\t...NotFoundFields\n\t\t\t}\n\t\t}\n\t}\n"])), NOT_FOUND_FIELDS, USER_AUTH_FIELDS, USER_FORBIDDEN_FIELDS);
+export var GET_CRON_STATUS = gql(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n\t", "\n\t", "\n\tquery GetCronStatus($cronName: String!) {\n\t\tgetCronStatus(cronName: $cronName) {\n\t\t\t... on CronStatus {\n\t\t\t\tstatus\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t}\n\t}\n"], ["\n\t", "\n\t", "\n\tquery GetCronStatus($cronName: String!) {\n\t\tgetCronStatus(cronName: $cronName) {\n\t\t\t... on CronStatus {\n\t\t\t\tstatus\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t}\n\t}\n"])), USER_AUTH_FIELDS, USER_FORBIDDEN_FIELDS);
+var templateObject_1, templateObject_2;
+//# sourceMappingURL=query.js.map

@@ -1,0 +1,28 @@
+{
+	"fr": {
+		"yourCookies": "Vos cookies",
+		"mandatoryTitle": "Cookies fonctionnels",
+		"mandatory": "ohmonpepet.com utilise des cookies fonctionnels nécessaires afin de garantir l'accès sécurisé à votre compte ohmonpepet. Ils ne peuvent pas être désactivés car ils assurent la sécurités des utilisateurs sur ohmonpept.com",
+		"optionalTitle": "Cookies optionnels",
+		"optional": "ohmonpepet.com utilise également des cookies d'analyse tiers optionnel pour comprendre comment vous utilisez ohmonpepet.com afin que nous puissions créer un meilleur produit.",
+		"learnMore": "En savoir plus.",
+		"manageOptional": "Gérer les cookies optionnels",
+		"googleAnalytics": "Google analytics",
+		"btnAccept": "Accepter et fermer",
+		"btnValidate": "Valider",
+		"btnChoice": "Personnaliser"
+	},
+	"en": {
+		"yourCookies": "Your cookies",
+		"mandatoryTitle": "Functional cookies",
+		"mandatory": "ohmonpepet.com uses functional cookies that are necessary to ensure secure access to your ohmonpepet account. They cannot be disabled as they ensure the safety of users on ohmonpept.com",
+		"optionalTitle": "Optional cookies",
+		"optional": "We also use optional third-party analytics cookies to understand how you use Ohmonpepet.com so we can build a better product.",
+		"learnMore": "Learn more.",
+		"manageOptional": "Manage optional cookies.",
+		"googleAnalytics": "Google analytics",
+		"btnAccept": "Accept and close",
+		"btnValidate": "Validate",
+		"btnChoice": "Customize"
+	}
+}

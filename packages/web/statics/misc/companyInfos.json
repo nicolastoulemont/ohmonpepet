@@ -1,0 +1,28 @@
+{
+	"fr": {
+		"imageAlt": "Certificat d'entreprise",
+		"detailsTitle": "Coordonnées de l'entreprise :",
+		"address": "Ohmonpepet",
+		"street": "32 rue de montmorency",
+		"codePost": "75003",
+		"city": "Paris",
+		"country": "France",
+		"typeOfCompany": "Société par Actions simplifiée au capital social de XXXXX euros",
+		"siren": "Immatriculée au RCS de XXX sous le numéro XXXXXXX",
+		"contactUs": "Nous contacter :",
+		"email": "contact@ohmonpepet.com"
+	},
+	"en": {
+		"imageAlt": "Company certificat",
+		"detailsTitle": "Company details:",
+		"address": "Ohmonpepet",
+		"street": "32 rue de montmorency",
+		"codePost": "75003",
+		"city": "Paris",
+		"country": "France",
+		"typeOfCompany": "Société par Actions simplifiée au capital social de XXXXX euros",
+		"siren": "Immatriculée au RCS de XXX sous le numéro XXXXXXX",
+		"contactUs": "Contact us:",
+		"email": "contact@ohmonpepet.com"
+	}
+}

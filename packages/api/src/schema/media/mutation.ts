@@ -38,7 +38,6 @@ export const CreateMediaResult = unionType({
 			'StorageInfos',
 			'InvalidArgumentsError',
 			'UserAuthenticationError',
-			'UserForbiddenError',
 			'UnableToProcessError'
 		)
 	}
@@ -46,7 +45,7 @@ export const CreateMediaResult = unionType({
 
 export const createMedia = mutationField('createMedia', {
 	type: 'CreateMediaResult',
-	args: { input: nonNull(arg({ type: CreateMediaInput })) },
+	args: { input: nonNull(arg({ type: 'CreateMediaInput' })) },
 	authorization: (ctx) => authorize(ctx, 'user'),
 	validation: (args) => checkArgs(args, ['fileName', 'fileType', 'saveAs:saveAs']),
 	async resolve(
@@ -95,20 +94,11 @@ export const createMedia = mutationField('createMedia', {
 	}
 })
 
-export const AlreadyOperatorAvatarError = objectType({
-	name: 'AlreadyOperatorAvatarError',
-	isTypeOf: (data) => Boolean((data as any).alreadyOperatorAvatarError),
-	definition(t) {
-		t.nonNull.string('alreadyOperatorAvatarError')
-	}
-})
-
-export const SetMediaAsOperatorAvatarResult = unionType({
-	name: 'SetMediaAsOperatorAvatarResult',
+export const SetMediaAsAvatarResult = unionType({
+	name: 'SetMediaAsAvatarResult',
 	definition(t) {
 		t.members(
 			'BooleanResult',
-			'AlreadyOperatorAvatarError',
 			'NotFoundError',
 			'UserAuthenticationError',
 			'UserForbiddenError',
@@ -118,22 +108,28 @@ export const SetMediaAsOperatorAvatarResult = unionType({
 	}
 })
 
-export const setPictureAsMainProfilePicture = mutationField('setPictureAsMainProfilePicture', {
-	type: 'SetMediaAsOperatorAvatarResult',
+export const setMediaAsAvatar = mutationField('setMediaAsAvatar', {
+	type: 'SetMediaAsAvatarResult',
 	args: {
 		id: nonNull(idArg())
 	},
 	authorization: (ctx) => authorize(ctx, 'operator'),
 	validation: (args) => checkArgs(args, ['id']),
-	async resolve(_, { id }, { user: { operatorId } }) {
+	async resolve(_, { id }, { user: { operatorId, userId } }) {
 		try {
 			const media = await prisma.media.findFirst({
-				where: { id, operatorId },
-				include: { operator: true }
+				where: { id, OR: [{ operatorId }, { userId }] },
+				include: { operator: true, user: true }
 			})
 			if (!media) return NotFoundError
-			if (media.id === media.operator?.avatarMediaId)
-				return { alreadyOperatorAvatarError: 'Provided id is already the operator avatar' }
+
+			if (media.mediaType === 'VIDEO')
+				return {
+					...PartialInvalidArgumentsError,
+					invalidArguments: [
+						{ key: 'id', message: 'This media is a video and cannot be used as avatar' }
+					]
+				}
 
 			// Update media if needed
 			if (!media?.operator?.id) {
@@ -144,9 +140,23 @@ export const setPictureAsMainProfilePicture = mutationField('setPictureAsMainPro
 					}
 				})
 			}
+			if (!media?.user?.id) {
+				await prisma.media.update({
+					where: { id },
+					data: {
+						userId
+					}
+				})
+			}
 
 			await prisma.operator.update({
 				where: { id: operatorId as string },
+				data: {
+					avatarMediaId: media.id
+				}
+			})
+			await prisma.user.update({
+				where: { id: userId as string },
 				data: {
 					avatarMediaId: media.id
 				}
@@ -195,14 +205,14 @@ export const deleteMediaResult = unionType({
 export const deleteMedia = mutationField('deleteMedia', {
 	type: 'DeleteMediaResult',
 	args: {
-		mediaId: nonNull(idArg())
+		id: nonNull(idArg())
 	},
 	authorization: (ctx) => authorize(ctx, 'user'),
-	validation: (args) => checkArgs(args, ['mediaId']),
-	async resolve(_, { mediaId }, { user: { operatorId } }) {
+	validation: (args) => checkArgs(args, ['id']),
+	async resolve(_, { id }, { user: { operatorId } }) {
 		try {
 			const media = await prisma.media.findUnique({
-				where: { id: mediaId },
+				where: { id },
 				rejectOnNotFound: true
 			})
 
@@ -217,7 +227,7 @@ export const deleteMedia = mutationField('deleteMedia', {
 						where: { operatorId: media.operatorId }
 					})
 					const hasNoReplacementPictures = operatorMedias.length === 1 // Only has this one media
-					const isOperatorMainPicture = operator.avatarMediaId === mediaId
+					const isOperatorMainPicture = operator.avatarMediaId === id
 					if (hasNoReplacementPictures) {
 						return {
 							activeOperatorWithNoReplacementMediaError:
@@ -232,7 +242,7 @@ export const deleteMedia = mutationField('deleteMedia', {
 						const { success } = await deleteS3Media(media.storeUrl)
 						if (success) {
 							await prisma.media.deleteMany({
-								where: { id: mediaId, operatorId }
+								where: { id, operatorId }
 							})
 							return { success: true }
 						} else {
@@ -243,7 +253,7 @@ export const deleteMedia = mutationField('deleteMedia', {
 					const { success } = await deleteS3Media(media.storeUrl)
 					if (success) {
 						await prisma.media.deleteMany({
-							where: { id: mediaId, operatorId }
+							where: { id, operatorId }
 						})
 						return { success: true }
 					} else {
@@ -255,7 +265,7 @@ export const deleteMedia = mutationField('deleteMedia', {
 					const { success } = await deleteS3Media(media.storeUrl)
 					if (success) {
 						await prisma.media.deleteMany({
-							where: { id: mediaId, operatorId }
+							where: { id, operatorId }
 						})
 						return { success: true }
 					} else {

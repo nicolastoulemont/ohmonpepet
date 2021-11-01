@@ -27,7 +27,7 @@ export const bookingMessageById = queryField('bookingMessageById', {
 	validation: (args) => checkArgs(args, ['id']),
 	async resolve(_, { id }) {
 		try {
-			return await prisma.bookingMessage.findUnique({
+			return await prisma.message.findUnique({
 				where: { id },
 				rejectOnNotFound: true
 			})
@@ -37,21 +37,21 @@ export const bookingMessageById = queryField('bookingMessageById', {
 	}
 })
 
-export const bookingMessagesList = objectType({
-	name: 'BookingMessagesList',
-	isTypeOf: (data) => Boolean((data as any).bookingMessages),
+export const MessagesList = objectType({
+	name: 'MessagesList',
+	isTypeOf: (data) => Boolean((data as any).messages),
 	description: 'List of booking messages',
 	definition(t) {
-		t.list.field('bookingMessages', { type: 'BookingMessage' })
+		t.list.field('messages', { type: 'Message' })
 	}
 })
 
-export const bookingMessagesResult = unionType({
-	name: 'BookingMessagesResult',
+export const MessagesResult = unionType({
+	name: 'MessagesResult',
 	description: 'The result of the bookingMessages query',
 	definition(t) {
 		t.members(
-			'BookingMessagesList',
+			'MessagesList',
 			'UserAuthenticationError',
 			'UserForbiddenError',
 			'UnableToProcessError'
@@ -59,14 +59,45 @@ export const bookingMessagesResult = unionType({
 	}
 })
 
-export const bookingMessages = queryField('bookingMessages', {
-	type: 'BookingMessagesResult',
+export const messages = queryField('messages', {
+	type: 'MessagesResult',
 	description: 'Access restricted to admin users',
-	// authorization: (ctx) => authorize(ctx, 'staff'),
+	authorization: (ctx) => authorize(ctx, 'staff'),
 	async resolve() {
 		try {
-			const bookingMessages = await prisma.bookingMessage.findMany()
-			return { bookingMessages }
+			const messages = await prisma.message.findMany()
+			return { messages }
+		} catch (error) {
+			return UnableToProcessError
+		}
+	}
+})
+
+export const MessagesByBookingIdResult = unionType({
+	name: 'MessagesByBookingIdResult',
+	description: 'The result of the bookingMessages query',
+	definition(t) {
+		t.members(
+			'MessagesList',
+			'InvalidArgumentsError',
+			'UserAuthenticationError',
+			'UserForbiddenError',
+			'UnableToProcessError'
+		)
+	}
+})
+
+export const messagesByBookingId = queryField('messagesByBookingId', {
+	type: 'MessagesByBookingIdResult',
+	args: {
+		id: nonNull(idArg())
+	},
+	authorization: (ctx) => authorize(ctx, 'user'),
+	validation: (args) => checkArgs(args, ['id']),
+	async resolve(_, { id }) {
+		try {
+			const messages = await prisma.message.findMany({ where: { bookingId: id } })
+			return { messages }
 		} catch (error) {
 			return UnableToProcessError
 		}

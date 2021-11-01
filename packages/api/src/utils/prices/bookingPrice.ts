@@ -1,4 +1,4 @@
-import { getPercentage, getIntervalDays } from '../index'
+import { getPercentage, getIntervalDaysAsStrings } from '../index'
 
 interface BookingPriceParams {
 	coreServicePrice: number
@@ -15,7 +15,7 @@ export async function useBookingPrice({
 	endDate,
 	selectedOptions = []
 }: BookingPriceParams) {
-	const selectedDays = getIntervalDays(startDate, endDate)
+	const selectedDays = getIntervalDaysAsStrings(startDate, endDate)
 
 	let totalWithoutApplicationFee = coreServicePrice * selectedDays.length
 	selectedOptions.forEach((option: any) => (totalWithoutApplicationFee += option.price))

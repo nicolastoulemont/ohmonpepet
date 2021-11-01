@@ -42,6 +42,7 @@ export const stripePayment = objectType({
 	definition(t) {
 		t.implements('Payment')
 		t.string('errorCode')
+		t.datetime('expectedPaymentIntentCaptureDate')
 		t.field('booking', {
 			type: 'Booking',
 			resolve: async (m) =>

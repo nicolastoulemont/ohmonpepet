@@ -1,0 +1,12 @@
+{
+	"fr": {
+		"price": "Prix",
+		"startDate": "Date de début",
+		"endDate": "Date de fin"
+	},
+	"en": {
+		"price": "Price",
+		"startDate": "Start date",
+		"endDate": "End date"
+	}
+}

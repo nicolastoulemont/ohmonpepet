@@ -1,0 +1,28 @@
+{
+	"fr": {
+		"title": "Espace Langues",
+		"languageListTitle": "Liste des langues",
+		"languageListItemDesc": "Traduction : ",
+		"addLanguageTitle": "Ajouter une langue",
+		"addLanguageLabelFr": "Nom français",
+		"addLanguageLabelEn": "Nom anglais",
+		"addLanguageBtn": "Sauvegarder",
+		"closeModalBtn": "Fermer",
+		"editModalTitle": "Changer la langue",
+		"deleteModalTitle": "Supprimer la langue",
+		"deleteModalMessage": "Si des utilisateurs ont choisit cette langue, cette action n'est pas recommandée"
+	},
+	"en": {
+		"title": "Language Panel",
+		"languageListTitle": "Languages list",
+		"languageListItemDesc": "Translation: ",
+		"addLanguageTitle": "Add a language",
+		"addLanguageLabelFr": "French name",
+		"addLanguageLabelEn": "English name",
+		"addLanguageBtn": "Save",
+		"closeModalBtn": "Close",
+		"editModalTitle": "Change language",
+		"deleteModalTitle": "Delete language",
+		"deleteModalMessage": "If users have selected this language, this action is not recommended"
+	}
+}

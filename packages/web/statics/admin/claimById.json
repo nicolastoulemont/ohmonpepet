@@ -1,0 +1,34 @@
+{
+	"fr": {
+		"title": "Réclamations",
+		"titleUnique": "Réclamation",
+		"atHomeDay": "Garde au domicile du pet sitter (journée)",
+		"atHomeHour": "Garde au domicile du pet sitter (heure)",
+		"atOwnerHomeDay": "Garde au domicile du propriétaire (journée)",
+		"atOwnerHomeHour": "Garde au domicile du pet sitter (heure)",
+		"claimReason": "Raison de la réclamation",
+		"claimMessages": "Messages échangés",
+		"owner": "Maître",
+		"sitter": "Pet sitter",
+		"goBack": "Retour",
+		"comments": "Commentaires internes",
+		"saveComment": "Sauvegarder",
+		"suspendPayment": "Suspendre le paiement"
+	},
+	"en": {
+		"title": "Claims",
+		"titleUnique": "Claim",
+		"atHomeDay": "Pet sitting at the pet sitter place (day)",
+		"atHomeHour": "Pet sitting at the pet sitter place (hour)",
+		"atOwnerHomeDay": "Pet sitting at the owner place (day)",
+		"atOwnerHomeHour": "Pet sitting at the owner place (hour)",
+		"claimReason": "Claim details",
+		"claimMessages": "Exchanged messages",
+		"owner": "Owner",
+		"sitter": "Petsitter",
+		"goBack": "Go Back",
+		"comments": "Internal comments",
+		"saveComment": "Save",
+		"suspendPayment": "Suspend payment"
+	}
+}

@@ -10,21 +10,22 @@ import {
 	deleteS3Media
 } from '../../utils'
 
-export const createBookingMessageInput = inputObjectType({
-	name: 'CreateBookingMessageInput',
+export const createMessageInput = inputObjectType({
+	name: 'CreateMessageInput',
 	definition(t) {
 		t.nonNull.string('content')
 		t.nonNull.string('bookingId')
-		t.nonNull.string('saveAs')
+		t.nonNull.saveAs('saveAs')
 	}
 })
 
-export const createBookingMessageResult = unionType({
-	name: 'CreateBookingMessageResult',
+export const createMessageResult = unionType({
+	name: 'CreateMessageResult',
 	definition(t) {
 		t.members(
 			'UserBookingMessage',
 			'OperatorBookingMessage',
+			'StaffBookingMessage',
 			'UserAuthenticationError',
 			'UnableToProcessError',
 			'InvalidArgumentsError'
@@ -32,12 +33,12 @@ export const createBookingMessageResult = unionType({
 	}
 })
 
-export const createBookingMessage = mutationField('createBookingMessage', {
-	type: 'CreateBookingMessageResult',
+export const createMessage = mutationField('createMessage', {
+	type: 'CreateMessageResult',
 	args: {
 		input: nonNull(
 			arg({
-				type: 'CreateBookingMessageInput'
+				type: 'CreateMessageInput'
 			})
 		)
 	},
@@ -46,7 +47,7 @@ export const createBookingMessage = mutationField('createBookingMessage', {
 	async resolve(
 		_,
 		{ input: { content, bookingId, saveAs } },
-		{ user: { userId, operatorId }, pubsub }
+		{ user: { userId, operatorId, staffId }, pubsub }
 	) {
 		try {
 			if (saveAs === 'operator' && !operatorId) {
@@ -60,37 +61,49 @@ export const createBookingMessage = mutationField('createBookingMessage', {
 					]
 				}
 			}
+			if (saveAs === 'staff' && !staffId) {
+				return {
+					...PartialInvalidArgumentsError,
+					invalidArguments: [
+						{
+							key: 'saveAs',
+							message: 'Cannot save as staff, please use a staff account'
+						}
+					]
+				}
+			}
 
-			const bookingMessage = await prisma.bookingMessage.create({
+			const message = await prisma.message.create({
 				data: {
 					content,
 					bookingId,
 					...(saveAs === 'operator' && operatorId && { operatorId }),
+					...(saveAs === 'staff' && staffId && { staffId }),
 					...(saveAs === 'user' && { userId })
 				}
 			})
 
 			pubsub.publish(NEW_MESSAGE, {
-				bookingByIdChatSub: bookingMessage
+				bookingByIdChatSub: message
 			})
-			return bookingMessage
+			return message
 		} catch (err) {
 			return UnableToProcessError
 		}
 	}
 })
 
-export const setBookingMessagesAsReadInput = inputObjectType({
-	name: 'SetBookingMessagesAsReadInput',
+export const setMessagesAsReadInput = inputObjectType({
+	name: 'SetMessagesAsReadInput',
 	definition(t) {
 		t.nonNull.list.nonNull.id('ids')
 		t.date('readAt')
 	}
 })
 
-export const setBookingMessagesAsReadResult = unionType({
-	name: 'SetBookingMessagesAsReadResult',
-	description: 'The result of the setBookingMessageAsRead mutation',
+export const setMessagesAsReadResult = unionType({
+	name: 'SetMessagesAsReadResult',
+	description: 'The result of the setMessageAsRead mutation',
 	definition(t) {
 		t.members(
 			'BooleanResult',
@@ -103,11 +116,11 @@ export const setBookingMessagesAsReadResult = unionType({
 })
 
 export const setAsRead = mutationField('setAsRead', {
-	type: 'SetBookingMessagesAsReadResult',
+	type: 'SetMessagesAsReadResult',
 	args: {
 		input: nonNull(
 			arg({
-				type: 'SetBookingMessagesAsReadInput'
+				type: 'SetMessagesAsReadInput'
 			})
 		)
 	},
@@ -115,7 +128,7 @@ export const setAsRead = mutationField('setAsRead', {
 	validation: (args) => checkArgs(args, ['id', 'readtAt:date']),
 	async resolve(_, { input: { ids, readAt } }) {
 		try {
-			await prisma.bookingMessage.updateMany({
+			await prisma.message.updateMany({
 				where: {
 					id: { in: ids }
 				},
@@ -130,20 +143,22 @@ export const setAsRead = mutationField('setAsRead', {
 	}
 })
 
-export const updateBookingMessageInput = inputObjectType({
-	name: 'UpdateBookingMessageInput',
+export const updateMessageInput = inputObjectType({
+	name: 'UpdateMessageInput',
 	definition(t) {
 		t.nonNull.string('content')
 		t.date('readAt')
+		t.saveAs('saveAs')
 	}
 })
 
-export const updateBookingMessageResult = unionType({
-	name: 'UpdateBookingMessageResult',
+export const updateMessageResult = unionType({
+	name: 'UpdateMessageResult',
 	definition(t) {
 		t.members(
 			'UserBookingMessage',
 			'OperatorBookingMessage',
+			'StaffBookingMessage',
 			'NotFoundError',
 			'UserAuthenticationError',
 			'UnableToProcessError',
@@ -152,20 +167,23 @@ export const updateBookingMessageResult = unionType({
 	}
 })
 
-export const updateBookingMessage = mutationField('updateBookingMessage', {
-	type: 'UpdateBookingMessageResult',
+export const updateMessage = mutationField('updateMessage', {
+	type: 'UpdateMessageResult',
 	args: {
 		id: nonNull(idArg()),
-		saveAs: nonNull(stringArg()),
 		input: nonNull(
 			arg({
-				type: 'UpdateBookingMessageInput'
+				type: 'UpdateMessageInput'
 			})
 		)
 	},
 	authorization: (ctx) => authorize(ctx, 'user'),
 	validation: (args) => checkArgs(args, ['id', 'saveAs']),
-	async resolve(_, { id, saveAs, input: { content, readAt } }, { user: { userId, operatorId } }) {
+	async resolve(
+		_,
+		{ id, input: { content, readAt, saveAs } },
+		{ user: { userId, operatorId, staffId } }
+	) {
 		try {
 			if (saveAs === 'operator' && !operatorId) {
 				return {
@@ -179,10 +197,23 @@ export const updateBookingMessage = mutationField('updateBookingMessage', {
 				}
 			}
 
-			const message = await prisma.bookingMessage.update({
+			if (saveAs === 'staff' && !staffId) {
+				return {
+					...PartialInvalidArgumentsError,
+					invalidArguments: [
+						{
+							key: 'saveAs',
+							message: 'Cannot save as staff, please use a staff account'
+						}
+					]
+				}
+			}
+
+			const message = await prisma.message.update({
 				where: {
 					id,
 					...(saveAs === 'operator' && operatorId && { operatorId }),
+					...(saveAs === 'staff' && staffId && { staffId }),
 					...(saveAs === 'user' && { userId })
 				},
 				data: {
@@ -198,9 +229,9 @@ export const updateBookingMessage = mutationField('updateBookingMessage', {
 	}
 })
 
-export const deleteBookingMessageResult = unionType({
-	name: 'DeleteBookingMessageResult',
-	description: 'The result of the deleteBookingMessage mutation',
+export const deleteMessageResult = unionType({
+	name: 'DeleteMessageResult',
+	description: 'The result of the deleteMessage mutation',
 	definition(t) {
 		t.members(
 			'BooleanResult',
@@ -212,17 +243,17 @@ export const deleteBookingMessageResult = unionType({
 	}
 })
 
-export const deleteBookingMessage = mutationField('deleteBookingMessage', {
-	type: 'DeleteBookingMessageResult',
+export const deleteMessage = mutationField('deleteMessage', {
+	type: 'DeleteMessageResult',
 	args: {
 		id: nonNull(idArg())
 	},
 	authorization: (ctx) => authorize(ctx, 'user'),
 	validation: (args) => checkArgs(args, ['id']),
-	async resolve(_, { id }, { user: { userId, operatorId } }) {
+	async resolve(_, { id }, { user: { userId, operatorId, staffId } }) {
 		try {
-			const [message] = await prisma.bookingMessage.findMany({
-				where: { id, OR: [{ userId }, { operatorId }] },
+			const [message] = await prisma.message.findMany({
+				where: { id, OR: [{ userId }, { operatorId }, { staffId }] },
 				include: {
 					medias: true
 				}
@@ -243,7 +274,7 @@ export const deleteBookingMessage = mutationField('deleteBookingMessage', {
 				})
 			}
 
-			await prisma.bookingMessage.delete({ where: { id: message.id } })
+			await prisma.message.delete({ where: { id: message.id } })
 
 			return { success: true }
 		} catch (err) {

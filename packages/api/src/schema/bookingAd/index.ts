@@ -37,8 +37,8 @@ export const BookingAd = objectType({
 			type: 'User',
 			resolve: async ({ id }) => await prisma.bookingAd.findUnique({ where: { id } }).user()
 		})
-		t.list.field('bids', {
-			type: 'Operator',
+		t.list.field('bidders', {
+			type: 'IndividualOperator',
 			resolve: async ({ id }) => await prisma.bookingAd.findUnique({ where: { id } }).bids()
 		})
 	}

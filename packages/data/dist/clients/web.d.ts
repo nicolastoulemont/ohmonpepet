@@ -1,3 +1,3 @@
-export declare const webSsrCache: import("@urql/core/dist/types/exchanges/ssr").SSRExchange;
-export declare const webClient: import("urql").Client;
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+export declare function useWebApollo(initialState: any): ApolloClient<NormalizedCacheObject>;
 //# sourceMappingURL=web.d.ts.map

@@ -12,6 +12,25 @@ export const bookingPayment = unionType({
 	}
 })
 
+export const bookingAnimal = objectType({
+	name: 'BookingAnimal',
+	isTypeOf: (data) => Boolean((data as any).specieOptionId && (data as any).bookingId),
+	definition(t) {
+		t.implements('Node')
+		t.nonNull.id('specieOptionId')
+		t.nonNull.id('bookingId')
+		t.field('specie', {
+			type: 'SpecieOption',
+			resolve: async (i) =>
+				await prisma.bookingAnimal
+					.findUnique({
+						where: { id: i.id }
+					})
+					.specie()
+		})
+	}
+})
+
 export const BookingStatus = enumType({
 	name: 'BookingStatus',
 	description: 'The booking different possible status',
@@ -34,9 +53,9 @@ export const booking = objectType({
 		t.implements('Node')
 		t.date('startDate')
 		t.date('endDate')
-		t.list.json('selectedOptions')
+		t.json('selectedOptions')
 		t.positiveFloat('priceWithOutApplicationFee')
-		t.positiveFloat('applictionFeeAmount')
+		t.positiveFloat('applicationFeeAmount')
 		t.list.id('animalsIds')
 		t.datetime('operatorConfirmationDate')
 		t.datetime('ownerConfirmationDate')
@@ -87,7 +106,7 @@ export const booking = objectType({
 			resolve: async (b) => await prisma.booking.findUnique({ where: { id: b.id } }).user()
 		})
 		t.field('operator', {
-			type: 'Operator',
+			type: 'IndividualOperator',
 			resolve: async (b) =>
 				await prisma.booking.findUnique({ where: { id: b.id } }).operator()
 		})
@@ -96,12 +115,13 @@ export const booking = objectType({
 			resolve: async (b) => await prisma.booking.findUnique({ where: { id: b.id } }).service()
 		})
 		t.field('payment', {
-			type: 'BookingPayment',
+			type: 'StripePayment',
 			resolve: async (b) =>
 				await prisma.booking.findUnique({ where: { id: b.id } }).stripePayment()
 		})
 		t.list.field('messages', {
 			type: 'BookingMessage',
+			// @ts-expect-error
 			resolve: async (b) =>
 				await prisma.booking.findUnique({ where: { id: b.id } }).messages()
 		})
@@ -112,6 +132,10 @@ export const booking = objectType({
 		t.list.field('reviews', {
 			type: 'Review',
 			resolve: async (b) => await prisma.booking.findUnique({ where: { id: b.id } }).reviews()
+		})
+		t.list.field('animals', {
+			type: 'BookingAnimal',
+			resolve: async (b) => await prisma.booking.findUnique({ where: { id: b.id } }).animals()
 		})
 	}
 })

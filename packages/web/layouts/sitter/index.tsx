@@ -1,0 +1,6 @@
+export * from './Intro'
+export * from './Booking'
+export * from './Details'
+export * from './Map'
+export * from './MobileBooking'
+export * from './Reviews'

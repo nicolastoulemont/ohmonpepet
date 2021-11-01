@@ -202,7 +202,7 @@ export const createBooking = mutationField('createBooking', {
 			})
 
 			if (message) {
-				await prisma.bookingMessage.create({
+				await prisma.message.create({
 					data: {
 						userId,
 						bookingId: booking.id,

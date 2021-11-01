@@ -1,0 +1,10 @@
+{
+	"fr": {
+		"addressField": "À proximité de",
+		"addressFieldPlaceholder": "Entrer une adresse"
+	},
+	"en": {
+		"addressField": "Close to",
+		"addressFieldPlaceholder": "Enter an address"
+	}
+}

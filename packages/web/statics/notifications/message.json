@@ -1,0 +1,12 @@
+{
+	"fr": {
+		"title": "Vous avez un nouveau message",
+		"subTitle": "{{name}} vous a envoyé un message",
+		"seeMore": "Répondre"
+	},
+	"en": {
+		"title": "You have a new message",
+		"subTitle": "{{name}} sent you a  message",
+		"seeMore": "Answer"
+	}
+}

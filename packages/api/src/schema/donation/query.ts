@@ -74,9 +74,9 @@ export const currentOperatorDonationsResult = unionType({
 	}
 })
 
-export const currentUserSitterDonations = queryField('currentOperatorDonations', {
+export const currentOperatorDonations = queryField('currentOperatorDonations', {
 	type: 'CurrentOperatorDonationsResult',
-	authorization: (ctx) => authorize(ctx, 'user'),
+	authorization: (ctx) => authorize(ctx, 'operator'),
 	async resolve(_, __, { user: { operatorId } }) {
 		try {
 			const donations = await prisma.donation.findMany({

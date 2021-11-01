@@ -1,0 +1,10 @@
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+import gql from 'graphql-tag';
+import { MESSAGE_FIELDS } from './fragment';
+import { INVALID_ARGUMENTS_FIELDS, USER_AUTH_FIELDS, USER_FORBIDDEN_FIELDS, UNABLE_TO_PROCESS_FIELDS } from '../errors';
+export var GET_BOOKING_MESSAGES = gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n\t", "\n\t", "\n\t", "\n\t", "\n\t", "\n\tquery MessagesByBookingId($id: ID!) {\n\t\tmessagesByBookingId(id: $id) {\n\t\t\t... on MessagesList {\n\t\t\t\tmessages {\n\t\t\t\t\t...MessageFields\n\t\t\t\t\tcontent\n\t\t\t\t}\n\t\t\t}\n\t\t\t... on InvalidArgumentsError {\n\t\t\t\t...InvalidArgumentsFields\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t\t... on UnableToProcessError {\n\t\t\t\t...UnableToProcessFields\n\t\t\t}\n\t\t}\n\t}\n"], ["\n\t", "\n\t", "\n\t", "\n\t", "\n\t", "\n\tquery MessagesByBookingId($id: ID!) {\n\t\tmessagesByBookingId(id: $id) {\n\t\t\t... on MessagesList {\n\t\t\t\tmessages {\n\t\t\t\t\t...MessageFields\n\t\t\t\t\tcontent\n\t\t\t\t}\n\t\t\t}\n\t\t\t... on InvalidArgumentsError {\n\t\t\t\t...InvalidArgumentsFields\n\t\t\t}\n\t\t\t... on UserAuthenticationError {\n\t\t\t\t...UserAuthFields\n\t\t\t}\n\t\t\t... on UserForbiddenError {\n\t\t\t\t...UserForbiddenFields\n\t\t\t}\n\t\t\t... on UnableToProcessError {\n\t\t\t\t...UnableToProcessFields\n\t\t\t}\n\t\t}\n\t}\n"])), INVALID_ARGUMENTS_FIELDS, USER_AUTH_FIELDS, USER_FORBIDDEN_FIELDS, UNABLE_TO_PROCESS_FIELDS, MESSAGE_FIELDS);
+var templateObject_1;
+//# sourceMappingURL=query.js.map

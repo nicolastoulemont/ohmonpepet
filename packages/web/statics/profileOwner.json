@@ -1,0 +1,12 @@
+{
+	"fr": {
+		"title": "Informations propriétaire",
+		"subTitleOne": "Vous pouvez ici créer des annonces de recherche de garde pour vos animaux.",
+		"subTitleTwo": "Cela peut être utile si vous ne souhaitez pas solliciter vous même des petsitters."
+	},
+	"en": {
+		"title": "Owner informations",
+		"subTitleOne": "Here you can create a petsitter search ad for your pets.",
+		"subTitleTwo": "This can be useful if you do not wish to solicit petsitters yourself."
+	}
+}

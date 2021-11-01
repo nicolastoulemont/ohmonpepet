@@ -1,1 +1,1 @@
-{"version":3,"file":"mobile.d.ts","sourceRoot":"","sources":["../../src/clients/mobile.ts"],"names":[],"mappings":"AAMA,eAAO,MAAM,YAAY,uBAiBvB,CAAA"}
+{"version":3,"file":"mobile.d.ts","sourceRoot":"","sources":["../../src/clients/mobile.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,YAAY,EAAiB,qBAAqB,EAAE,MAAM,gBAAgB,CAAA;AA8BnF,wBAAgB,eAAe,CAAC,YAAY,KAAA,uCAG3C"}
