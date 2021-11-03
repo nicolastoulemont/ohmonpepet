@@ -41,7 +41,25 @@
 		"throttle-debounce": "^3.0.1",
 		"universal-cookie": "^4.0.4",
 		"urql": "2.0.5",
-		"zustand": "^3.5.8"
+		"zustand": "^3.5.8",
+		"@apollo/client": "^3.3.12",
+		"@mdx-js/loader": "^1.6.22",
+		"@mdx-js/react": "^1.6.22",
+		"@next/mdx": "^10.0.7",
+		"@stripe/react-stripe-js": "^1.4.0",
+		"@stripe/stripe-js": "^1.13.1",
+		"apollo-cache-inmemory": "1.6.6",
+		"apollo-link": "^1.2.14",
+		"apollo-link-persisted-queries": "^0.2.2",
+		"axios": "^0.21.1",
+		"compressorjs": "^1.0.7",
+		"date-fns": "^2.19.0",
+		"geolib": "^3.3.1",
+		"graphql-tag": "2.11.0",
+		"gray-matter": "^4.0.2",
+		"isomorphic-unfetch": "^3.0.0",
+		"jwt-decode": "^3.1.2",
+		"next-mdx-enhanced": "^5.0.0"
 	},
 	"license": "ISC",
 	"devDependencies": {
@@ -59,6 +77,12 @@
 		"prettier": "^2.2.1",
 		"react-test-renderer": "^17.0.1",
 		"ts-jest": "^27.0.7",
-		"typescript": "4.4.4"
+		"typescript": "4.4.4",
+		"@graphql-codegen/cli": "^1.21.3",
+		"@graphql-codegen/typescript": "^1.21.1",
+		"@graphql-codegen/typescript-operations": "^1.17.15",
+		"@graphql-codegen/typescript-react-apollo": "^2.2.3",
+		"@types/node": "^16.11.6",
+		"concurrently": "^6.0.0"
 	}
 }

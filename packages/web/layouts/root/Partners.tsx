@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import rootJSON from 'statics/root.json'
 import { useI18n } from 'utils/hooks/useI18n'
 import { motion } from 'framer-motion'
-import { Partner, Receipt, Maybe } from 'generated/graphql'
+import { Partner, DonationReceipt, Maybe } from '@ohmonpepet/data'
 import { IoMdStats } from 'react-icons/io'
 import NextLink from 'next/link'
 import {
@@ -48,13 +48,13 @@ export function Partners({ partnersList }) {
 }
 
 interface PartnerCardProps {
-	partner: Pick<Partner, 'id' | 'name' | 'description' | 'websiteUrl' | 'logoUrl'> & {
+	partner: Pick<Partner, 'id' | 'name' | 'description' | 'websiteUrl' | 'medias'> & {
 		receipts?: Maybe<
 			Array<
 				Maybe<
 					{ __typename?: 'Receipt' } & Pick<
-						Receipt,
-						'id' | 'donationsIds' | 'amountDonated'
+						DonationReceipt,
+						'id' | 'donations' | 'amountDonated'
 					>
 				>
 			>
@@ -72,7 +72,7 @@ function PartnerCard({ partner }: PartnerCardProps) {
 
 	const numberOfDonations = useMemo(() => {
 		if (!partner.receipts) return 0
-		return partner.receipts.reduce((acc, item) => (acc += item.donationsIds.length), 0)
+		return partner.receipts.reduce((acc, item) => (acc += item.donations.length), 0)
 	}, [partner])
 
 	return (
@@ -92,8 +92,8 @@ function PartnerCard({ partner }: PartnerCardProps) {
 			flexDir='column'
 		>
 			<Image
-				src={partner.logoUrl}
-				fallbackSrc={partner.logoUrl}
+				src={partner.medias[0].storeUrl}
+				fallbackSrc={partner.medias[0].storeUrl}
 				alt={`${partner.name} logo`}
 				width='150px'
 				m='0 auto'
