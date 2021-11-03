@@ -1,1 +1,1 @@
-{"version":3,"file":"mutation.d.ts","sourceRoot":"","sources":["../../../src/graphql/gender/mutation.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,aAAa,gCAkBzB,CAAA;AAED,eAAO,MAAM,aAAa,gCAsBzB,CAAA;AAED,eAAO,MAAM,aAAa,gCAgBzB,CAAA"}
+{"version":3,"file":"mutation.d.ts","sourceRoot":"","sources":["../../../src/graphql/gender/mutation.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,aAAa,oCAkBzB,CAAA;AAED,eAAO,MAAM,aAAa,oCAsBzB,CAAA;AAED,eAAO,MAAM,aAAa,oCAgBzB,CAAA"}

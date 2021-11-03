@@ -1789,38 +1789,38 @@ export declare type CreateAccountMutationVariables = Exact<{
 }>;
 export declare type CreateAccountMutation = {
     __typename: 'Mutation';
-    createAccount?: Maybe<{
+    createAccount?: {
         __typename: 'Account';
         id: string;
-        email?: Maybe<string>;
+        email?: string | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SignInMutationVariables = Exact<{
     input: EmailAndPasswordInput;
 }>;
 export declare type SignInMutation = {
     __typename: 'Mutation';
-    signIn?: Maybe<{
+    signIn?: {
         __typename: 'Account';
         id: string;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -1829,16 +1829,16 @@ export declare type SignInMutation = {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SignOutMutationVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type SignOutMutation = {
     __typename: 'Mutation';
-    signOut?: Maybe<{
+    signOut?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -1847,23 +1847,23 @@ export declare type SignOutMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SendVerificationEmailMutationVariables = Exact<{
     email: Scalars['String'];
 }>;
 export declare type SendVerificationEmailMutation = {
     __typename: 'Mutation';
-    sendVerificationEmail?: Maybe<{
+    sendVerificationEmail?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -1872,23 +1872,23 @@ export declare type SendVerificationEmailMutation = {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type VerifyUserMutationVariables = Exact<{
     input: VerifyUserInput;
 }>;
 export declare type VerifyUserMutation = {
     __typename: 'Mutation';
-    verifyUser?: Maybe<{
+    verifyUser?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -1897,23 +1897,23 @@ export declare type VerifyUserMutation = {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type DeleteAccountMutationVariables = Exact<{
     confirmPassword: Scalars['String'];
 }>;
 export declare type DeleteAccountMutation = {
     __typename: 'Mutation';
-    deleteAccount?: Maybe<{
+    deleteAccount?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -1924,42 +1924,42 @@ export declare type DeleteAccountMutation = {
         message: ErrorMessage;
     } | {
         __typename: 'UserAuthenticationError';
-    }>;
+    } | null | undefined;
 };
 export declare type LostPasswordMutationVariables = Exact<{
     email: Scalars['String'];
 }>;
 export declare type LostPasswordMutation = {
     __typename: 'Mutation';
-    lostPassword?: Maybe<{
+    lostPassword?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type ResetPasswordMutationVariables = Exact<{
     input: ResetPasswordInput;
 }>;
 export declare type ResetPasswordMutation = {
     __typename: 'Mutation';
-    resetPassword?: Maybe<{
+    resetPassword?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type ModifyPasswordMutationVariables = Exact<{
     password: Scalars['String'];
@@ -1967,16 +1967,16 @@ export declare type ModifyPasswordMutationVariables = Exact<{
 }>;
 export declare type ModifyPasswordMutation = {
     __typename: 'Mutation';
-    modifyPassword?: Maybe<{
+    modifyPassword?: {
         __typename: 'Account';
         id: string;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -1989,23 +1989,23 @@ export declare type ModifyPasswordMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type ModifyEmailMutationVariables = Exact<{
     email: Scalars['String'];
 }>;
 export declare type ModifyEmailMutation = {
     __typename: 'Mutation';
-    modifyEmail?: Maybe<{
+    modifyEmail?: {
         __typename: 'Account';
         id: string;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -2018,27 +2018,27 @@ export declare type ModifyEmailMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentAccountQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type CurrentAccountQuery = {
     __typename: 'Query';
-    currentAccount?: Maybe<{
+    currentAccount?: {
         __typename: 'Account';
         id: string;
-        email?: Maybe<string>;
-        verifiedAt?: Maybe<Date>;
-        user?: Maybe<{
+        email?: string | null | undefined;
+        verifiedAt?: Date | null | undefined;
+        user?: {
             __typename: 'User';
             firstName: string;
-        }>;
-        operator?: Maybe<{
+        } | null | undefined;
+        operator?: {
             __typename: 'IndividualOperator';
             id: string;
-            isActive?: Maybe<boolean>;
-        }>;
+            isActive?: boolean | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -2047,21 +2047,21 @@ export declare type CurrentAccountQuery = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type AllAccountsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type AllAccountsQuery = {
     __typename: 'Query';
-    allAccounts?: Maybe<{
+    allAccounts?: {
         __typename: 'AccountsList';
-        accounts?: Maybe<Array<Maybe<{
+        accounts?: Array<{
             __typename: 'Account';
             id: string;
-            verifiedAt?: Maybe<Date>;
-            updatedAt?: Maybe<Date>;
-        }>>>;
+            verifiedAt?: Date | null | undefined;
+            updatedAt?: Date | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -2074,45 +2074,45 @@ export declare type AllAccountsQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateBookingAdMutationVariables = Exact<{
     input: CreateBookingAdInput;
 }>;
 export declare type CreateBookingAdMutation = {
     __typename: 'Mutation';
-    createBookingAd?: Maybe<{
+    createBookingAd?: {
         __typename: 'BookingAd';
         id: string;
-        createdAt?: Maybe<Date>;
-        updatedAt?: Maybe<Date>;
+        createdAt?: Date | null | undefined;
+        updatedAt?: Date | null | undefined;
         animalsSpeciesIds: Array<string>;
-        startDate?: Maybe<Date>;
-        endDate?: Maybe<Date>;
+        startDate?: Date | null | undefined;
+        endDate?: Date | null | undefined;
         serviceOptionId: string;
-        description?: Maybe<string>;
-        location?: Maybe<{
+        description?: string | null | undefined;
+        location?: {
             __typename: 'Location';
             latitude: number;
             longitude: any;
-        }>;
+        } | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'PreExistingUserAdError';
-        preExistingUserAdError?: Maybe<string>;
+        preExistingUserAdError?: string | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
     } | {
         __typename: 'UserAuthenticationError';
-    }>;
+    } | null | undefined;
 };
 export declare type UpdateBookingAdMutationVariables = Exact<{
     id: Scalars['ID'];
@@ -2120,28 +2120,28 @@ export declare type UpdateBookingAdMutationVariables = Exact<{
 }>;
 export declare type UpdateBookingAdMutation = {
     __typename: 'Mutation';
-    updateBookingAd?: Maybe<{
+    updateBookingAd?: {
         __typename: 'BookingAd';
         id: string;
-        createdAt?: Maybe<Date>;
-        updatedAt?: Maybe<Date>;
+        createdAt?: Date | null | undefined;
+        updatedAt?: Date | null | undefined;
         animalsSpeciesIds: Array<string>;
-        startDate?: Maybe<Date>;
-        endDate?: Maybe<Date>;
+        startDate?: Date | null | undefined;
+        endDate?: Date | null | undefined;
         serviceOptionId: string;
-        description?: Maybe<string>;
-        location?: Maybe<{
+        description?: string | null | undefined;
+        location?: {
             __typename: 'Location';
             latitude: number;
             longitude: any;
-        }>;
+        } | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -2152,23 +2152,23 @@ export declare type UpdateBookingAdMutation = {
         message: ErrorMessage;
     } | {
         __typename: 'UserAuthenticationError';
-    }>;
+    } | null | undefined;
 };
 export declare type DeleteBookingAdMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type DeleteBookingAdMutation = {
     __typename: 'Mutation';
-    deleteBookingAd?: Maybe<{
+    deleteBookingAd?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -2181,23 +2181,23 @@ export declare type DeleteBookingAdMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type BidForBookingAdMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type BidForBookingAdMutation = {
     __typename: 'Mutation';
-    bidForBookingAd?: Maybe<{
+    bidForBookingAd?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -2210,23 +2210,23 @@ export declare type BidForBookingAdMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type RemoveBidForBookingAdMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type RemoveBidForBookingAdMutation = {
     __typename: 'Mutation';
-    removeBidForBookingAd?: Maybe<{
+    removeBidForBookingAd?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -2239,73 +2239,73 @@ export declare type RemoveBidForBookingAdMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentUserAdsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type CurrentUserAdsQuery = {
     __typename: 'Query';
-    currentUserAds?: Maybe<{
+    currentUserAds?: {
         __typename: 'BookingAds';
-        bookingAds?: Maybe<Array<Maybe<{
+        bookingAds?: Array<{
             __typename: 'BookingAd';
             id: string;
-            createdAt?: Maybe<Date>;
-            updatedAt?: Maybe<Date>;
+            createdAt?: Date | null | undefined;
+            updatedAt?: Date | null | undefined;
             animalsSpeciesIds: Array<string>;
-            startDate?: Maybe<Date>;
-            endDate?: Maybe<Date>;
+            startDate?: Date | null | undefined;
+            endDate?: Date | null | undefined;
             serviceOptionId: string;
-            serviceMaxPrice?: Maybe<number>;
-            description?: Maybe<string>;
-            bidders?: Maybe<Array<Maybe<{
+            serviceMaxPrice?: number | null | undefined;
+            description?: string | null | undefined;
+            bidders?: Array<{
                 __typename: 'IndividualOperator';
                 id: string;
-                bids?: Maybe<Array<Maybe<{
+                bids?: Array<{
                     __typename: 'BookingAdBid';
                     id: string;
-                }>>>;
-            }>>>;
-        }>>>;
+                } | null | undefined> | null | undefined;
+            } | null | undefined> | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type AdByIdQueryVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type AdByIdQuery = {
     __typename: 'Query';
-    adById?: Maybe<{
+    adById?: {
         __typename: 'BookingAd';
         id: string;
-        updatedAt?: Maybe<Date>;
+        updatedAt?: Date | null | undefined;
         animalsSpeciesIds: Array<string>;
-        startDate?: Maybe<Date>;
-        endDate?: Maybe<Date>;
+        startDate?: Date | null | undefined;
+        endDate?: Date | null | undefined;
         serviceOptionId: string;
-        description?: Maybe<string>;
-        serviceMaxPrice?: Maybe<number>;
-        location?: Maybe<{
+        description?: string | null | undefined;
+        serviceMaxPrice?: number | null | undefined;
+        location?: {
             __typename: 'Location';
             latitude: number;
             longitude: any;
-        }>;
-        bidders?: Maybe<Array<Maybe<{
+        } | null | undefined;
+        bidders?: Array<{
             __typename: 'IndividualOperator';
             id: string;
-            averageScore?: Maybe<number>;
-            account?: Maybe<{
+            averageScore?: number | null | undefined;
+            account?: {
                 __typename: 'Account';
-                user?: Maybe<{
+                user?: {
                     __typename: 'User';
                     firstName: string;
-                }>;
-            }>;
-            avatar?: Maybe<{
+                } | null | undefined;
+            } | null | undefined;
+            avatar?: {
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -2326,157 +2326,157 @@ export declare type AdByIdQuery = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>;
-            location?: Maybe<{
+            } | null | undefined;
+            location?: {
                 __typename: 'Location';
                 latitude: number;
                 longitude: any;
-            }>;
-            coreServices?: Maybe<Array<Maybe<{
+            } | null | undefined;
+            coreServices?: Array<{
                 __typename: 'IndividualOperatorCoreService';
                 id: string;
                 price: number;
-            }>>>;
-            extraServices?: Maybe<{
+            } | null | undefined> | null | undefined;
+            extraServices?: {
                 __typename: 'IndividualOperatorExtraService';
-                atHomeExclusivity?: Maybe<boolean>;
-                atHomeExclusivityExtraPrice?: Maybe<number>;
-                atHomeContinuously?: Maybe<boolean>;
-                atHomeContinuouslyExtraPrice?: Maybe<number>;
-                atHomeOnlyBringPet?: Maybe<boolean>;
-                atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-                atHomeComeGetPet?: Maybe<boolean>;
-                atHomeComeGetPetExtraPrice?: Maybe<number>;
-                atOwnerHomePlantsCare?: Maybe<boolean>;
-                atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-                atOwnerHomeMail?: Maybe<boolean>;
-                atOwnerHomeMailExtraPrice?: Maybe<number>;
-                atOwnerHomeCurtains?: Maybe<boolean>;
-                atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-                acceptShortNotice?: Maybe<boolean>;
-                flexibleCancelation?: Maybe<boolean>;
-                isProfessionalOperator?: Maybe<boolean>;
-                abilityToProvideMedicalCare?: Maybe<boolean>;
-            }>;
-        }>>>;
+                atHomeExclusivity?: boolean | null | undefined;
+                atHomeExclusivityExtraPrice?: number | null | undefined;
+                atHomeContinuously?: boolean | null | undefined;
+                atHomeContinuouslyExtraPrice?: number | null | undefined;
+                atHomeOnlyBringPet?: boolean | null | undefined;
+                atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+                atHomeComeGetPet?: boolean | null | undefined;
+                atHomeComeGetPetExtraPrice?: number | null | undefined;
+                atOwnerHomePlantsCare?: boolean | null | undefined;
+                atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+                atOwnerHomeMail?: boolean | null | undefined;
+                atOwnerHomeMailExtraPrice?: number | null | undefined;
+                atOwnerHomeCurtains?: boolean | null | undefined;
+                atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+                acceptShortNotice?: boolean | null | undefined;
+                flexibleCancelation?: boolean | null | undefined;
+                isProfessionalOperator?: boolean | null | undefined;
+                abilityToProvideMedicalCare?: boolean | null | undefined;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SearchAdsQueryVariables = Exact<{
     input: SearchAdsInput;
 }>;
 export declare type SearchAdsQuery = {
     __typename: 'Query';
-    searchAds?: Maybe<{
+    searchAds?: {
         __typename: 'BookingAds';
-        bookingAds?: Maybe<Array<Maybe<{
+        bookingAds?: Array<{
             __typename: 'BookingAd';
             id: string;
-            updatedAt?: Maybe<Date>;
+            updatedAt?: Date | null | undefined;
             animalsSpeciesIds: Array<string>;
-            startDate?: Maybe<Date>;
-            endDate?: Maybe<Date>;
+            startDate?: Date | null | undefined;
+            endDate?: Date | null | undefined;
             serviceOptionId: string;
-            description?: Maybe<string>;
-            location?: Maybe<{
+            description?: string | null | undefined;
+            location?: {
                 __typename: 'Location';
                 latitude: number;
                 longitude: any;
-            }>;
-        }>>>;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentOperatorBidsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type CurrentOperatorBidsQuery = {
     __typename: 'Query';
-    currentOperatorBids?: Maybe<{
+    currentOperatorBids?: {
         __typename: 'BookingAdBids';
-        bids?: Maybe<Array<Maybe<{
+        bids?: Array<{
             __typename: 'BookingAdBid';
-            bookingAd?: Maybe<{
+            bookingAd?: {
                 __typename: 'BookingAd';
                 id: string;
-                updatedAt?: Maybe<Date>;
+                updatedAt?: Date | null | undefined;
                 animalsSpeciesIds: Array<string>;
-                startDate?: Maybe<Date>;
-                endDate?: Maybe<Date>;
+                startDate?: Date | null | undefined;
+                endDate?: Date | null | undefined;
                 serviceOptionId: string;
-                description?: Maybe<string>;
-                location?: Maybe<{
+                description?: string | null | undefined;
+                location?: {
                     __typename: 'Location';
                     latitude: number;
                     longitude: any;
-                }>;
-            }>;
-        }>>>;
+                } | null | undefined;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateBookingMutationVariables = Exact<{
     input: CreateBookingInput;
 }>;
 export declare type CreateBookingMutation = {
     __typename: 'Mutation';
-    createBooking?: Maybe<{
+    createBooking?: {
         __typename: 'Booking';
         id: string;
-        startDate?: Maybe<Date>;
-        endDate?: Maybe<Date>;
-        status?: Maybe<BookingStatus>;
-        ownerConfirmationDate?: Maybe<Date>;
-        operatorConfirmationDate?: Maybe<Date>;
-        selectedOptions?: Maybe<string>;
-        animals?: Maybe<Array<Maybe<{
+        startDate?: Date | null | undefined;
+        endDate?: Date | null | undefined;
+        status?: BookingStatus | null | undefined;
+        ownerConfirmationDate?: Date | null | undefined;
+        operatorConfirmationDate?: Date | null | undefined;
+        selectedOptions?: string | null | undefined;
+        animals?: Array<{
             __typename: 'BookingAnimal';
             specieOptionId: string;
-        }>>>;
-        messages?: Maybe<Array<Maybe<{
+        } | null | undefined> | null | undefined;
+        messages?: Array<{
             __typename: 'OperatorBookingMessage';
         } | {
             __typename: 'StaffBookingMessage';
         } | {
             __typename: 'UserBookingMessage';
             id: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'CannotBookHimSelfError';
-        cannotBookHimSelfError?: Maybe<string>;
+        cannotBookHimSelfError?: string | null | undefined;
     } | {
         __typename: 'ExistingBookingError';
-        existingBookingError?: Maybe<string>;
+        existingBookingError?: string | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
     } | {
         __typename: 'NotSupportedExtraServiceError';
-        notSupportedExtraServiceError?: Maybe<string>;
+        notSupportedExtraServiceError?: string | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -2485,25 +2485,25 @@ export declare type CreateBookingMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type ConfirmBookingMutationVariables = Exact<{
     input: ConfirmBookingInput;
 }>;
 export declare type ConfirmBookingMutation = {
     __typename: 'Mutation';
-    confirmBooking?: Maybe<{
+    confirmBooking?: {
         __typename: 'Booking';
         id: string;
-        ownerConfirmationDate?: Maybe<Date>;
-        operatorConfirmationDate?: Maybe<Date>;
+        ownerConfirmationDate?: Date | null | undefined;
+        operatorConfirmationDate?: Date | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -2516,25 +2516,25 @@ export declare type ConfirmBookingMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CancelBookingMutationVariables = Exact<{
     input: CancelBookingInput;
 }>;
 export declare type CancelBookingMutation = {
     __typename: 'Mutation';
-    cancelBooking?: Maybe<{
+    cancelBooking?: {
         __typename: 'Booking';
         id: string;
-        ownerConfirmationDate?: Maybe<Date>;
-        operatorConfirmationDate?: Maybe<Date>;
+        ownerConfirmationDate?: Date | null | undefined;
+        operatorConfirmationDate?: Date | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -2547,25 +2547,25 @@ export declare type CancelBookingMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CancelOnGoingBookingMutationVariables = Exact<{
     input: CancelOnGoingBookingInput;
 }>;
 export declare type CancelOnGoingBookingMutation = {
     __typename: 'Mutation';
-    cancelOnGoingBooking?: Maybe<{
+    cancelOnGoingBooking?: {
         __typename: 'Booking';
         id: string;
-        ownerConfirmationDate?: Maybe<Date>;
-        operatorConfirmationDate?: Maybe<Date>;
+        ownerConfirmationDate?: Date | null | undefined;
+        operatorConfirmationDate?: Date | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -2578,28 +2578,28 @@ export declare type CancelOnGoingBookingMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type AuthorizePaymentMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type AuthorizePaymentMutation = {
     __typename: 'Mutation';
-    authorizePayment?: Maybe<{
+    authorizePayment?: {
         __typename: 'AuthorizedPayment';
-        clientSecret?: Maybe<string>;
-        stripeTargetApi?: Maybe<string>;
-        hadRef?: Maybe<boolean>;
+        clientSecret?: string | null | undefined;
+        stripeTargetApi?: string | null | undefined;
+        hadRef?: boolean | null | undefined;
     } | {
         __typename: 'InvalidOperatorError';
-        invalidOperatorError?: Maybe<string>;
+        invalidOperatorError?: string | null | undefined;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
     } | {
         __typename: 'OperatorCannotProcessPaymentsError';
-        operatorCannotProcessPaymentsError?: Maybe<string>;
+        operatorCannotProcessPaymentsError?: string | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -2608,30 +2608,30 @@ export declare type AuthorizePaymentMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type UpdateBookingPaymentStatusMutationVariables = Exact<{
     input: UpdateBookingPaymentStatusInput;
 }>;
 export declare type UpdateBookingPaymentStatusMutation = {
     __typename: 'Mutation';
-    updateBookingPaymentStatus?: Maybe<{
+    updateBookingPaymentStatus?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
     } | {
         __typename: 'PaymentProcessorError';
-        paymentProcessorError?: Maybe<string>;
+        paymentProcessorError?: string | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -2640,19 +2640,19 @@ export declare type UpdateBookingPaymentStatusMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type GetCurrentUserAndOperatorBookingsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetCurrentUserAndOperatorBookingsQuery = {
     __typename: 'Query';
-    currentUserAndOperatorBookings?: Maybe<{
+    currentUserAndOperatorBookings?: {
         __typename: 'BookingsList';
-        bookings?: Maybe<Array<Maybe<{
+        bookings?: Array<{
             __typename: 'Booking';
             id: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -2661,48 +2661,48 @@ export declare type GetCurrentUserAndOperatorBookingsQuery = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type BookingByIdQueryVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type BookingByIdQuery = {
     __typename: 'Query';
-    bookingById?: Maybe<{
+    bookingById?: {
         __typename: 'Booking';
         id: string;
-        updatedAt?: Maybe<Date>;
-        status?: Maybe<BookingStatus>;
-        startDate?: Maybe<Date>;
-        endDate?: Maybe<Date>;
-        priceWithOutApplicationFee?: Maybe<number>;
-        applicationFeeAmount?: Maybe<number>;
-        selectedOptions?: Maybe<string>;
-        ownerConfirmationDate?: Maybe<Date>;
-        operatorConfirmationDate?: Maybe<Date>;
-        canceled?: Maybe<boolean>;
-        canceledBy?: Maybe<string>;
-        underReview?: Maybe<boolean>;
-        service?: Maybe<{
+        updatedAt?: Date | null | undefined;
+        status?: BookingStatus | null | undefined;
+        startDate?: Date | null | undefined;
+        endDate?: Date | null | undefined;
+        priceWithOutApplicationFee?: number | null | undefined;
+        applicationFeeAmount?: number | null | undefined;
+        selectedOptions?: string | null | undefined;
+        ownerConfirmationDate?: Date | null | undefined;
+        operatorConfirmationDate?: Date | null | undefined;
+        canceled?: boolean | null | undefined;
+        canceledBy?: string | null | undefined;
+        underReview?: boolean | null | undefined;
+        service?: {
             __typename: 'ServiceOption';
             nameFr: string;
             nameEn: string;
-        }>;
-        operator?: Maybe<{
+        } | null | undefined;
+        operator?: {
             __typename: 'IndividualOperator';
             id: string;
-            averageScore?: Maybe<number>;
-            averageResponseTime?: Maybe<Date>;
-            partnerId?: Maybe<string>;
-            partnerPercentage?: Maybe<number>;
-            account?: Maybe<{
+            averageScore?: number | null | undefined;
+            averageResponseTime?: Date | null | undefined;
+            partnerId?: string | null | undefined;
+            partnerPercentage?: number | null | undefined;
+            account?: {
                 __typename: 'Account';
-                user?: Maybe<{
+                user?: {
                     __typename: 'User';
                     firstName: string;
-                }>;
-            }>;
-            avatar?: Maybe<{
+                } | null | undefined;
+            } | null | undefined;
+            avatar?: {
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -2723,39 +2723,39 @@ export declare type BookingByIdQuery = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>;
-            location?: Maybe<{
+            } | null | undefined;
+            location?: {
                 __typename: 'Location';
-                city?: Maybe<string>;
-            }>;
-            coreServices?: Maybe<Array<Maybe<{
+                city?: string | null | undefined;
+            } | null | undefined;
+            coreServices?: Array<{
                 __typename: 'IndividualOperatorCoreService';
                 price: number;
                 serviceOptionId: string;
-            }>>>;
-            extraServices?: Maybe<{
+            } | null | undefined> | null | undefined;
+            extraServices?: {
                 __typename: 'IndividualOperatorExtraService';
-                atHomeExclusivity?: Maybe<boolean>;
-                atHomeExclusivityExtraPrice?: Maybe<number>;
-                atHomeContinuously?: Maybe<boolean>;
-                atHomeContinuouslyExtraPrice?: Maybe<number>;
-                atHomeOnlyBringPet?: Maybe<boolean>;
-                atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-                atHomeComeGetPet?: Maybe<boolean>;
-                atHomeComeGetPetExtraPrice?: Maybe<number>;
-                atOwnerHomePlantsCare?: Maybe<boolean>;
-                atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-                atOwnerHomeMail?: Maybe<boolean>;
-                atOwnerHomeMailExtraPrice?: Maybe<number>;
-                atOwnerHomeCurtains?: Maybe<boolean>;
-                atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-            }>;
-        }>;
-        user?: Maybe<{
+                atHomeExclusivity?: boolean | null | undefined;
+                atHomeExclusivityExtraPrice?: number | null | undefined;
+                atHomeContinuously?: boolean | null | undefined;
+                atHomeContinuouslyExtraPrice?: number | null | undefined;
+                atHomeOnlyBringPet?: boolean | null | undefined;
+                atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+                atHomeComeGetPet?: boolean | null | undefined;
+                atHomeComeGetPetExtraPrice?: number | null | undefined;
+                atOwnerHomePlantsCare?: boolean | null | undefined;
+                atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+                atOwnerHomeMail?: boolean | null | undefined;
+                atOwnerHomeMailExtraPrice?: number | null | undefined;
+                atOwnerHomeCurtains?: boolean | null | undefined;
+                atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+            } | null | undefined;
+        } | null | undefined;
+        user?: {
             __typename: 'User';
             id: string;
             firstName: string;
-            avatar?: Maybe<{
+            avatar?: {
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -2776,89 +2776,89 @@ export declare type BookingByIdQuery = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>;
-        }>;
-        reviews?: Maybe<Array<Maybe<{
+            } | null | undefined;
+        } | null | undefined;
+        reviews?: Array<{
             __typename: 'OperatorReview';
             id: string;
             score: number;
             title: string;
-            body?: Maybe<string>;
+            body?: string | null | undefined;
         } | {
             __typename: 'UserReview';
             id: string;
             score: number;
             title: string;
-            body?: Maybe<string>;
-        }>>>;
-        animals?: Maybe<Array<Maybe<{
+            body?: string | null | undefined;
+        } | null | undefined> | null | undefined;
+        animals?: Array<{
             __typename: 'BookingAnimal';
-            specie?: Maybe<{
+            specie?: {
                 __typename: 'SpecieOption';
                 nameFr: string;
                 nameEn: string;
-            }>;
-        }>>>;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentUserOwnerBookingsQueryVariables = Exact<{
     input: CurrentUserBookingFilterInput;
 }>;
 export declare type CurrentUserOwnerBookingsQuery = {
     __typename: 'Query';
-    currentUserOwnerBookings?: Maybe<{
+    currentUserOwnerBookings?: {
         __typename: 'BookingsList';
-        bookings?: Maybe<Array<Maybe<{
+        bookings?: Array<{
             __typename: 'Booking';
             id: string;
-            updatedAt?: Maybe<Date>;
-            status?: Maybe<BookingStatus>;
-            startDate?: Maybe<Date>;
-            endDate?: Maybe<Date>;
-            priceWithOutApplicationFee?: Maybe<number>;
-            applicationFeeAmount?: Maybe<number>;
-            selectedOptions?: Maybe<string>;
-            service?: Maybe<{
+            updatedAt?: Date | null | undefined;
+            status?: BookingStatus | null | undefined;
+            startDate?: Date | null | undefined;
+            endDate?: Date | null | undefined;
+            priceWithOutApplicationFee?: number | null | undefined;
+            applicationFeeAmount?: number | null | undefined;
+            selectedOptions?: string | null | undefined;
+            service?: {
                 __typename: 'ServiceOption';
                 nameFr: string;
                 nameEn: string;
-            }>;
-            messages?: Maybe<Array<Maybe<{
+            } | null | undefined;
+            messages?: Array<{
                 __typename: 'OperatorBookingMessage';
                 operatorId: string;
-                readAt?: Maybe<Date>;
+                readAt?: Date | null | undefined;
             } | {
                 __typename: 'StaffBookingMessage';
             } | {
                 __typename: 'UserBookingMessage';
                 userId: string;
-                readAt?: Maybe<Date>;
-            }>>>;
-            operator?: Maybe<{
+                readAt?: Date | null | undefined;
+            } | null | undefined> | null | undefined;
+            operator?: {
                 __typename: 'IndividualOperator';
                 id: string;
-                partnerId?: Maybe<string>;
-                partnerPercentage?: Maybe<number>;
-                averageScore?: Maybe<number>;
-                account?: Maybe<{
+                partnerId?: string | null | undefined;
+                partnerPercentage?: number | null | undefined;
+                averageScore?: number | null | undefined;
+                account?: {
                     __typename: 'Account';
-                    user?: Maybe<{
+                    user?: {
                         __typename: 'User';
                         firstName: string;
-                    }>;
-                }>;
-                avatar?: Maybe<{
+                    } | null | undefined;
+                } | null | undefined;
+                avatar?: {
                     __typename: 'DonationReceiptMedia';
                     storeUrl: string;
                 } | {
@@ -2879,43 +2879,43 @@ export declare type CurrentUserOwnerBookingsQuery = {
                 } | {
                     __typename: 'UserMedia';
                     storeUrl: string;
-                }>;
-                location?: Maybe<{
+                } | null | undefined;
+                location?: {
                     __typename: 'Location';
-                    city?: Maybe<string>;
-                }>;
-                coreServices?: Maybe<Array<Maybe<{
+                    city?: string | null | undefined;
+                } | null | undefined;
+                coreServices?: Array<{
                     __typename: 'IndividualOperatorCoreService';
                     serviceOptionId: string;
                     price: number;
-                }>>>;
-                extraServices?: Maybe<{
+                } | null | undefined> | null | undefined;
+                extraServices?: {
                     __typename: 'IndividualOperatorExtraService';
-                    atHomeExclusivity?: Maybe<boolean>;
-                    atHomeExclusivityExtraPrice?: Maybe<number>;
-                    atHomeContinuously?: Maybe<boolean>;
-                    atHomeContinuouslyExtraPrice?: Maybe<number>;
-                    atHomeOnlyBringPet?: Maybe<boolean>;
-                    atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-                    atHomeComeGetPet?: Maybe<boolean>;
-                    atHomeComeGetPetExtraPrice?: Maybe<number>;
-                    atOwnerHomePlantsCare?: Maybe<boolean>;
-                    atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-                    atOwnerHomeMail?: Maybe<boolean>;
-                    atOwnerHomeMailExtraPrice?: Maybe<number>;
-                    atOwnerHomeCurtains?: Maybe<boolean>;
-                    atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-                }>;
-            }>;
-            animals?: Maybe<Array<Maybe<{
+                    atHomeExclusivity?: boolean | null | undefined;
+                    atHomeExclusivityExtraPrice?: number | null | undefined;
+                    atHomeContinuously?: boolean | null | undefined;
+                    atHomeContinuouslyExtraPrice?: number | null | undefined;
+                    atHomeOnlyBringPet?: boolean | null | undefined;
+                    atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+                    atHomeComeGetPet?: boolean | null | undefined;
+                    atHomeComeGetPetExtraPrice?: number | null | undefined;
+                    atOwnerHomePlantsCare?: boolean | null | undefined;
+                    atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+                    atOwnerHomeMail?: boolean | null | undefined;
+                    atOwnerHomeMailExtraPrice?: number | null | undefined;
+                    atOwnerHomeCurtains?: boolean | null | undefined;
+                    atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            animals?: Array<{
                 __typename: 'BookingAnimal';
-                specie?: Maybe<{
+                specie?: {
                     __typename: 'SpecieOption';
                     nameFr: string;
                     nameEn: string;
-                }>;
-            }>>>;
-        }>>>;
+                } | null | undefined;
+            } | null | undefined> | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -2926,46 +2926,46 @@ export declare type CurrentUserOwnerBookingsQuery = {
         message: ErrorMessage;
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentUserOperatorBookingsQueryVariables = Exact<{
     input: CurrentUserBookingFilterInput;
 }>;
 export declare type CurrentUserOperatorBookingsQuery = {
     __typename: 'Query';
-    currentUserOperatorBookings?: Maybe<{
+    currentUserOperatorBookings?: {
         __typename: 'BookingsList';
-        bookings?: Maybe<Array<Maybe<{
+        bookings?: Array<{
             __typename: 'Booking';
             id: string;
-            updatedAt?: Maybe<Date>;
-            status?: Maybe<BookingStatus>;
-            startDate?: Maybe<Date>;
-            endDate?: Maybe<Date>;
-            priceWithOutApplicationFee?: Maybe<number>;
-            applicationFeeAmount?: Maybe<number>;
-            selectedOptions?: Maybe<string>;
-            service?: Maybe<{
+            updatedAt?: Date | null | undefined;
+            status?: BookingStatus | null | undefined;
+            startDate?: Date | null | undefined;
+            endDate?: Date | null | undefined;
+            priceWithOutApplicationFee?: number | null | undefined;
+            applicationFeeAmount?: number | null | undefined;
+            selectedOptions?: string | null | undefined;
+            service?: {
                 __typename: 'ServiceOption';
                 nameFr: string;
                 nameEn: string;
-            }>;
-            messages?: Maybe<Array<Maybe<{
+            } | null | undefined;
+            messages?: Array<{
                 __typename: 'OperatorBookingMessage';
                 operatorId: string;
-                readAt?: Maybe<Date>;
+                readAt?: Date | null | undefined;
             } | {
                 __typename: 'StaffBookingMessage';
             } | {
                 __typename: 'UserBookingMessage';
                 userId: string;
-                readAt?: Maybe<Date>;
-            }>>>;
-            user?: Maybe<{
+                readAt?: Date | null | undefined;
+            } | null | undefined> | null | undefined;
+            user?: {
                 __typename: 'User';
                 id: string;
                 firstName: string;
-                avatar?: Maybe<{
+                avatar?: {
                     __typename: 'DonationReceiptMedia';
                     storeUrl: string;
                 } | {
@@ -2986,45 +2986,45 @@ export declare type CurrentUserOperatorBookingsQuery = {
                 } | {
                     __typename: 'UserMedia';
                     storeUrl: string;
-                }>;
-            }>;
-            operator?: Maybe<{
+                } | null | undefined;
+            } | null | undefined;
+            operator?: {
                 __typename: 'IndividualOperator';
                 id: string;
-                partnerId?: Maybe<string>;
-                partnerPercentage?: Maybe<number>;
-                coreServices?: Maybe<Array<Maybe<{
+                partnerId?: string | null | undefined;
+                partnerPercentage?: number | null | undefined;
+                coreServices?: Array<{
                     __typename: 'IndividualOperatorCoreService';
                     price: number;
                     serviceOptionId: string;
-                }>>>;
-                extraServices?: Maybe<{
+                } | null | undefined> | null | undefined;
+                extraServices?: {
                     __typename: 'IndividualOperatorExtraService';
-                    atHomeExclusivity?: Maybe<boolean>;
-                    atHomeExclusivityExtraPrice?: Maybe<number>;
-                    atHomeContinuously?: Maybe<boolean>;
-                    atHomeContinuouslyExtraPrice?: Maybe<number>;
-                    atHomeOnlyBringPet?: Maybe<boolean>;
-                    atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-                    atHomeComeGetPet?: Maybe<boolean>;
-                    atHomeComeGetPetExtraPrice?: Maybe<number>;
-                    atOwnerHomePlantsCare?: Maybe<boolean>;
-                    atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-                    atOwnerHomeMail?: Maybe<boolean>;
-                    atOwnerHomeMailExtraPrice?: Maybe<number>;
-                    atOwnerHomeCurtains?: Maybe<boolean>;
-                    atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-                }>;
-            }>;
-            animals?: Maybe<Array<Maybe<{
+                    atHomeExclusivity?: boolean | null | undefined;
+                    atHomeExclusivityExtraPrice?: number | null | undefined;
+                    atHomeContinuously?: boolean | null | undefined;
+                    atHomeContinuouslyExtraPrice?: number | null | undefined;
+                    atHomeOnlyBringPet?: boolean | null | undefined;
+                    atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+                    atHomeComeGetPet?: boolean | null | undefined;
+                    atHomeComeGetPetExtraPrice?: number | null | undefined;
+                    atOwnerHomePlantsCare?: boolean | null | undefined;
+                    atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+                    atOwnerHomeMail?: boolean | null | undefined;
+                    atOwnerHomeMailExtraPrice?: number | null | undefined;
+                    atOwnerHomeCurtains?: boolean | null | undefined;
+                    atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            animals?: Array<{
                 __typename: 'BookingAnimal';
-                specie?: Maybe<{
+                specie?: {
                     __typename: 'SpecieOption';
                     nameFr: string;
                     nameEn: string;
-                }>;
-            }>>>;
-        }>>>;
+                } | null | undefined;
+            } | null | undefined> | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -3037,23 +3037,23 @@ export declare type CurrentUserOperatorBookingsQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type BookingsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type BookingsQuery = {
     __typename: 'Query';
-    bookings?: Maybe<{
+    bookings?: {
         __typename: 'BookingsList';
-        bookings?: Maybe<Array<Maybe<{
+        bookings?: Array<{
             __typename: 'Booking';
             id: string;
-            updatedAt?: Maybe<Date>;
-            status?: Maybe<BookingStatus>;
-            priceWithOutApplicationFee?: Maybe<number>;
-            applicationFeeAmount?: Maybe<number>;
-        }>>>;
+            updatedAt?: Date | null | undefined;
+            status?: BookingStatus | null | undefined;
+            priceWithOutApplicationFee?: number | null | undefined;
+            applicationFeeAmount?: number | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -3066,28 +3066,28 @@ export declare type BookingsQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type BookingsWithPaymentStatusQueryVariables = Exact<{
     input: BookingWithPaymentStatusInput;
 }>;
 export declare type BookingsWithPaymentStatusQuery = {
     __typename: 'Query';
-    bookingsWithPaymentStatus?: Maybe<{
+    bookingsWithPaymentStatus?: {
         __typename: 'BookingsList';
-        bookings?: Maybe<Array<Maybe<{
+        bookings?: Array<{
             __typename: 'Booking';
             id: string;
-            updatedAt?: Maybe<Date>;
-            priceWithOutApplicationFee?: Maybe<number>;
-            applicationFeeAmount?: Maybe<number>;
-            underReview?: Maybe<boolean>;
-            payment?: Maybe<{
+            updatedAt?: Date | null | undefined;
+            priceWithOutApplicationFee?: number | null | undefined;
+            applicationFeeAmount?: number | null | undefined;
+            underReview?: boolean | null | undefined;
+            payment?: {
                 __typename: 'StripePayment';
                 status: PaymentStatus;
-                expectedPaymentIntentCaptureDate?: Maybe<Date>;
-            }>;
-        }>>>;
+                expectedPaymentIntentCaptureDate?: Date | null | undefined;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -3100,18 +3100,18 @@ export declare type BookingsWithPaymentStatusQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SubscribeToBookingMessagesSubscriptionVariables = Exact<{
     bookingId: Scalars['ID'];
 }>;
 export declare type SubscribeToBookingMessagesSubscription = {
     __typename: 'Subscription';
-    bookingByIdChatSub?: Maybe<{
+    bookingByIdChatSub?: {
         __typename: 'OperatorBookingMessage';
         id: string;
         operatorId: string;
-        readAt?: Maybe<Date>;
+        readAt?: Date | null | undefined;
         content: string;
     } | {
         __typename: 'UserAuthenticationError';
@@ -3121,13 +3121,13 @@ export declare type SubscribeToBookingMessagesSubscription = {
         __typename: 'UserBookingMessage';
         id: string;
         userId: string;
-        readAt?: Maybe<Date>;
+        readAt?: Date | null | undefined;
         content: string;
     } | {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SubscribeToUserBookingsMessagesChangesSubscriptionVariables = Exact<{
     bookingsIds?: Maybe<Array<Scalars['ID']> | Scalars['ID']>;
@@ -3135,16 +3135,16 @@ export declare type SubscribeToUserBookingsMessagesChangesSubscriptionVariables 
 }>;
 export declare type SubscribeToUserBookingsMessagesChangesSubscription = {
     __typename: 'Subscription';
-    userBookingsMessagesChangesSub?: Maybe<{
+    userBookingsMessagesChangesSub?: {
         __typename: 'OperatorBookingMessage';
         id: string;
         bookingId: string;
         operatorId: string;
-        readAt?: Maybe<Date>;
+        readAt?: Date | null | undefined;
         content: string;
-        operator?: Maybe<{
+        operator?: {
             __typename: 'IndividualOperator';
-            avatar?: Maybe<{
+            avatar?: {
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -3165,16 +3165,16 @@ export declare type SubscribeToUserBookingsMessagesChangesSubscription = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>;
-            account?: Maybe<{
+            } | null | undefined;
+            account?: {
                 __typename: 'Account';
-                user?: Maybe<{
+                user?: {
                     __typename: 'User';
                     firstName: string;
-                    lastName?: Maybe<string>;
-                }>;
-            }>;
-        }>;
+                    lastName?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -3184,12 +3184,12 @@ export declare type SubscribeToUserBookingsMessagesChangesSubscription = {
         id: string;
         bookingId: string;
         userId: string;
-        readAt?: Maybe<Date>;
+        readAt?: Date | null | undefined;
         content: string;
-        user?: Maybe<{
+        user?: {
             __typename: 'User';
             firstName: string;
-            avatar?: Maybe<{
+            avatar?: {
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -3210,43 +3210,43 @@ export declare type SubscribeToUserBookingsMessagesChangesSubscription = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>;
-        }>;
+            } | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SubscribeToUserBookingsStatusChangesSubscriptionVariables = Exact<{
     bookingsIds?: Maybe<Array<Scalars['ID']> | Scalars['ID']>;
 }>;
 export declare type SubscribeToUserBookingsStatusChangesSubscription = {
     __typename: 'Subscription';
-    userBookingsStatusChangesSub?: Maybe<{
+    userBookingsStatusChangesSub?: {
         __typename: 'Booking';
         id: string;
-        status?: Maybe<BookingStatus>;
-        startDate?: Maybe<Date>;
-        endDate?: Maybe<Date>;
-        user?: Maybe<{
+        status?: BookingStatus | null | undefined;
+        startDate?: Date | null | undefined;
+        endDate?: Date | null | undefined;
+        user?: {
             __typename: 'User';
             id: string;
             firstName: string;
-            lastName?: Maybe<string>;
-        }>;
-        operator?: Maybe<{
+            lastName?: string | null | undefined;
+        } | null | undefined;
+        operator?: {
             __typename: 'IndividualOperator';
             id: string;
-            account?: Maybe<{
+            account?: {
                 __typename: 'Account';
-                user?: Maybe<{
+                user?: {
                     __typename: 'User';
                     firstName: string;
-                    lastName?: Maybe<string>;
-                }>;
-            }>;
-            avatar?: Maybe<{
+                    lastName?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            avatar?: {
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -3267,8 +3267,8 @@ export declare type SubscribeToUserBookingsStatusChangesSubscription = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>;
-        }>;
+            } | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -3277,19 +3277,19 @@ export declare type SubscribeToUserBookingsStatusChangesSubscription = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SubscribeToNewlyCreatedBookingsAsSitterSubscriptionVariables = Exact<{
     sitterId?: Maybe<Scalars['ID']>;
 }>;
 export declare type SubscribeToNewlyCreatedBookingsAsSitterSubscription = {
     __typename: 'Subscription';
-    newlyCreatedBookingsAsSitterSub?: Maybe<{
+    newlyCreatedBookingsAsSitterSub?: {
         __typename: 'Booking';
         id: string;
-        startDate?: Maybe<Date>;
-        endDate?: Maybe<Date>;
-        priceWithOutApplicationFee?: Maybe<number>;
+        startDate?: Date | null | undefined;
+        endDate?: Date | null | undefined;
+        priceWithOutApplicationFee?: number | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -3298,24 +3298,24 @@ export declare type SubscribeToNewlyCreatedBookingsAsSitterSubscription = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateBookingClaimMutationVariables = Exact<{
     input: CreateBookingClaimInput;
 }>;
 export declare type CreateBookingClaimMutation = {
     __typename: 'Mutation';
-    createBookingClaim?: Maybe<{
+    createBookingClaim?: {
         __typename: 'Claim';
         id: string;
         reason: string;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -3324,28 +3324,28 @@ export declare type CreateBookingClaimMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type GetBookingClaimsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetBookingClaimsQuery = {
     __typename: 'Query';
-    claims?: Maybe<{
+    claims?: {
         __typename: 'ClaimsList';
-        claims?: Maybe<Array<Maybe<{
+        claims?: Array<{
             __typename: 'Claim';
             id: string;
             reason: string;
-            user?: Maybe<{
+            user?: {
                 __typename: 'User';
                 firstName: string;
-                lastName?: Maybe<string>;
-                account?: Maybe<{
+                lastName?: string | null | undefined;
+                account?: {
                     __typename: 'Account';
-                    email?: Maybe<string>;
-                }>;
-                avatar?: Maybe<{
+                    email?: string | null | undefined;
+                } | null | undefined;
+                avatar?: {
                     __typename: 'DonationReceiptMedia';
                     storeUrl: string;
                 } | {
@@ -3366,17 +3366,17 @@ export declare type GetBookingClaimsQuery = {
                 } | {
                     __typename: 'UserMedia';
                     storeUrl: string;
-                }>;
-            }>;
-            operator?: Maybe<{
+                } | null | undefined;
+            } | null | undefined;
+            operator?: {
                 __typename: 'IndividualOperator';
-                averageScore?: Maybe<number>;
-                location?: Maybe<{
+                averageScore?: number | null | undefined;
+                location?: {
                     __typename: 'Location';
-                    address?: Maybe<string>;
-                    city?: Maybe<string>;
-                }>;
-                avatar?: Maybe<{
+                    address?: string | null | undefined;
+                    city?: string | null | undefined;
+                } | null | undefined;
+                avatar?: {
                     __typename: 'DonationReceiptMedia';
                     storeUrl: string;
                 } | {
@@ -3397,32 +3397,32 @@ export declare type GetBookingClaimsQuery = {
                 } | {
                     __typename: 'UserMedia';
                     storeUrl: string;
-                }>;
-                account?: Maybe<{
+                } | null | undefined;
+                account?: {
                     __typename: 'Account';
-                    email?: Maybe<string>;
-                    user?: Maybe<{
+                    email?: string | null | undefined;
+                    user?: {
                         __typename: 'User';
                         firstName: string;
-                        lastName?: Maybe<string>;
-                    }>;
-                }>;
-            }>;
-            booking?: Maybe<{
+                        lastName?: string | null | undefined;
+                    } | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            booking?: {
                 __typename: 'Booking';
                 id: string;
-                startDate?: Maybe<Date>;
-                endDate?: Maybe<Date>;
-                animalsIds?: Maybe<Array<Maybe<string>>>;
-                priceWithOutApplicationFee?: Maybe<number>;
-                applicationFeeAmount?: Maybe<number>;
-                service?: Maybe<{
+                startDate?: Date | null | undefined;
+                endDate?: Date | null | undefined;
+                animalsIds?: Array<string | null | undefined> | null | undefined;
+                priceWithOutApplicationFee?: number | null | undefined;
+                applicationFeeAmount?: number | null | undefined;
+                service?: {
                     __typename: 'ServiceOption';
                     nameFr: string;
                     nameEn: string;
-                }>;
-            }>;
-        }>>>;
+                } | null | undefined;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -3435,26 +3435,26 @@ export declare type GetBookingClaimsQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type GetBookingClaimByIdQueryVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type GetBookingClaimByIdQuery = {
     __typename: 'Query';
-    claimById?: Maybe<{
+    claimById?: {
         __typename: 'Claim';
         id: string;
         reason: string;
-        user?: Maybe<{
+        user?: {
             __typename: 'User';
             firstName: string;
-            lastName?: Maybe<string>;
-            account?: Maybe<{
+            lastName?: string | null | undefined;
+            account?: {
                 __typename: 'Account';
-                email?: Maybe<string>;
-            }>;
-            avatar?: Maybe<{
+                email?: string | null | undefined;
+            } | null | undefined;
+            avatar?: {
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -3475,17 +3475,17 @@ export declare type GetBookingClaimByIdQuery = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>;
-        }>;
-        operator?: Maybe<{
+            } | null | undefined;
+        } | null | undefined;
+        operator?: {
             __typename: 'IndividualOperator';
-            averageScore?: Maybe<number>;
-            location?: Maybe<{
+            averageScore?: number | null | undefined;
+            location?: {
                 __typename: 'Location';
-                address?: Maybe<string>;
-                city?: Maybe<string>;
-            }>;
-            avatar?: Maybe<{
+                address?: string | null | undefined;
+                city?: string | null | undefined;
+            } | null | undefined;
+            avatar?: {
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -3506,49 +3506,49 @@ export declare type GetBookingClaimByIdQuery = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>;
-            account?: Maybe<{
+            } | null | undefined;
+            account?: {
                 __typename: 'Account';
-                email?: Maybe<string>;
-                user?: Maybe<{
+                email?: string | null | undefined;
+                user?: {
                     __typename: 'User';
                     firstName: string;
-                    lastName?: Maybe<string>;
-                }>;
-            }>;
-        }>;
-        booking?: Maybe<{
+                    lastName?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+        } | null | undefined;
+        booking?: {
             __typename: 'Booking';
             id: string;
-            startDate?: Maybe<Date>;
-            endDate?: Maybe<Date>;
-            animalsIds?: Maybe<Array<Maybe<string>>>;
-            priceWithOutApplicationFee?: Maybe<number>;
-            applicationFeeAmount?: Maybe<number>;
-            service?: Maybe<{
+            startDate?: Date | null | undefined;
+            endDate?: Date | null | undefined;
+            animalsIds?: Array<string | null | undefined> | null | undefined;
+            priceWithOutApplicationFee?: number | null | undefined;
+            applicationFeeAmount?: number | null | undefined;
+            service?: {
                 __typename: 'ServiceOption';
                 nameFr: string;
                 nameEn: string;
-            }>;
-            messages?: Maybe<Array<Maybe<{
+            } | null | undefined;
+            messages?: Array<{
                 __typename: 'OperatorBookingMessage';
                 operatorId: string;
                 id: string;
                 content: string;
-                readAt?: Maybe<Date>;
+                readAt?: Date | null | undefined;
             } | {
                 __typename: 'StaffBookingMessage';
                 id: string;
                 content: string;
-                readAt?: Maybe<Date>;
+                readAt?: Date | null | undefined;
             } | {
                 __typename: 'UserBookingMessage';
                 userId: string;
                 id: string;
                 content: string;
-                readAt?: Maybe<Date>;
-            }>>>;
-        }>;
+                readAt?: Date | null | undefined;
+            } | null | undefined> | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -3561,26 +3561,26 @@ export declare type GetBookingClaimByIdQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentOperatorDonationsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type CurrentOperatorDonationsQuery = {
     __typename: 'Query';
-    currentOperatorDonations?: Maybe<{
+    currentOperatorDonations?: {
         __typename: 'DonationsList';
-        donations?: Maybe<Array<Maybe<{
+        donations?: Array<{
             __typename: 'Donation';
             id: string;
-            amountToDonate?: Maybe<number>;
-            donationDate?: Maybe<Date>;
+            amountToDonate?: number | null | undefined;
+            donationDate?: Date | null | undefined;
             partnerId: string;
-            booking?: Maybe<{
+            booking?: {
                 __typename: 'Booking';
-                status?: Maybe<BookingStatus>;
-            }>;
-        }>>>;
+                status?: BookingStatus | null | undefined;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -3593,61 +3593,61 @@ export declare type CurrentOperatorDonationsQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SearchDonationsQueryVariables = Exact<{
     input: SearchDonationsInput;
 }>;
 export declare type SearchDonationsQuery = {
     __typename: 'Query';
-    searchDonations?: Maybe<{
+    searchDonations?: {
         __typename: 'DonationsList';
-        donations?: Maybe<Array<Maybe<{
+        donations?: Array<{
             __typename: 'Donation';
             id: string;
-            amountToDonate?: Maybe<number>;
-            donationDate?: Maybe<Date>;
+            amountToDonate?: number | null | undefined;
+            donationDate?: Date | null | undefined;
             partnerId: string;
-            createdAt?: Maybe<Date>;
-            updatedAt?: Maybe<Date>;
-            booking?: Maybe<{
+            createdAt?: Date | null | undefined;
+            updatedAt?: Date | null | undefined;
+            booking?: {
                 __typename: 'Booking';
-                status?: Maybe<BookingStatus>;
-            }>;
-            partner?: Maybe<{
+                status?: BookingStatus | null | undefined;
+            } | null | undefined;
+            partner?: {
                 __typename: 'Partner';
                 name: string;
-            }>;
-        }>>>;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateDonationReceiptMutationVariables = Exact<{
     input: CreateDonationReceiptInput;
 }>;
 export declare type CreateDonationReceiptMutation = {
     __typename: 'Mutation';
-    createDonationReceipt?: Maybe<{
+    createDonationReceipt?: {
         __typename: 'DonationReceipt';
         id: string;
-        amountDonated?: Maybe<number>;
-        createdAt?: Maybe<Date>;
-        updatedAt?: Maybe<Date>;
-        donations?: Maybe<Array<Maybe<{
+        amountDonated?: number | null | undefined;
+        createdAt?: Date | null | undefined;
+        updatedAt?: Date | null | undefined;
+        donations?: Array<{
             __typename: 'Donation';
             id: string;
-        }>>>;
-        files?: Maybe<Array<Maybe<{
+        } | null | undefined> | null | undefined;
+        files?: Array<{
             __typename: 'DonationReceiptMedia';
             storeUrl: string;
         } | {
@@ -3668,11 +3668,11 @@ export declare type CreateDonationReceiptMutation = {
         } | {
             __typename: 'UserMedia';
             storeUrl: string;
-        }>>>;
-        partner?: Maybe<{
+        } | null | undefined> | null | undefined;
+        partner?: {
             __typename: 'Partner';
             name: string;
-            medias?: Maybe<Array<Maybe<{
+            medias?: Array<{
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -3693,15 +3693,15 @@ export declare type CreateDonationReceiptMutation = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>>>;
-        }>;
+            } | null | undefined> | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -3714,22 +3714,22 @@ export declare type CreateDonationReceiptMutation = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SearchDonationReceiptsQueryVariables = Exact<{
     input: SearchDonationReceiptsInput;
 }>;
 export declare type SearchDonationReceiptsQuery = {
     __typename: 'Query';
-    searchDonationReceipts?: Maybe<{
+    searchDonationReceipts?: {
         __typename: 'DonationReceiptsList';
-        donationReceipts?: Maybe<Array<Maybe<{
+        donationReceipts?: Array<{
             __typename: 'DonationReceipt';
             id: string;
-            amountDonated?: Maybe<number>;
-            createdAt?: Maybe<Date>;
-            updatedAt?: Maybe<Date>;
-            files?: Maybe<Array<Maybe<{
+            amountDonated?: number | null | undefined;
+            createdAt?: Date | null | undefined;
+            updatedAt?: Date | null | undefined;
+            files?: Array<{
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -3750,11 +3750,11 @@ export declare type SearchDonationReceiptsQuery = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>>>;
-            partner?: Maybe<{
+            } | null | undefined> | null | undefined;
+            partner?: {
                 __typename: 'Partner';
                 name: string;
-                medias?: Maybe<Array<Maybe<{
+                medias?: Array<{
                     __typename: 'DonationReceiptMedia';
                     storeUrl: string;
                 } | {
@@ -3775,33 +3775,33 @@ export declare type SearchDonationReceiptsQuery = {
                 } | {
                     __typename: 'UserMedia';
                     storeUrl: string;
-                }>>>;
-            }>;
-            donations?: Maybe<Array<Maybe<{
+                } | null | undefined> | null | undefined;
+            } | null | undefined;
+            donations?: Array<{
                 __typename: 'Donation';
                 id: string;
-            }>>>;
-        }>>>;
+            } | null | undefined> | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type InvalidArgumentsFieldsFragment = {
     __typename: 'InvalidArgumentsError';
-    invalidArguments: Array<Maybe<{
+    invalidArguments: Array<{
         __typename: 'InvalidArgument';
         key: string;
         message: string;
-    }>>;
+    } | null | undefined>;
 };
 export declare type NotFoundFieldsFragment = {
     __typename: 'NotFoundError';
@@ -3828,18 +3828,18 @@ export declare type CreateGenderOptionMutationVariables = Exact<{
 }>;
 export declare type CreateGenderOptionMutation = {
     __typename: 'Mutation';
-    createGenderOption?: Maybe<{
+    createGenderOption?: {
         __typename: 'GenderOption';
         id: string;
         nameFr: string;
         nameEn: string;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -3848,7 +3848,7 @@ export declare type CreateGenderOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type UpdateGenderOptionMutationVariables = Exact<{
     id: Scalars['ID'];
@@ -3856,18 +3856,18 @@ export declare type UpdateGenderOptionMutationVariables = Exact<{
 }>;
 export declare type UpdateGenderOptionMutation = {
     __typename: 'Mutation';
-    updateGenderOption?: Maybe<{
+    updateGenderOption?: {
         __typename: 'GenderOption';
         id: string;
         nameFr: string;
         nameEn: string;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -3880,23 +3880,23 @@ export declare type UpdateGenderOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type DeleteGenderOptionMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type DeleteGenderOptionMutation = {
     __typename: 'Mutation';
-    deleteGenderOption?: Maybe<{
+    deleteGenderOption?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -3905,44 +3905,44 @@ export declare type DeleteGenderOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type GetGendersOptionsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetGendersOptionsQuery = {
     __typename: 'Query';
-    gendersOptions?: Maybe<{
+    gendersOptions?: {
         __typename: 'GenderOptionsList';
-        genderOptions?: Maybe<Array<Maybe<{
+        genderOptions?: Array<{
             __typename: 'GenderOption';
             id: string;
             nameFr: string;
             nameEn: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateHostingOptionMutationVariables = Exact<{
     input: CreateHostingOptionInput;
 }>;
 export declare type CreateHostingOptionMutation = {
     __typename: 'Mutation';
-    createHostingOption?: Maybe<{
+    createHostingOption?: {
         __typename: 'HostingOption';
         id: string;
         nameFr: string;
         nameEn: string;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -3951,7 +3951,7 @@ export declare type CreateHostingOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type UpdateHostingOptionMutationVariables = Exact<{
     id: Scalars['ID'];
@@ -3959,18 +3959,18 @@ export declare type UpdateHostingOptionMutationVariables = Exact<{
 }>;
 export declare type UpdateHostingOptionMutation = {
     __typename: 'Mutation';
-    updateHostingOption?: Maybe<{
+    updateHostingOption?: {
         __typename: 'HostingOption';
         id: string;
         nameFr: string;
         nameEn: string;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -3983,23 +3983,23 @@ export declare type UpdateHostingOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type DeleteHostingOptionMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type DeleteHostingOptionMutation = {
     __typename: 'Mutation';
-    deleteHostingOption?: Maybe<{
+    deleteHostingOption?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -4008,39 +4008,39 @@ export declare type DeleteHostingOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type GetHostingsOptionsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetHostingsOptionsQuery = {
     __typename: 'Query';
-    hostingsOptions?: Maybe<{
+    hostingsOptions?: {
         __typename: 'HostingOptionsList';
-        hostingOptions?: Maybe<Array<Maybe<{
+        hostingOptions?: Array<{
             __typename: 'HostingOption';
             id: string;
             nameFr: string;
             nameEn: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateLanguageOptionMutationVariables = Exact<{
     input: CreateLanguageOptionInput;
 }>;
 export declare type CreateLanguageOptionMutation = {
     __typename: 'Mutation';
-    createLanguageOption?: Maybe<{
+    createLanguageOption?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'LanguageOption';
         id: string;
@@ -4054,7 +4054,7 @@ export declare type CreateLanguageOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type UpdateLanguageOptionMutationVariables = Exact<{
     id: Scalars['ID'];
@@ -4062,13 +4062,13 @@ export declare type UpdateLanguageOptionMutationVariables = Exact<{
 }>;
 export declare type UpdateLanguageOptionMutation = {
     __typename: 'Mutation';
-    updateLanguageOption?: Maybe<{
+    updateLanguageOption?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'LanguageOption';
         id: string;
@@ -4086,23 +4086,23 @@ export declare type UpdateLanguageOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type DeleteLanguageOptionMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type DeleteLanguageOptionMutation = {
     __typename: 'Mutation';
-    deleteLanguageOption?: Maybe<{
+    deleteLanguageOption?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -4111,26 +4111,26 @@ export declare type DeleteLanguageOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type GetLanguagesOptionsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetLanguagesOptionsQuery = {
     __typename: 'Query';
-    languagesOptions?: Maybe<{
+    languagesOptions?: {
         __typename: 'LanguageOptionsList';
-        languageOptions?: Maybe<Array<Maybe<{
+        languageOptions?: Array<{
             __typename: 'LanguageOption';
             id: string;
             nameFr: string;
             nameEn: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type LocationSearchQueryVariables = Exact<{
     query: Scalars['String'];
@@ -4138,49 +4138,49 @@ export declare type LocationSearchQueryVariables = Exact<{
 }>;
 export declare type LocationSearchQuery = {
     __typename: 'Query';
-    locationSearch?: Maybe<{
+    locationSearch?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'LocationsList';
-        locations?: Maybe<Array<Maybe<{
+        locations?: Array<{
             __typename: 'LocationSearchInfos';
-            id?: Maybe<string>;
-            formattedLocationString?: Maybe<string>;
-            locale_names?: Maybe<string>;
-            postcode?: Maybe<string>;
-            city?: Maybe<string>;
-            country?: Maybe<string>;
-            country_code?: Maybe<string>;
-            latitude?: Maybe<number>;
-            longitude?: Maybe<any>;
-        }>>>;
+            id?: string | null | undefined;
+            formattedLocationString?: string | null | undefined;
+            locale_names?: string | null | undefined;
+            postcode?: string | null | undefined;
+            city?: string | null | undefined;
+            country?: string | null | undefined;
+            country_code?: string | null | undefined;
+            latitude?: number | null | undefined;
+            longitude?: any | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateMediaMutationVariables = Exact<{
     input: CreateMediaInput;
 }>;
 export declare type CreateMediaMutation = {
     __typename: 'Mutation';
-    createMedia?: Maybe<{
+    createMedia?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'StorageInfos';
-        signedRequest?: Maybe<string>;
-        url?: Maybe<string>;
+        signedRequest?: string | null | undefined;
+        url?: string | null | undefined;
         mediaId: string;
     } | {
         __typename: 'UnableToProcessError';
@@ -4190,23 +4190,23 @@ export declare type CreateMediaMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SetMediaAsAvatarMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type SetMediaAsAvatarMutation = {
     __typename: 'Mutation';
-    setMediaAsAvatar?: Maybe<{
+    setMediaAsAvatar?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -4223,23 +4223,23 @@ export declare type SetMediaAsAvatarMutation = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type DeleteMediaMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type DeleteMediaMutation = {
     __typename: 'Mutation';
-    deleteMedia?: Maybe<{
+    deleteMedia?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'IsActiveOperatorMainMediaError';
         activeOperatorMainMediaError: string;
@@ -4258,25 +4258,25 @@ export declare type DeleteMediaMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 declare type MessageFields_OperatorBookingMessage_Fragment = {
     __typename: 'OperatorBookingMessage';
     id: string;
-    updatedAt?: Maybe<Date>;
-    readAt?: Maybe<Date>;
+    updatedAt?: Date | null | undefined;
+    readAt?: Date | null | undefined;
 };
 declare type MessageFields_StaffBookingMessage_Fragment = {
     __typename: 'StaffBookingMessage';
     id: string;
-    updatedAt?: Maybe<Date>;
-    readAt?: Maybe<Date>;
+    updatedAt?: Date | null | undefined;
+    readAt?: Date | null | undefined;
 };
 declare type MessageFields_UserBookingMessage_Fragment = {
     __typename: 'UserBookingMessage';
     id: string;
-    updatedAt?: Maybe<Date>;
-    readAt?: Maybe<Date>;
+    updatedAt?: Date | null | undefined;
+    readAt?: Date | null | undefined;
 };
 export declare type MessageFieldsFragment = MessageFields_OperatorBookingMessage_Fragment | MessageFields_StaffBookingMessage_Fragment | MessageFields_UserBookingMessage_Fragment;
 export declare type CreateMessageMutationVariables = Exact<{
@@ -4284,23 +4284,23 @@ export declare type CreateMessageMutationVariables = Exact<{
 }>;
 export declare type CreateMessageMutation = {
     __typename: 'Mutation';
-    createMessage?: Maybe<{
+    createMessage?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'OperatorBookingMessage';
         id: string;
-        updatedAt?: Maybe<Date>;
-        readAt?: Maybe<Date>;
+        updatedAt?: Date | null | undefined;
+        readAt?: Date | null | undefined;
     } | {
         __typename: 'StaffBookingMessage';
         id: string;
-        updatedAt?: Maybe<Date>;
-        readAt?: Maybe<Date>;
+        updatedAt?: Date | null | undefined;
+        readAt?: Date | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -4312,9 +4312,9 @@ export declare type CreateMessageMutation = {
     } | {
         __typename: 'UserBookingMessage';
         id: string;
-        updatedAt?: Maybe<Date>;
-        readAt?: Maybe<Date>;
-    }>;
+        updatedAt?: Date | null | undefined;
+        readAt?: Date | null | undefined;
+    } | null | undefined;
 };
 export declare type UpdateMessageMutationVariables = Exact<{
     id: Scalars['ID'];
@@ -4322,13 +4322,13 @@ export declare type UpdateMessageMutationVariables = Exact<{
 }>;
 export declare type UpdateMessageMutation = {
     __typename: 'Mutation';
-    updateMessage?: Maybe<{
+    updateMessage?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -4336,13 +4336,13 @@ export declare type UpdateMessageMutation = {
     } | {
         __typename: 'OperatorBookingMessage';
         id: string;
-        updatedAt?: Maybe<Date>;
-        readAt?: Maybe<Date>;
+        updatedAt?: Date | null | undefined;
+        readAt?: Date | null | undefined;
     } | {
         __typename: 'StaffBookingMessage';
         id: string;
-        updatedAt?: Maybe<Date>;
-        readAt?: Maybe<Date>;
+        updatedAt?: Date | null | undefined;
+        readAt?: Date | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -4354,25 +4354,25 @@ export declare type UpdateMessageMutation = {
     } | {
         __typename: 'UserBookingMessage';
         id: string;
-        updatedAt?: Maybe<Date>;
-        readAt?: Maybe<Date>;
-    }>;
+        updatedAt?: Date | null | undefined;
+        readAt?: Date | null | undefined;
+    } | null | undefined;
 };
 export declare type SetAsReadMutationVariables = Exact<{
     input: SetMessagesAsReadInput;
 }>;
 export declare type SetAsReadMutation = {
     __typename: 'Mutation';
-    setAsRead?: Maybe<{
+    setAsRead?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
     } | {
@@ -4381,41 +4381,41 @@ export declare type SetAsReadMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type MessagesByBookingIdQueryVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type MessagesByBookingIdQuery = {
     __typename: 'Query';
-    messagesByBookingId?: Maybe<{
+    messagesByBookingId?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'MessagesList';
-        messages?: Maybe<Array<Maybe<{
+        messages?: Array<{
             __typename: 'OperatorBookingMessage';
             content: string;
             id: string;
-            updatedAt?: Maybe<Date>;
-            readAt?: Maybe<Date>;
+            updatedAt?: Date | null | undefined;
+            readAt?: Date | null | undefined;
         } | {
             __typename: 'StaffBookingMessage';
             content: string;
             id: string;
-            updatedAt?: Maybe<Date>;
-            readAt?: Maybe<Date>;
+            updatedAt?: Date | null | undefined;
+            readAt?: Date | null | undefined;
         } | {
             __typename: 'UserBookingMessage';
             content: string;
             id: string;
-            updatedAt?: Maybe<Date>;
-            readAt?: Maybe<Date>;
-        }>>>;
+            updatedAt?: Date | null | undefined;
+            readAt?: Date | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -4428,26 +4428,26 @@ export declare type MessagesByBookingIdQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateIndividualOperatorMutationVariables = Exact<{
     input: CreateIndividualOperatorInput;
 }>;
 export declare type CreateIndividualOperatorMutation = {
     __typename: 'Mutation';
-    createIndividualOperator?: Maybe<{
+    createIndividualOperator?: {
         __typename: 'IndividualOperator';
         id: string;
-        description?: Maybe<string>;
-        birthDate?: Maybe<Date>;
-        genderOptionId?: Maybe<string>;
-        hostingOptionId?: Maybe<string>;
-        languageOptionIds?: Maybe<Array<Maybe<string>>>;
-        acceptedSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        ownAnimalsSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        partnerId?: Maybe<string>;
-        partnerPercentage?: Maybe<number>;
-        avatar?: Maybe<{
+        description?: string | null | undefined;
+        birthDate?: Date | null | undefined;
+        genderOptionId?: string | null | undefined;
+        hostingOptionId?: string | null | undefined;
+        languageOptionIds?: Array<string | null | undefined> | null | undefined;
+        acceptedSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        ownAnimalsSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        partnerId?: string | null | undefined;
+        partnerPercentage?: number | null | undefined;
+        avatar?: {
             __typename: 'DonationReceiptMedia';
             storeUrl: string;
         } | {
@@ -4468,63 +4468,63 @@ export declare type CreateIndividualOperatorMutation = {
         } | {
             __typename: 'UserMedia';
             storeUrl: string;
-        }>;
-        account?: Maybe<{
+        } | null | undefined;
+        account?: {
             __typename: 'Account';
-            user?: Maybe<{
+            user?: {
                 __typename: 'User';
                 firstName: string;
-                lastName?: Maybe<string>;
-            }>;
-        }>;
-        location?: Maybe<{
+                lastName?: string | null | undefined;
+            } | null | undefined;
+        } | null | undefined;
+        location?: {
             __typename: 'Location';
-            address?: Maybe<string>;
-            city?: Maybe<string>;
-            country?: Maybe<string>;
-            country_code?: Maybe<string>;
-            postcode?: Maybe<string>;
+            address?: string | null | undefined;
+            city?: string | null | undefined;
+            country?: string | null | undefined;
+            country_code?: string | null | undefined;
+            postcode?: string | null | undefined;
             latitude: number;
             longitude: any;
-        }>;
-        availabilities?: Maybe<Array<Maybe<{
+        } | null | undefined;
+        availabilities?: Array<{
             __typename: 'OperatorAvailability';
             id: string;
-            date?: Maybe<Date>;
-        }>>>;
-        coreServices?: Maybe<Array<Maybe<{
+            date?: Date | null | undefined;
+        } | null | undefined> | null | undefined;
+        coreServices?: Array<{
             __typename: 'IndividualOperatorCoreService';
             serviceOptionId: string;
             price: number;
-        }>>>;
-        extraServices?: Maybe<{
+        } | null | undefined> | null | undefined;
+        extraServices?: {
             __typename: 'IndividualOperatorExtraService';
-            atHomeExclusivity?: Maybe<boolean>;
-            atHomeExclusivityExtraPrice?: Maybe<number>;
-            atHomeContinuously?: Maybe<boolean>;
-            atHomeContinuouslyExtraPrice?: Maybe<number>;
-            atHomeOnlyBringPet?: Maybe<boolean>;
-            atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-            atHomeComeGetPet?: Maybe<boolean>;
-            atHomeComeGetPetExtraPrice?: Maybe<number>;
-            atOwnerHomePlantsCare?: Maybe<boolean>;
-            atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-            atOwnerHomeMail?: Maybe<boolean>;
-            atOwnerHomeMailExtraPrice?: Maybe<number>;
-            atOwnerHomeCurtains?: Maybe<boolean>;
-            atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-            acceptShortNotice?: Maybe<boolean>;
-            flexibleCancelation?: Maybe<boolean>;
-            isProfessionalOperator?: Maybe<boolean>;
-            abilityToProvideMedicalCare?: Maybe<boolean>;
-        }>;
+            atHomeExclusivity?: boolean | null | undefined;
+            atHomeExclusivityExtraPrice?: number | null | undefined;
+            atHomeContinuously?: boolean | null | undefined;
+            atHomeContinuouslyExtraPrice?: number | null | undefined;
+            atHomeOnlyBringPet?: boolean | null | undefined;
+            atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+            atHomeComeGetPet?: boolean | null | undefined;
+            atHomeComeGetPetExtraPrice?: number | null | undefined;
+            atOwnerHomePlantsCare?: boolean | null | undefined;
+            atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+            atOwnerHomeMail?: boolean | null | undefined;
+            atOwnerHomeMailExtraPrice?: number | null | undefined;
+            atOwnerHomeCurtains?: boolean | null | undefined;
+            atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+            acceptShortNotice?: boolean | null | undefined;
+            flexibleCancelation?: boolean | null | undefined;
+            isProfessionalOperator?: boolean | null | undefined;
+            abilityToProvideMedicalCare?: boolean | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -4533,26 +4533,26 @@ export declare type CreateIndividualOperatorMutation = {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type UpdateIndividualOperatorMutationVariables = Exact<{
     input: UpdateIndividualOperatorInput;
 }>;
 export declare type UpdateIndividualOperatorMutation = {
     __typename: 'Mutation';
-    updateIndividualOperator?: Maybe<{
+    updateIndividualOperator?: {
         __typename: 'IndividualOperator';
         id: string;
-        description?: Maybe<string>;
-        birthDate?: Maybe<Date>;
-        genderOptionId?: Maybe<string>;
-        hostingOptionId?: Maybe<string>;
-        languageOptionIds?: Maybe<Array<Maybe<string>>>;
-        acceptedSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        ownAnimalsSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        partnerId?: Maybe<string>;
-        partnerPercentage?: Maybe<number>;
-        avatar?: Maybe<{
+        description?: string | null | undefined;
+        birthDate?: Date | null | undefined;
+        genderOptionId?: string | null | undefined;
+        hostingOptionId?: string | null | undefined;
+        languageOptionIds?: Array<string | null | undefined> | null | undefined;
+        acceptedSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        ownAnimalsSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        partnerId?: string | null | undefined;
+        partnerPercentage?: number | null | undefined;
+        avatar?: {
             __typename: 'DonationReceiptMedia';
             storeUrl: string;
         } | {
@@ -4573,63 +4573,63 @@ export declare type UpdateIndividualOperatorMutation = {
         } | {
             __typename: 'UserMedia';
             storeUrl: string;
-        }>;
-        account?: Maybe<{
+        } | null | undefined;
+        account?: {
             __typename: 'Account';
-            user?: Maybe<{
+            user?: {
                 __typename: 'User';
                 firstName: string;
-                lastName?: Maybe<string>;
-            }>;
-        }>;
-        location?: Maybe<{
+                lastName?: string | null | undefined;
+            } | null | undefined;
+        } | null | undefined;
+        location?: {
             __typename: 'Location';
-            address?: Maybe<string>;
-            city?: Maybe<string>;
-            country?: Maybe<string>;
-            country_code?: Maybe<string>;
-            postcode?: Maybe<string>;
+            address?: string | null | undefined;
+            city?: string | null | undefined;
+            country?: string | null | undefined;
+            country_code?: string | null | undefined;
+            postcode?: string | null | undefined;
             latitude: number;
             longitude: any;
-        }>;
-        availabilities?: Maybe<Array<Maybe<{
+        } | null | undefined;
+        availabilities?: Array<{
             __typename: 'OperatorAvailability';
             id: string;
-            date?: Maybe<Date>;
-        }>>>;
-        coreServices?: Maybe<Array<Maybe<{
+            date?: Date | null | undefined;
+        } | null | undefined> | null | undefined;
+        coreServices?: Array<{
             __typename: 'IndividualOperatorCoreService';
             serviceOptionId: string;
             price: number;
-        }>>>;
-        extraServices?: Maybe<{
+        } | null | undefined> | null | undefined;
+        extraServices?: {
             __typename: 'IndividualOperatorExtraService';
-            atHomeExclusivity?: Maybe<boolean>;
-            atHomeExclusivityExtraPrice?: Maybe<number>;
-            atHomeContinuously?: Maybe<boolean>;
-            atHomeContinuouslyExtraPrice?: Maybe<number>;
-            atHomeOnlyBringPet?: Maybe<boolean>;
-            atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-            atHomeComeGetPet?: Maybe<boolean>;
-            atHomeComeGetPetExtraPrice?: Maybe<number>;
-            atOwnerHomePlantsCare?: Maybe<boolean>;
-            atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-            atOwnerHomeMail?: Maybe<boolean>;
-            atOwnerHomeMailExtraPrice?: Maybe<number>;
-            atOwnerHomeCurtains?: Maybe<boolean>;
-            atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-            acceptShortNotice?: Maybe<boolean>;
-            flexibleCancelation?: Maybe<boolean>;
-            isProfessionalOperator?: Maybe<boolean>;
-            abilityToProvideMedicalCare?: Maybe<boolean>;
-        }>;
+            atHomeExclusivity?: boolean | null | undefined;
+            atHomeExclusivityExtraPrice?: number | null | undefined;
+            atHomeContinuously?: boolean | null | undefined;
+            atHomeContinuouslyExtraPrice?: number | null | undefined;
+            atHomeOnlyBringPet?: boolean | null | undefined;
+            atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+            atHomeComeGetPet?: boolean | null | undefined;
+            atHomeComeGetPetExtraPrice?: number | null | undefined;
+            atOwnerHomePlantsCare?: boolean | null | undefined;
+            atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+            atOwnerHomeMail?: boolean | null | undefined;
+            atOwnerHomeMailExtraPrice?: number | null | undefined;
+            atOwnerHomeCurtains?: boolean | null | undefined;
+            atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+            acceptShortNotice?: boolean | null | undefined;
+            flexibleCancelation?: boolean | null | undefined;
+            isProfessionalOperator?: boolean | null | undefined;
+            abilityToProvideMedicalCare?: boolean | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -4646,26 +4646,26 @@ export declare type UpdateIndividualOperatorMutation = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentOperatorQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type CurrentOperatorQuery = {
     __typename: 'Query';
-    currentOperator?: Maybe<{
+    currentOperator?: {
         __typename: 'IndividualOperator';
         id: string;
-        description?: Maybe<string>;
-        birthDate?: Maybe<Date>;
-        genderOptionId?: Maybe<string>;
-        hostingOptionId?: Maybe<string>;
-        languageOptionIds?: Maybe<Array<Maybe<string>>>;
-        acceptedSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        ownAnimalsSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        partnerId?: Maybe<string>;
-        partnerPercentage?: Maybe<number>;
-        avatar?: Maybe<{
+        description?: string | null | undefined;
+        birthDate?: Date | null | undefined;
+        genderOptionId?: string | null | undefined;
+        hostingOptionId?: string | null | undefined;
+        languageOptionIds?: Array<string | null | undefined> | null | undefined;
+        acceptedSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        ownAnimalsSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        partnerId?: string | null | undefined;
+        partnerPercentage?: number | null | undefined;
+        avatar?: {
             __typename: 'DonationReceiptMedia';
             storeUrl: string;
         } | {
@@ -4686,56 +4686,56 @@ export declare type CurrentOperatorQuery = {
         } | {
             __typename: 'UserMedia';
             storeUrl: string;
-        }>;
-        account?: Maybe<{
+        } | null | undefined;
+        account?: {
             __typename: 'Account';
-            user?: Maybe<{
+            user?: {
                 __typename: 'User';
                 firstName: string;
-                lastName?: Maybe<string>;
-            }>;
-        }>;
-        location?: Maybe<{
+                lastName?: string | null | undefined;
+            } | null | undefined;
+        } | null | undefined;
+        location?: {
             __typename: 'Location';
-            address?: Maybe<string>;
-            city?: Maybe<string>;
-            country?: Maybe<string>;
-            country_code?: Maybe<string>;
-            postcode?: Maybe<string>;
+            address?: string | null | undefined;
+            city?: string | null | undefined;
+            country?: string | null | undefined;
+            country_code?: string | null | undefined;
+            postcode?: string | null | undefined;
             latitude: number;
             longitude: any;
-        }>;
-        availabilities?: Maybe<Array<Maybe<{
+        } | null | undefined;
+        availabilities?: Array<{
             __typename: 'OperatorAvailability';
             id: string;
-            date?: Maybe<Date>;
-        }>>>;
-        coreServices?: Maybe<Array<Maybe<{
+            date?: Date | null | undefined;
+        } | null | undefined> | null | undefined;
+        coreServices?: Array<{
             __typename: 'IndividualOperatorCoreService';
             serviceOptionId: string;
             price: number;
-        }>>>;
-        extraServices?: Maybe<{
+        } | null | undefined> | null | undefined;
+        extraServices?: {
             __typename: 'IndividualOperatorExtraService';
-            atHomeExclusivity?: Maybe<boolean>;
-            atHomeExclusivityExtraPrice?: Maybe<number>;
-            atHomeContinuously?: Maybe<boolean>;
-            atHomeContinuouslyExtraPrice?: Maybe<number>;
-            atHomeOnlyBringPet?: Maybe<boolean>;
-            atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-            atHomeComeGetPet?: Maybe<boolean>;
-            atHomeComeGetPetExtraPrice?: Maybe<number>;
-            atOwnerHomePlantsCare?: Maybe<boolean>;
-            atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-            atOwnerHomeMail?: Maybe<boolean>;
-            atOwnerHomeMailExtraPrice?: Maybe<number>;
-            atOwnerHomeCurtains?: Maybe<boolean>;
-            atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-            acceptShortNotice?: Maybe<boolean>;
-            flexibleCancelation?: Maybe<boolean>;
-            isProfessionalOperator?: Maybe<boolean>;
-            abilityToProvideMedicalCare?: Maybe<boolean>;
-        }>;
+            atHomeExclusivity?: boolean | null | undefined;
+            atHomeExclusivityExtraPrice?: number | null | undefined;
+            atHomeContinuously?: boolean | null | undefined;
+            atHomeContinuouslyExtraPrice?: number | null | undefined;
+            atHomeOnlyBringPet?: boolean | null | undefined;
+            atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+            atHomeComeGetPet?: boolean | null | undefined;
+            atHomeComeGetPetExtraPrice?: number | null | undefined;
+            atOwnerHomePlantsCare?: boolean | null | undefined;
+            atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+            atOwnerHomeMail?: boolean | null | undefined;
+            atOwnerHomeMailExtraPrice?: number | null | undefined;
+            atOwnerHomeCurtains?: boolean | null | undefined;
+            atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+            acceptShortNotice?: boolean | null | undefined;
+            flexibleCancelation?: boolean | null | undefined;
+            isProfessionalOperator?: boolean | null | undefined;
+            abilityToProvideMedicalCare?: boolean | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -4748,34 +4748,34 @@ export declare type CurrentOperatorQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type OperatorByIdQueryVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type OperatorByIdQuery = {
     __typename: 'Query';
-    operatorById?: Maybe<{
+    operatorById?: {
         __typename: 'IndividualOperator';
         id: string;
-        description?: Maybe<string>;
-        genderOptionId?: Maybe<string>;
-        hostingOptionId?: Maybe<string>;
-        languageOptionIds?: Maybe<Array<Maybe<string>>>;
-        acceptedSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        ownAnimalsSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        averageScore?: Maybe<number>;
-        averageResponseTime?: Maybe<Date>;
-        partnerId?: Maybe<string>;
-        partnerPercentage?: Maybe<number>;
-        account?: Maybe<{
+        description?: string | null | undefined;
+        genderOptionId?: string | null | undefined;
+        hostingOptionId?: string | null | undefined;
+        languageOptionIds?: Array<string | null | undefined> | null | undefined;
+        acceptedSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        ownAnimalsSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        averageScore?: number | null | undefined;
+        averageResponseTime?: Date | null | undefined;
+        partnerId?: string | null | undefined;
+        partnerPercentage?: number | null | undefined;
+        account?: {
             __typename: 'Account';
-            user?: Maybe<{
+            user?: {
                 __typename: 'User';
                 firstName: string;
-            }>;
-        }>;
-        avatar?: Maybe<{
+            } | null | undefined;
+        } | null | undefined;
+        avatar?: {
             __typename: 'DonationReceiptMedia';
             storeUrl: string;
         } | {
@@ -4796,8 +4796,8 @@ export declare type OperatorByIdQuery = {
         } | {
             __typename: 'UserMedia';
             storeUrl: string;
-        }>;
-        medias?: Maybe<Array<Maybe<{
+        } | null | undefined;
+        medias?: Array<{
             __typename: 'DonationReceiptMedia';
             storeUrl: string;
         } | {
@@ -4818,63 +4818,63 @@ export declare type OperatorByIdQuery = {
         } | {
             __typename: 'UserMedia';
             storeUrl: string;
-        }>>>;
-        location?: Maybe<{
+        } | null | undefined> | null | undefined;
+        location?: {
             __typename: 'Location';
-            city?: Maybe<string>;
-            country?: Maybe<string>;
+            city?: string | null | undefined;
+            country?: string | null | undefined;
             latitude: number;
             longitude: any;
-        }>;
-        coreServices?: Maybe<Array<Maybe<{
+        } | null | undefined;
+        coreServices?: Array<{
             __typename: 'IndividualOperatorCoreService';
             serviceOptionId: string;
             price: number;
-        }>>>;
-        extraServices?: Maybe<{
+        } | null | undefined> | null | undefined;
+        extraServices?: {
             __typename: 'IndividualOperatorExtraService';
-            atHomeExclusivity?: Maybe<boolean>;
-            atHomeExclusivityExtraPrice?: Maybe<number>;
-            atHomeContinuously?: Maybe<boolean>;
-            atHomeContinuouslyExtraPrice?: Maybe<number>;
-            atHomeOnlyBringPet?: Maybe<boolean>;
-            atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-            atHomeComeGetPet?: Maybe<boolean>;
-            atHomeComeGetPetExtraPrice?: Maybe<number>;
-            atOwnerHomePlantsCare?: Maybe<boolean>;
-            atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-            atOwnerHomeMail?: Maybe<boolean>;
-            atOwnerHomeMailExtraPrice?: Maybe<number>;
-            atOwnerHomeCurtains?: Maybe<boolean>;
-            atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-            acceptShortNotice?: Maybe<boolean>;
-            flexibleCancelation?: Maybe<boolean>;
-            isProfessionalOperator?: Maybe<boolean>;
-            abilityToProvideMedicalCare?: Maybe<boolean>;
-        }>;
-        availabilities?: Maybe<Array<Maybe<{
+            atHomeExclusivity?: boolean | null | undefined;
+            atHomeExclusivityExtraPrice?: number | null | undefined;
+            atHomeContinuously?: boolean | null | undefined;
+            atHomeContinuouslyExtraPrice?: number | null | undefined;
+            atHomeOnlyBringPet?: boolean | null | undefined;
+            atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+            atHomeComeGetPet?: boolean | null | undefined;
+            atHomeComeGetPetExtraPrice?: number | null | undefined;
+            atOwnerHomePlantsCare?: boolean | null | undefined;
+            atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+            atOwnerHomeMail?: boolean | null | undefined;
+            atOwnerHomeMailExtraPrice?: number | null | undefined;
+            atOwnerHomeCurtains?: boolean | null | undefined;
+            atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+            acceptShortNotice?: boolean | null | undefined;
+            flexibleCancelation?: boolean | null | undefined;
+            isProfessionalOperator?: boolean | null | undefined;
+            abilityToProvideMedicalCare?: boolean | null | undefined;
+        } | null | undefined;
+        availabilities?: Array<{
             __typename: 'OperatorAvailability';
             id: string;
-            date?: Maybe<Date>;
-        }>>>;
-        reviews?: Maybe<Array<Maybe<{
+            date?: Date | null | undefined;
+        } | null | undefined> | null | undefined;
+        reviews?: Array<{
             __typename: 'OperatorReview';
             id: string;
-            createdAt?: Maybe<Date>;
+            createdAt?: Date | null | undefined;
             score: number;
             title: string;
-            body?: Maybe<string>;
+            body?: string | null | undefined;
         } | {
             __typename: 'UserReview';
             id: string;
-            createdAt?: Maybe<Date>;
+            createdAt?: Date | null | undefined;
             score: number;
             title: string;
-            body?: Maybe<string>;
-            user?: Maybe<{
+            body?: string | null | undefined;
+            user?: {
                 __typename: 'User';
                 firstName: string;
-                avatar?: Maybe<{
+                avatar?: {
                     __typename: 'DonationReceiptMedia';
                     storeUrl: string;
                 } | {
@@ -4895,26 +4895,26 @@ export declare type OperatorByIdQuery = {
                 } | {
                     __typename: 'UserMedia';
                     storeUrl: string;
-                }>;
-            }>;
-        }>>>;
+                } | null | undefined;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type OperatorBookingInfosByIdQueryVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type OperatorBookingInfosByIdQuery = {
     __typename: 'Query';
-    operatorById?: Maybe<{
+    operatorById?: {
         __typename: 'IndividualOperator';
         id: string;
-        hostingOptionId?: Maybe<string>;
-        averageScore?: Maybe<number>;
-        avatar?: Maybe<{
+        hostingOptionId?: string | null | undefined;
+        averageScore?: number | null | undefined;
+        avatar?: {
             __typename: 'DonationReceiptMedia';
             storeUrl: string;
         } | {
@@ -4935,64 +4935,64 @@ export declare type OperatorBookingInfosByIdQuery = {
         } | {
             __typename: 'UserMedia';
             storeUrl: string;
-        }>;
-        account?: Maybe<{
+        } | null | undefined;
+        account?: {
             __typename: 'Account';
-            user?: Maybe<{
+            user?: {
                 __typename: 'User';
                 firstName: string;
-            }>;
-        }>;
-        location?: Maybe<{
+            } | null | undefined;
+        } | null | undefined;
+        location?: {
             __typename: 'Location';
-            city?: Maybe<string>;
-            postcode?: Maybe<string>;
-        }>;
-        availabilities?: Maybe<Array<Maybe<{
+            city?: string | null | undefined;
+            postcode?: string | null | undefined;
+        } | null | undefined;
+        availabilities?: Array<{
             __typename: 'OperatorAvailability';
             id: string;
-            date?: Maybe<Date>;
-        }>>>;
-        coreServices?: Maybe<Array<Maybe<{
+            date?: Date | null | undefined;
+        } | null | undefined> | null | undefined;
+        coreServices?: Array<{
             __typename: 'IndividualOperatorCoreService';
             serviceOptionId: string;
             price: number;
-        }>>>;
-        extraServices?: Maybe<{
+        } | null | undefined> | null | undefined;
+        extraServices?: {
             __typename: 'IndividualOperatorExtraService';
-            atHomeExclusivity?: Maybe<boolean>;
-            atHomeExclusivityExtraPrice?: Maybe<number>;
-            atHomeContinuously?: Maybe<boolean>;
-            atHomeContinuouslyExtraPrice?: Maybe<number>;
-            atHomeOnlyBringPet?: Maybe<boolean>;
-            atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-            atHomeComeGetPet?: Maybe<boolean>;
-            atHomeComeGetPetExtraPrice?: Maybe<number>;
-            atOwnerHomePlantsCare?: Maybe<boolean>;
-            atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-            atOwnerHomeMail?: Maybe<boolean>;
-            atOwnerHomeMailExtraPrice?: Maybe<number>;
-            atOwnerHomeCurtains?: Maybe<boolean>;
-            atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-            acceptShortNotice?: Maybe<boolean>;
-            flexibleCancelation?: Maybe<boolean>;
-            isProfessionalOperator?: Maybe<boolean>;
-            abilityToProvideMedicalCare?: Maybe<boolean>;
-        }>;
+            atHomeExclusivity?: boolean | null | undefined;
+            atHomeExclusivityExtraPrice?: number | null | undefined;
+            atHomeContinuously?: boolean | null | undefined;
+            atHomeContinuouslyExtraPrice?: number | null | undefined;
+            atHomeOnlyBringPet?: boolean | null | undefined;
+            atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+            atHomeComeGetPet?: boolean | null | undefined;
+            atHomeComeGetPetExtraPrice?: number | null | undefined;
+            atOwnerHomePlantsCare?: boolean | null | undefined;
+            atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+            atOwnerHomeMail?: boolean | null | undefined;
+            atOwnerHomeMailExtraPrice?: number | null | undefined;
+            atOwnerHomeCurtains?: boolean | null | undefined;
+            atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+            acceptShortNotice?: boolean | null | undefined;
+            flexibleCancelation?: boolean | null | undefined;
+            isProfessionalOperator?: boolean | null | undefined;
+            abilityToProvideMedicalCare?: boolean | null | undefined;
+        } | null | undefined;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentOperatorMediasQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type CurrentOperatorMediasQuery = {
     __typename: 'Query';
-    currentOperator?: Maybe<{
+    currentOperator?: {
         __typename: 'IndividualOperator';
-        avatar?: Maybe<{
+        avatar?: {
             __typename: 'DonationReceiptMedia';
             id: string;
             storeUrl: string;
@@ -5020,8 +5020,8 @@ export declare type CurrentOperatorMediasQuery = {
             __typename: 'UserMedia';
             id: string;
             storeUrl: string;
-        }>;
-        medias?: Maybe<Array<Maybe<{
+        } | null | undefined;
+        medias?: Array<{
             __typename: 'DonationReceiptMedia';
             id: string;
             storeUrl: string;
@@ -5049,7 +5049,7 @@ export declare type CurrentOperatorMediasQuery = {
             __typename: 'UserMedia';
             id: string;
             storeUrl: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -5062,32 +5062,32 @@ export declare type CurrentOperatorMediasQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentOperatorBookingInfosQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type CurrentOperatorBookingInfosQuery = {
     __typename: 'Query';
-    currentOperator?: Maybe<{
+    currentOperator?: {
         __typename: 'IndividualOperator';
-        acceptedSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        ownAnimalsSpecieOptionsIds?: Maybe<Array<Maybe<string>>>;
-        location?: Maybe<{
+        acceptedSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        ownAnimalsSpecieOptionsIds?: Array<string | null | undefined> | null | undefined;
+        location?: {
             __typename: 'Location';
             latitude: number;
             longitude: any;
-        }>;
-        availabilities?: Maybe<Array<Maybe<{
+        } | null | undefined;
+        availabilities?: Array<{
             __typename: 'OperatorAvailability';
             id: string;
-            date?: Maybe<Date>;
-        }>>>;
-        coreServices?: Maybe<Array<Maybe<{
+            date?: Date | null | undefined;
+        } | null | undefined> | null | undefined;
+        coreServices?: Array<{
             __typename: 'IndividualOperatorCoreService';
             serviceOptionId: string;
             price: number;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -5100,27 +5100,27 @@ export declare type CurrentOperatorBookingInfosQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SearchOperatorsQueryVariables = Exact<{
     input: SearchOperatorsInput;
 }>;
 export declare type SearchOperatorsQuery = {
     __typename: 'Query';
-    searchOperators?: Maybe<{
+    searchOperators?: {
         __typename: 'Operators';
-        operators?: Maybe<Array<Maybe<{
+        operators?: Array<{
             __typename: 'IndividualOperator';
             id: string;
-            hostingOptionId?: Maybe<string>;
-            genderOptionId?: Maybe<string>;
-            languageOptionIds?: Maybe<Array<Maybe<string>>>;
-            averageScore?: Maybe<number>;
-            averageResponseTime?: Maybe<Date>;
-            calendarUpdate?: Maybe<Date>;
-            partnerId?: Maybe<string>;
-            partnerPercentage?: Maybe<number>;
-            avatar?: Maybe<{
+            hostingOptionId?: string | null | undefined;
+            genderOptionId?: string | null | undefined;
+            languageOptionIds?: Array<string | null | undefined> | null | undefined;
+            averageScore?: number | null | undefined;
+            averageResponseTime?: Date | null | undefined;
+            calendarUpdate?: Date | null | undefined;
+            partnerId?: string | null | undefined;
+            partnerPercentage?: number | null | undefined;
+            avatar?: {
                 __typename: 'DonationReceiptMedia';
                 storeUrl: string;
             } | {
@@ -5141,59 +5141,59 @@ export declare type SearchOperatorsQuery = {
             } | {
                 __typename: 'UserMedia';
                 storeUrl: string;
-            }>;
-            location?: Maybe<{
+            } | null | undefined;
+            location?: {
                 __typename: 'Location';
-                city?: Maybe<string>;
-                postcode?: Maybe<string>;
+                city?: string | null | undefined;
+                postcode?: string | null | undefined;
                 latitude: number;
                 longitude: any;
-            }>;
-            coreServices?: Maybe<Array<Maybe<{
+            } | null | undefined;
+            coreServices?: Array<{
                 __typename: 'IndividualOperatorCoreService';
                 serviceOptionId: string;
                 price: number;
-            }>>>;
-            extraServices?: Maybe<{
+            } | null | undefined> | null | undefined;
+            extraServices?: {
                 __typename: 'IndividualOperatorExtraService';
-                atHomeExclusivity?: Maybe<boolean>;
-                atHomeExclusivityExtraPrice?: Maybe<number>;
-                atHomeContinuously?: Maybe<boolean>;
-                atHomeContinuouslyExtraPrice?: Maybe<number>;
-                atHomeOnlyBringPet?: Maybe<boolean>;
-                atHomeOnlyBringPetExtraPrice?: Maybe<number>;
-                atHomeComeGetPet?: Maybe<boolean>;
-                atHomeComeGetPetExtraPrice?: Maybe<number>;
-                atOwnerHomePlantsCare?: Maybe<boolean>;
-                atOwnerHomePlantsCareExtraPrice?: Maybe<number>;
-                atOwnerHomeMail?: Maybe<boolean>;
-                atOwnerHomeMailExtraPrice?: Maybe<number>;
-                atOwnerHomeCurtains?: Maybe<boolean>;
-                atOwnerHomeCurtainsExtraPrice?: Maybe<number>;
-                acceptShortNotice?: Maybe<boolean>;
-                flexibleCancelation?: Maybe<boolean>;
-                isProfessionalOperator?: Maybe<boolean>;
-                abilityToProvideMedicalCare?: Maybe<boolean>;
-            }>;
-        }>>>;
+                atHomeExclusivity?: boolean | null | undefined;
+                atHomeExclusivityExtraPrice?: number | null | undefined;
+                atHomeContinuously?: boolean | null | undefined;
+                atHomeContinuouslyExtraPrice?: number | null | undefined;
+                atHomeOnlyBringPet?: boolean | null | undefined;
+                atHomeOnlyBringPetExtraPrice?: number | null | undefined;
+                atHomeComeGetPet?: boolean | null | undefined;
+                atHomeComeGetPetExtraPrice?: number | null | undefined;
+                atOwnerHomePlantsCare?: boolean | null | undefined;
+                atOwnerHomePlantsCareExtraPrice?: number | null | undefined;
+                atOwnerHomeMail?: boolean | null | undefined;
+                atOwnerHomeMailExtraPrice?: number | null | undefined;
+                atOwnerHomeCurtains?: boolean | null | undefined;
+                atOwnerHomeCurtainsExtraPrice?: number | null | undefined;
+                acceptShortNotice?: boolean | null | undefined;
+                flexibleCancelation?: boolean | null | undefined;
+                isProfessionalOperator?: boolean | null | undefined;
+                abilityToProvideMedicalCare?: boolean | null | undefined;
+            } | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type AllOperatorsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type AllOperatorsQuery = {
     __typename: 'Query';
-    allOperators?: Maybe<{
+    allOperators?: {
         __typename: 'Operators';
-        operators?: Maybe<Array<Maybe<{
+        operators?: Array<{
             __typename: 'IndividualOperator';
             id: string;
-            updatedAt?: Maybe<Date>;
-        }>>>;
+            updatedAt?: Date | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -5206,27 +5206,27 @@ export declare type AllOperatorsQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreatePartnerMutationVariables = Exact<{
     input: CreatePartnerInput;
 }>;
 export declare type CreatePartnerMutation = {
     __typename: 'Mutation';
-    createPartner?: Maybe<{
+    createPartner?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'Partner';
         id: string;
         name: string;
         description: string;
         websiteUrl: string;
-        medias?: Maybe<Array<Maybe<{
+        medias?: Array<{
             __typename: 'DonationReceiptMedia';
             id: string;
             storeUrl: string;
@@ -5254,7 +5254,7 @@ export declare type CreatePartnerMutation = {
             __typename: 'UserMedia';
             id: string;
             storeUrl: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -5267,7 +5267,7 @@ export declare type CreatePartnerMutation = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type UpdatePartnerMutationVariables = Exact<{
     id: Scalars['ID'];
@@ -5275,20 +5275,20 @@ export declare type UpdatePartnerMutationVariables = Exact<{
 }>;
 export declare type UpdatePartnerMutation = {
     __typename: 'Mutation';
-    updatePartner?: Maybe<{
+    updatePartner?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'Partner';
         id: string;
         name: string;
         description: string;
         websiteUrl: string;
-        medias?: Maybe<Array<Maybe<{
+        medias?: Array<{
             __typename: 'DonationReceiptMedia';
             id: string;
             storeUrl: string;
@@ -5316,7 +5316,7 @@ export declare type UpdatePartnerMutation = {
             __typename: 'UserMedia';
             id: string;
             storeUrl: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -5329,16 +5329,16 @@ export declare type UpdatePartnerMutation = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type DeletePartnerMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type DeletePartnerMutation = {
     __typename: 'Mutation';
-    deletePartner?: Maybe<{
+    deletePartner?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -5347,22 +5347,22 @@ export declare type DeletePartnerMutation = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type GetPartnersQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetPartnersQuery = {
     __typename: 'Query';
-    partners?: Maybe<{
+    partners?: {
         __typename: 'PartnersList';
-        partners?: Maybe<Array<Maybe<{
+        partners?: Array<{
             __typename: 'Partner';
             id: string;
             name: string;
             description: string;
             websiteUrl: string;
-            medias?: Maybe<Array<Maybe<{
+            medias?: Array<{
                 __typename: 'DonationReceiptMedia';
                 id: string;
                 storeUrl: string;
@@ -5390,20 +5390,20 @@ export declare type GetPartnersQuery = {
                 __typename: 'UserMedia';
                 id: string;
                 storeUrl: string;
-            }>>>;
-        }>>>;
+            } | null | undefined> | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type GetPartnerByIdQueryVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type GetPartnerByIdQuery = {
     __typename: 'Query';
-    partnerById?: Maybe<{
+    partnerById?: {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
@@ -5413,12 +5413,12 @@ export declare type GetPartnerByIdQuery = {
         name: string;
         description: string;
         websiteUrl: string;
-        receipts?: Maybe<Array<Maybe<{
+        receipts?: Array<{
             __typename: 'DonationReceipt';
             id: string;
-            createdAt?: Maybe<Date>;
-            amountDonated?: Maybe<number>;
-            files?: Maybe<Array<Maybe<{
+            createdAt?: Date | null | undefined;
+            amountDonated?: number | null | undefined;
+            files?: Array<{
                 __typename: 'DonationReceiptMedia';
                 id: string;
                 storeUrl: string;
@@ -5446,22 +5446,22 @@ export declare type GetPartnerByIdQuery = {
                 __typename: 'UserMedia';
                 id: string;
                 storeUrl: string;
-            }>>>;
-            donations?: Maybe<Array<Maybe<{
+            } | null | undefined> | null | undefined;
+            donations?: Array<{
                 __typename: 'Donation';
                 id: string;
-                createdAt?: Maybe<Date>;
-                amountToDonate?: Maybe<number>;
-                operator?: Maybe<{
+                createdAt?: Date | null | undefined;
+                amountToDonate?: number | null | undefined;
+                operator?: {
                     __typename: 'IndividualOperator';
-                    account?: Maybe<{
+                    account?: {
                         __typename: 'Account';
-                        user?: Maybe<{
+                        user?: {
                             __typename: 'User';
                             firstName: string;
-                        }>;
-                    }>;
-                    avatar?: Maybe<{
+                        } | null | undefined;
+                    } | null | undefined;
+                    avatar?: {
                         __typename: 'DonationReceiptMedia';
                         storeUrl: string;
                     } | {
@@ -5482,43 +5482,43 @@ export declare type GetPartnerByIdQuery = {
                     } | {
                         __typename: 'UserMedia';
                         storeUrl: string;
-                    }>;
-                }>;
-            }>>>;
-        }>>>;
-    }>;
+                    } | null | undefined;
+                } | null | undefined;
+            } | null | undefined> | null | undefined;
+        } | null | undefined> | null | undefined;
+    } | null | undefined;
 };
 export declare type GetPartnersIdsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetPartnersIdsQuery = {
     __typename: 'Query';
-    partners?: Maybe<{
+    partners?: {
         __typename: 'PartnersList';
-        partners?: Maybe<Array<Maybe<{
+        partners?: Array<{
             __typename: 'Partner';
             id: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type GetPartnersWithReceiptsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetPartnersWithReceiptsQuery = {
     __typename: 'Query';
-    partners?: Maybe<{
+    partners?: {
         __typename: 'PartnersList';
-        partners?: Maybe<Array<Maybe<{
+        partners?: Array<{
             __typename: 'Partner';
             id: string;
             name: string;
             description: string;
             websiteUrl: string;
-            medias?: Maybe<Array<Maybe<{
+            medias?: Array<{
                 __typename: 'DonationReceiptMedia';
                 id: string;
                 storeUrl: string;
@@ -5546,35 +5546,35 @@ export declare type GetPartnersWithReceiptsQuery = {
                 __typename: 'UserMedia';
                 id: string;
                 storeUrl: string;
-            }>>>;
-            receipts?: Maybe<Array<Maybe<{
+            } | null | undefined> | null | undefined;
+            receipts?: Array<{
                 __typename: 'DonationReceipt';
                 id: string;
-                amountDonated?: Maybe<number>;
-                donations?: Maybe<Array<Maybe<{
+                amountDonated?: number | null | undefined;
+                donations?: Array<{
                     __typename: 'Donation';
                     id: string;
-                }>>>;
-            }>>>;
-        }>>>;
+                } | null | undefined> | null | undefined;
+            } | null | undefined> | null | undefined;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateReviewMutationVariables = Exact<{
     input: CreateReviewInput;
 }>;
 export declare type CreateReviewMutation = {
     __typename: 'Mutation';
-    createReview?: Maybe<{
+    createReview?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'OperatorReview';
         id: string;
@@ -5589,20 +5589,20 @@ export declare type CreateReviewMutation = {
     } | {
         __typename: 'UserReview';
         id: string;
-    }>;
+    } | null | undefined;
 };
 export declare type CreateServiceOptionMutationVariables = Exact<{
     input: CreateServiceOptionInput;
 }>;
 export declare type CreateServiceOptionMutation = {
     __typename: 'Mutation';
-    createServiceOption?: Maybe<{
+    createServiceOption?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'ServiceOption';
         id: string;
@@ -5616,7 +5616,7 @@ export declare type CreateServiceOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type UpdateServiceOptionMutationVariables = Exact<{
     id: Scalars['ID'];
@@ -5624,13 +5624,13 @@ export declare type UpdateServiceOptionMutationVariables = Exact<{
 }>;
 export declare type UpdateServiceOptionMutation = {
     __typename: 'Mutation';
-    updateServiceOption?: Maybe<{
+    updateServiceOption?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -5648,23 +5648,23 @@ export declare type UpdateServiceOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type DeleteServiceOptionMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type DeleteServiceOptionMutation = {
     __typename: 'Mutation';
-    deleteServiceOption?: Maybe<{
+    deleteServiceOption?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -5673,21 +5673,21 @@ export declare type DeleteServiceOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type GetServiceOptionsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetServiceOptionsQuery = {
     __typename: 'Query';
-    servicesOptions?: Maybe<{
+    servicesOptions?: {
         __typename: 'ServiceOptionsList';
-        serviceOptions?: Maybe<Array<Maybe<{
+        serviceOptions?: Array<{
             __typename: 'ServiceOption';
             id: string;
             nameFr: string;
             nameEn: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -5696,20 +5696,20 @@ export declare type GetServiceOptionsQuery = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type CreateSpecieOptionMutationVariables = Exact<{
     input: CreateSpecieOptionInput;
 }>;
 export declare type CreateSpecieOptionMutation = {
     __typename: 'Mutation';
-    createSpecieOption?: Maybe<{
+    createSpecieOption?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'SpecieOption';
         id: string;
@@ -5723,7 +5723,7 @@ export declare type CreateSpecieOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type UpdateSpecieOptionMutationVariables = Exact<{
     id: Scalars['ID'];
@@ -5731,13 +5731,13 @@ export declare type UpdateSpecieOptionMutationVariables = Exact<{
 }>;
 export declare type UpdateSpecieOptionMutation = {
     __typename: 'Mutation';
-    updateSpecieOption?: Maybe<{
+    updateSpecieOption?: {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -5755,23 +5755,23 @@ export declare type UpdateSpecieOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type DeleteSpecieOptionMutationVariables = Exact<{
     id: Scalars['ID'];
 }>;
 export declare type DeleteSpecieOptionMutation = {
     __typename: 'Mutation';
-    deleteSpecieOption?: Maybe<{
+    deleteSpecieOption?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'InvalidArgumentsError';
-        invalidArguments: Array<Maybe<{
+        invalidArguments: Array<{
             __typename: 'InvalidArgument';
             key: string;
             message: string;
-        }>>;
+        } | null | undefined>;
     } | {
         __typename: 'NotFoundError';
         code: ErrorCode;
@@ -5780,21 +5780,21 @@ export declare type DeleteSpecieOptionMutation = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type GetSpeciesOptionsQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type GetSpeciesOptionsQuery = {
     __typename: 'Query';
-    speciesOptions?: Maybe<{
+    speciesOptions?: {
         __typename: 'SpecieOptionsList';
-        specieOptions?: Maybe<Array<Maybe<{
+        specieOptions?: Array<{
             __typename: 'SpecieOption';
             id: string;
             nameFr: string;
             nameEn: string;
-        }>>>;
+        } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
         code: ErrorCode;
@@ -5803,16 +5803,16 @@ export declare type GetSpeciesOptionsQuery = {
         __typename: 'UserAuthenticationError';
     } | {
         __typename: 'UserForbiddenError';
-    }>;
+    } | null | undefined;
 };
 export declare type StartCronMutationVariables = Exact<{
     cronName: Scalars['String'];
 }>;
 export declare type StartCronMutation = {
     __typename: 'Mutation';
-    startCron?: Maybe<{
+    startCron?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -5821,16 +5821,16 @@ export declare type StartCronMutation = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type StopCronMutationVariables = Exact<{
     cronName: Scalars['String'];
 }>;
 export declare type StopCronMutation = {
     __typename: 'Mutation';
-    stopCron?: Maybe<{
+    stopCron?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -5839,21 +5839,21 @@ export declare type StopCronMutation = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type CurrentStaffQueryVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type CurrentStaffQuery = {
     __typename: 'Query';
-    currentStaff?: Maybe<{
+    currentStaff?: {
         __typename: 'NotFoundError';
         code: ErrorCode;
         message: ErrorMessage;
     } | {
         __typename: 'Staff';
         id: string;
-        email?: Maybe<string>;
+        email?: string | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -5862,16 +5862,16 @@ export declare type CurrentStaffQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type GetCronStatusQueryVariables = Exact<{
     cronName: Scalars['String'];
 }>;
 export declare type GetCronStatusQuery = {
     __typename: 'Query';
-    getCronStatus?: Maybe<{
+    getCronStatus?: {
         __typename: 'CronStatus';
-        status?: Maybe<string>;
+        status?: string | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -5880,16 +5880,16 @@ export declare type GetCronStatusQuery = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SubscribeToPendingPaymentCronSubscriptionVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type SubscribeToPendingPaymentCronSubscription = {
     __typename: 'Subscription';
-    pendingPaymentCronSub?: Maybe<{
+    pendingPaymentCronSub?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -5898,16 +5898,16 @@ export declare type SubscribeToPendingPaymentCronSubscription = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SubscribeToSetupIntentCronSubscriptionVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type SubscribeToSetupIntentCronSubscription = {
     __typename: 'Subscription';
-    setupIntentCronSub?: Maybe<{
+    setupIntentCronSub?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -5916,16 +5916,16 @@ export declare type SubscribeToSetupIntentCronSubscription = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare type SubscribeToErrorsEmailCronSubscriptionVariables = Exact<{
     [key: string]: never;
 }>;
 export declare type SubscribeToErrorsEmailCronSubscription = {
     __typename: 'Subscription';
-    errorsEmailCronSub?: Maybe<{
+    errorsEmailCronSub?: {
         __typename: 'BooleanResult';
-        success?: Maybe<boolean>;
+        success?: boolean | null | undefined;
     } | {
         __typename: 'UserAuthenticationError';
         code: ErrorCode;
@@ -5934,7 +5934,7 @@ export declare type SubscribeToErrorsEmailCronSubscription = {
         __typename: 'UserForbiddenError';
         code: ErrorCode;
         message: ErrorMessage;
-    }>;
+    } | null | undefined;
 };
 export declare const InvalidArgumentsFieldsFragmentDoc: Apollo.DocumentNode;
 export declare const NotFoundFieldsFragmentDoc: Apollo.DocumentNode;

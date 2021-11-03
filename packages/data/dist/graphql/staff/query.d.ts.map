@@ -1,1 +1,1 @@
-{"version":3,"file":"query.d.ts","sourceRoot":"","sources":["../../../src/graphql/staff/query.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,kBAAkB,gCAqB9B,CAAA;AAED,eAAO,MAAM,eAAe,gCAgB3B,CAAA"}
+{"version":3,"file":"query.d.ts","sourceRoot":"","sources":["../../../src/graphql/staff/query.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,kBAAkB,oCAqB9B,CAAA;AAED,eAAO,MAAM,eAAe,oCAgB3B,CAAA"}

@@ -2,10 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator dbml {
-  provider = "prisma-dbml-generator"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -28,7 +24,7 @@ model Staff {
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @default(now())
   account              Account            @relation(fields: [accountId], references: [id])
-  accountId            String
+  accountId            String             @unique
   phoneNumber          String // Required for potential 2 factor auth
   createdSpecies       SpecieOption[]
   createdLanguages     LanguageOption[]
@@ -47,7 +43,7 @@ model User {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   account          Account        @relation(fields: [accountId], references: [id])
-  accountId        String
+  accountId        String         @unique
   firstName        String
   lastName         String?
   stripeCustomerId String?
@@ -131,7 +127,7 @@ model ExtraOperatorService {
   createdAt                       DateTime @default(now())
   updatedAt                       DateTime @updatedAt
   operator                        Operator @relation(fields: [operatorId], references: [id])
-  operatorId                      String
+  operatorId                      String   @unique
   atHomeExclusivity               Boolean?
   atHomeExlusivityExtraPrice      Int?
   atHomeContinuously              Boolean?
@@ -164,9 +160,9 @@ model Location {
   latitude     Float
   longitude    Float
   operator     Operator?  @relation(fields: [operatorId], references: [id])
-  operatorId   String?
+  operatorId   String?    @unique
   bookingAd    BookingAd? @relation(fields: [bookingAdId], references: [id])
-  bookingAdId  String?
+  bookingAdId  String?    @unique
 
   @@index(fields: [latitude, longitude], name: "operator_latitude_longitude_index")
 }
@@ -198,7 +194,7 @@ model Donation {
   operator                            Operator          @relation(fields: [operatorId], references: [id])
   operatorId                          String
   booking                             Booking           @relation(fields: [bookingId], references: [id])
-  bookingId                           String
+  bookingId                           String            @unique
   donationReceipt                     DonationsReceipt? @relation(fields: [donationsReceiptId], references: [id])
   donationsReceiptId                  String?
 }
@@ -324,7 +320,7 @@ model StripePayment {
   createdAt                         DateTime      @default(now())
   updatedAt                         DateTime      @updatedAt
   booking                           Booking       @relation(fields: [bookingId], references: [id])
-  bookingId                         String
+  bookingId                         String        @unique
   setupIntentClientSecret           String?
   setupIntentId                     String?
   setupIntentCreationDate           DateTime?
@@ -400,7 +396,7 @@ model Media {
   messageId         String?
   staffId           String?
   staff             Staff?            @relation(fields: [staffId], references: [id])
-  languageOptionId  String?
+  languageOptionId  String?           @unique
   languageOption    LanguageOption?   @relation(fields: [languageOptionId], references: [id])
   donationReceiptId String?
   donationReceipt   DonationsReceipt? @relation(fields: [donationReceiptId], references: [id])

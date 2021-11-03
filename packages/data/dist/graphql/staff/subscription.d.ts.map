@@ -1,1 +1,1 @@
-{"version":3,"file":"subscription.d.ts","sourceRoot":"","sources":["../../../src/graphql/staff/subscription.ts"],"names":[],"mappings":"AAGA,eAAO,MAAM,iCAAiC,gCAgB7C,CAAA;AAED,eAAO,MAAM,8BAA8B,gCAgB1C,CAAA;AACD,eAAO,MAAM,+BAA+B,gCAgB3C,CAAA"}
+{"version":3,"file":"subscription.d.ts","sourceRoot":"","sources":["../../../src/graphql/staff/subscription.ts"],"names":[],"mappings":"AAGA,eAAO,MAAM,iCAAiC,oCAgB7C,CAAA;AAED,eAAO,MAAM,8BAA8B,oCAgB1C,CAAA;AACD,eAAO,MAAM,+BAA+B,oCAgB3C,CAAA"}

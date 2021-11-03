@@ -1,1 +1,1 @@
-{"version":3,"file":"mutation.d.ts","sourceRoot":"","sources":["../../../src/graphql/operator/mutation.ts"],"names":[],"mappings":"AASA,eAAO,MAAM,eAAe,gCA2E3B,CAAA;AAED,eAAO,MAAM,eAAe,gCAmF3B,CAAA"}
+{"version":3,"file":"mutation.d.ts","sourceRoot":"","sources":["../../../src/graphql/operator/mutation.ts"],"names":[],"mappings":"AASA,eAAO,MAAM,eAAe,oCA2E3B,CAAA;AAED,eAAO,MAAM,eAAe,oCAmF3B,CAAA"}

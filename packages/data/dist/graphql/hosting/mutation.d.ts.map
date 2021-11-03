@@ -1,1 +1,1 @@
-{"version":3,"file":"mutation.d.ts","sourceRoot":"","sources":["../../../src/graphql/hosting/mutation.ts"],"names":[],"mappings":"AAGA,eAAO,MAAM,cAAc,gCAkB1B,CAAA;AAED,eAAO,MAAM,cAAc,gCAsB1B,CAAA;AAED,eAAO,MAAM,cAAc,gCAgB1B,CAAA"}
+{"version":3,"file":"mutation.d.ts","sourceRoot":"","sources":["../../../src/graphql/hosting/mutation.ts"],"names":[],"mappings":"AAGA,eAAO,MAAM,cAAc,oCAkB1B,CAAA;AAED,eAAO,MAAM,cAAc,oCAsB1B,CAAA;AAED,eAAO,MAAM,cAAc,oCAgB1B,CAAA"}

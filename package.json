@@ -6,26 +6,26 @@
 		"packages/*"
 	],
 	"scripts": {
-		"dev:api": "yarn --cwd packages/api dev",
-		"dev:shared": "yarn --cwd packages/shared dev",
-		"dev:data": "yarn --cwd packages/data dev",
-		"dev:web": "yarn --cwd packages/web dev",
-		"dev:all": "concurrently \"yarn dev:api\" \"yarn dev:shared\" \"yarn dev:data\" \"yarn dev:web\" \"yarn codegen\" ",
-		"build:shared": "yarn --cwd packages/shared build",
-		"build:web": "yarn --cwd packages/web build",
-		"build:api": "yarn --cwd packages/api build",
-		"start:web": "yarn --cwd packages/web start",
-		"start:api": "yarn --cwd packages/api start",
+		"dev:api": "pnpm --dir packages/api dev",
+		"dev:shared": "pnpm --dir packages/shared dev",
+		"dev:data": "pnpm --dir packages/data dev",
+		"dev:web": "pnpm --dir packages/web dev",
+		"dev:all": "concurrently \"pnpm dev:api\" \"pnpm dev:shared\" \"pnpm dev:data\" \"pnpm dev:web\" \"pnpm codegen\" ",
+		"build:shared": "pnpm --dir packages/shared build",
+		"build:web": "pnpm --dir packages/web build",
+		"build:api": "pnpm --dir packages/api build",
+		"start:web": "pnpm --dir packages/web start",
+		"start:api": "pnpm --dir packages/api start",
 		"codegen": "graphql-codegen --config codegen.yml"
 	},
 	"dependencies": {
-		"concurrently": "^6.2.0"
+		"concurrently": "^6.3.0"
 	},
 	"devDependencies": {
-		"@graphql-codegen/cli": "^2.0.1",
-		"@graphql-codegen/typescript": "^2.0.0",
-		"@graphql-codegen/typescript-operations": "^2.0.1",
-		"@graphql-codegen/typescript-react-apollo": "^3.0.0",
+		"@graphql-codegen/cli": "^2.2.2",
+		"@graphql-codegen/typescript": "^2.3.0",
+		"@graphql-codegen/typescript-operations": "^2.2.0",
+		"@graphql-codegen/typescript-react-apollo": "^3.2.0",
 		"typescript": "4.3.4"
 	},
 	"resolutions": {
