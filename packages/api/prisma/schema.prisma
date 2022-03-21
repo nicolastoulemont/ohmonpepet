@@ -217,6 +217,7 @@ model Booking {
   id                         String          @id @default(cuid())
   createdAt                  DateTime        @default(now())
   updatedAt                  DateTime        @updatedAt
+  lastUpdatedBy              String
   startDate                  DateTime        @db.Date
   endDate                    DateTime        @db.Date
   // Price related fields

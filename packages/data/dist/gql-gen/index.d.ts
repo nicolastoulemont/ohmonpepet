@@ -99,9 +99,11 @@ export declare type Booking = Node & {
     endDate?: Maybe<Scalars['Date']>;
     /** GUID for a resource */
     id: Scalars['String'];
+    lastUpdatedBy?: Maybe<Scalars['ID']>;
     messages?: Maybe<Array<Maybe<BookingMessage>>>;
     operator?: Maybe<IndividualOperator>;
     operatorConfirmationDate?: Maybe<Scalars['DateTime']>;
+    operatorId?: Maybe<Scalars['ID']>;
     ownerConfirmationDate?: Maybe<Scalars['DateTime']>;
     paid?: Maybe<Scalars['Boolean']>;
     payment?: Maybe<StripePayment>;
@@ -114,6 +116,7 @@ export declare type Booking = Node & {
     underReview?: Maybe<Scalars['Boolean']>;
     updatedAt?: Maybe<Scalars['DateTime']>;
     user?: Maybe<User>;
+    userId?: Maybe<Scalars['ID']>;
 };
 export declare type BookingAd = Node & {
     __typename: 'BookingAd';
@@ -2032,6 +2035,7 @@ export declare type CurrentAccountQuery = {
         verifiedAt?: Date | null | undefined;
         user?: {
             __typename: 'User';
+            id: string;
             firstName: string;
         } | null | undefined;
         operator?: {
@@ -2652,6 +2656,8 @@ export declare type GetCurrentUserAndOperatorBookingsQuery = {
         bookings?: Array<{
             __typename: 'Booking';
             id: string;
+            userId?: string | null | undefined;
+            operatorId?: string | null | undefined;
         } | null | undefined> | null | undefined;
     } | {
         __typename: 'UnableToProcessError';
@@ -3229,6 +3235,7 @@ export declare type SubscribeToUserBookingsStatusChangesSubscription = {
         status?: BookingStatus | null | undefined;
         startDate?: Date | null | undefined;
         endDate?: Date | null | undefined;
+        lastUpdatedBy?: string | null | undefined;
         user?: {
             __typename: 'User';
             id: string;

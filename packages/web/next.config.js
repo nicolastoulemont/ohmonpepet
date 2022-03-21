@@ -1,23 +1,4 @@
-// const withBundleAnalyzer = require('@next/bundle-analyzer')({
-// 	enabled: process.env.ANALYZE === 'true'
-// })
-
-// TO ADD if IE is needed
-// const withTM = require('next-transpile-modules')(['@chakra-ui', 'framer-motion', 'date-fns'])
-
-const withMdxEnhanced = require('next-mdx-enhanced')
-
-module.exports = withMdxEnhanced({
-	layoutPath: 'blog',
-	defaultLayout: true,
-	fileExtensions: ['mdx'],
-	usesSrc: false,
-	extendFrontMatter: {
-		process: (mdxContent, frontMatter) => {},
-		phase: 'prebuild|loader|both'
-	},
-	reExportDataFetching: false
-})({
+module.exports = {
 	poweredByHeader: false,
 	i18n: {
 		// These are all the locales you want to support in
@@ -34,4 +15,4 @@ module.exports = withMdxEnhanced({
 	// 	}
 
 	// 	return config
-})
+}

@@ -16,6 +16,7 @@ export const CURRENT_ACCOUNT = gql`
 				email
 				verifiedAt
 				user {
+					id
 					firstName
 				}
 				operator {

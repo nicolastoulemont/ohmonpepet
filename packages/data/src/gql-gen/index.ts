@@ -107,9 +107,11 @@ export type Booking = Node & {
   endDate?: Maybe<Scalars['Date']>;
   /** GUID for a resource */
   id: Scalars['String'];
+  lastUpdatedBy?: Maybe<Scalars['ID']>;
   messages?: Maybe<Array<Maybe<BookingMessage>>>;
   operator?: Maybe<IndividualOperator>;
   operatorConfirmationDate?: Maybe<Scalars['DateTime']>;
+  operatorId?: Maybe<Scalars['ID']>;
   ownerConfirmationDate?: Maybe<Scalars['DateTime']>;
   paid?: Maybe<Scalars['Boolean']>;
   payment?: Maybe<StripePayment>;
@@ -122,6 +124,7 @@ export type Booking = Node & {
   underReview?: Maybe<Scalars['Boolean']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   user?: Maybe<User>;
+  userId?: Maybe<Scalars['ID']>;
 };
 
 export type BookingAd = Node & {
@@ -2317,7 +2320,7 @@ export type ModifyEmailMutation = { __typename: 'Mutation', modifyEmail?: { __ty
 export type CurrentAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentAccountQuery = { __typename: 'Query', currentAccount?: { __typename: 'Account', id: string, email?: string | null | undefined, verifiedAt?: Date | null | undefined, user?: { __typename: 'User', firstName: string } | null | undefined, operator?: { __typename: 'IndividualOperator', id: string, isActive?: boolean | null | undefined } | null | undefined } | { __typename: 'NotFoundError', code: ErrorCode, message: ErrorMessage } | { __typename: 'UserAuthenticationError', code: ErrorCode, message: ErrorMessage } | null | undefined };
+export type CurrentAccountQuery = { __typename: 'Query', currentAccount?: { __typename: 'Account', id: string, email?: string | null | undefined, verifiedAt?: Date | null | undefined, user?: { __typename: 'User', id: string, firstName: string } | null | undefined, operator?: { __typename: 'IndividualOperator', id: string, isActive?: boolean | null | undefined } | null | undefined } | { __typename: 'NotFoundError', code: ErrorCode, message: ErrorMessage } | { __typename: 'UserAuthenticationError', code: ErrorCode, message: ErrorMessage } | null | undefined };
 
 export type AllAccountsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2429,7 +2432,7 @@ export type UpdateBookingPaymentStatusMutation = { __typename: 'Mutation', updat
 export type GetCurrentUserAndOperatorBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserAndOperatorBookingsQuery = { __typename: 'Query', currentUserAndOperatorBookings?: { __typename: 'BookingsList', bookings?: Array<{ __typename: 'Booking', id: string } | null | undefined> | null | undefined } | { __typename: 'UnableToProcessError', code: ErrorCode, message: ErrorMessage } | { __typename: 'UserAuthenticationError' } | { __typename: 'UserForbiddenError' } | null | undefined };
+export type GetCurrentUserAndOperatorBookingsQuery = { __typename: 'Query', currentUserAndOperatorBookings?: { __typename: 'BookingsList', bookings?: Array<{ __typename: 'Booking', id: string, userId?: string | null | undefined, operatorId?: string | null | undefined } | null | undefined> | null | undefined } | { __typename: 'UnableToProcessError', code: ErrorCode, message: ErrorMessage } | { __typename: 'UserAuthenticationError' } | { __typename: 'UserForbiddenError' } | null | undefined };
 
 export type BookingByIdQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -2484,7 +2487,7 @@ export type SubscribeToUserBookingsStatusChangesSubscriptionVariables = Exact<{
 }>;
 
 
-export type SubscribeToUserBookingsStatusChangesSubscription = { __typename: 'Subscription', userBookingsStatusChangesSub?: { __typename: 'Booking', id: string, status?: BookingStatus | null | undefined, startDate?: Date | null | undefined, endDate?: Date | null | undefined, user?: { __typename: 'User', id: string, firstName: string, lastName?: string | null | undefined } | null | undefined, operator?: { __typename: 'IndividualOperator', id: string, account?: { __typename: 'Account', user?: { __typename: 'User', firstName: string, lastName?: string | null | undefined } | null | undefined } | null | undefined, avatar?: { __typename: 'DonationReceiptMedia', storeUrl: string } | { __typename: 'LanguageOptionMedia', storeUrl: string } | { __typename: 'MessageMedia', storeUrl: string } | { __typename: 'OperatorMedia', storeUrl: string } | { __typename: 'PartnerMedia', storeUrl: string } | { __typename: 'SharedMedia', storeUrl: string } | { __typename: 'UserMedia', storeUrl: string } | null | undefined } | null | undefined } | { __typename: 'UserAuthenticationError', code: ErrorCode, message: ErrorMessage } | { __typename: 'UserForbiddenError', code: ErrorCode, message: ErrorMessage } | null | undefined };
+export type SubscribeToUserBookingsStatusChangesSubscription = { __typename: 'Subscription', userBookingsStatusChangesSub?: { __typename: 'Booking', id: string, status?: BookingStatus | null | undefined, startDate?: Date | null | undefined, endDate?: Date | null | undefined, lastUpdatedBy?: string | null | undefined, user?: { __typename: 'User', id: string, firstName: string, lastName?: string | null | undefined } | null | undefined, operator?: { __typename: 'IndividualOperator', id: string, account?: { __typename: 'Account', user?: { __typename: 'User', firstName: string, lastName?: string | null | undefined } | null | undefined } | null | undefined, avatar?: { __typename: 'DonationReceiptMedia', storeUrl: string } | { __typename: 'LanguageOptionMedia', storeUrl: string } | { __typename: 'MessageMedia', storeUrl: string } | { __typename: 'OperatorMedia', storeUrl: string } | { __typename: 'PartnerMedia', storeUrl: string } | { __typename: 'SharedMedia', storeUrl: string } | { __typename: 'UserMedia', storeUrl: string } | null | undefined } | null | undefined } | { __typename: 'UserAuthenticationError', code: ErrorCode, message: ErrorMessage } | { __typename: 'UserForbiddenError', code: ErrorCode, message: ErrorMessage } | null | undefined };
 
 export type SubscribeToNewlyCreatedBookingsAsSitterSubscriptionVariables = Exact<{
   sitterId?: Maybe<Scalars['ID']>;
@@ -3392,6 +3395,7 @@ export const CurrentAccountDocument = gql`
       email
       verifiedAt
       user {
+        id
         firstName
       }
       operator {
@@ -4336,6 +4340,8 @@ export const GetCurrentUserAndOperatorBookingsDocument = gql`
     ... on BookingsList {
       bookings {
         id
+        userId
+        operatorId
       }
     }
     ... on UnableToProcessError {
@@ -4942,6 +4948,7 @@ export const SubscribeToUserBookingsStatusChangesDocument = gql`
       status
       startDate
       endDate
+      lastUpdatedBy
       user {
         id
         firstName

@@ -72,9 +72,11 @@ type Booking implements Node {
 
   """GUID for a resource"""
   id: String!
+  lastUpdatedBy: ID
   messages: [BookingMessage]
   operator: IndividualOperator
   operatorConfirmationDate: DateTime
+  operatorId: ID
   ownerConfirmationDate: DateTime
   paid: Boolean
   payment: StripePayment
@@ -87,6 +89,7 @@ type Booking implements Node {
   underReview: Boolean
   updatedAt: DateTime
   user: User
+  userId: ID
 }
 
 type BookingAd implements Node {

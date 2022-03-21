@@ -454,7 +454,9 @@ export interface NexusGenObjects {
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     endDate?: NexusGenScalars['Date'] | null; // Date
     id: string; // String!
+    lastUpdatedBy?: string | null; // ID
     operatorConfirmationDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    operatorId?: string | null; // ID
     ownerConfirmationDate?: NexusGenScalars['DateTime'] | null; // DateTime
     paid?: boolean | null; // Boolean
     priceWithOutApplicationFee?: NexusGenScalars['PositiveFloat'] | null; // PositiveFloat
@@ -462,6 +464,7 @@ export interface NexusGenObjects {
     startDate?: NexusGenScalars['Date'] | null; // Date
     underReview?: boolean | null; // Boolean
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    userId?: string | null; // ID
   }
   BookingAd: { // root type
     animalsSpeciesIds: string[]; // [String!]!
@@ -1060,9 +1063,11 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     endDate: NexusGenScalars['Date'] | null; // Date
     id: string; // String!
+    lastUpdatedBy: string | null; // ID
     messages: Array<NexusGenRootTypes['BookingMessage'] | null> | null; // [BookingMessage]
     operator: NexusGenRootTypes['IndividualOperator'] | null; // IndividualOperator
     operatorConfirmationDate: NexusGenScalars['DateTime'] | null; // DateTime
+    operatorId: string | null; // ID
     ownerConfirmationDate: NexusGenScalars['DateTime'] | null; // DateTime
     paid: boolean | null; // Boolean
     payment: NexusGenRootTypes['StripePayment'] | null; // StripePayment
@@ -1075,6 +1080,7 @@ export interface NexusGenFieldTypes {
     underReview: boolean | null; // Boolean
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
     user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // ID
   }
   BookingAd: { // field return type
     animals: Array<NexusGenRootTypes['SpecieOption'] | null> | null; // [SpecieOption]
@@ -1811,9 +1817,11 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     endDate: 'Date'
     id: 'String'
+    lastUpdatedBy: 'ID'
     messages: 'BookingMessage'
     operator: 'IndividualOperator'
     operatorConfirmationDate: 'DateTime'
+    operatorId: 'ID'
     ownerConfirmationDate: 'DateTime'
     paid: 'Boolean'
     payment: 'StripePayment'
@@ -1826,6 +1834,7 @@ export interface NexusGenFieldTypeNames {
     underReview: 'Boolean'
     updatedAt: 'DateTime'
     user: 'User'
+    userId: 'ID'
   }
   BookingAd: { // field return type name
     animals: 'SpecieOption'

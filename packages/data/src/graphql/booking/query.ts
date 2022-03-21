@@ -14,6 +14,8 @@ export const GET_USER_AND_OPERATOR_BOOKINGS = gql`
 			... on BookingsList {
 				bookings {
 					id
+					userId
+					operatorId
 				}
 			}
 			... on UnableToProcessError {
